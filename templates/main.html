@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Modal window for retro fom-->
+<div class="modal fade" id="retroModal" tabindex="-1" role="dialog" aria-labelledby="retroModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="retroModalLabel">Creating new Retro board</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <form class="form-group" method="post">
+            {% csrf_token %}
+          <label for="name">Name</label>
+          <input class="form-control mr-sm-2 add_item" type="search" placeholder="" aria-label="Search", size="30" id="name" name="name"> </br>
+          <label for="leader">Leader</label>
+          <input class="form-control mr-sm-2 add_item" type="search" placeholder="" aria-label="Search", size="30" id="leader" name="leader"></br>
+<!--          <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="completed" value="3">-->
+          <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit" name="retro">Create Retro</button>
+      </form>
+      </div>
+      <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+<!--              <button type="submit" class="btn btn-primary">Save changes</button>-->
+
+
+      </div>
+    </div>
+  </div>
+</div>
+    {% if all_retros %}
+
+        {% for retro in all_retros %}
+                <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+                    <div class="card-header"><a href="{% url 'home' retro.id %}" style="color: black">{{ retro.name }}</a></div>
+                    <div class="card-body">
+                        {{ retro.leader }}</br>
+                    </div>
+                </div>
+        {% endfor %}
+    {% endif %}
+                  <div class="card">
+                  <div>
+                      <p class="card-text">
+                   <a data-target="#retroModal" data-toggle="modal" class="MainNavText" id="Modal"
+                           href="#retroModal"><center><i class="fas fa-plus-circle fa-2x"></i></center></a>
+<!--                        <a href="#"><center><i class="fas fa-plus-circle fa-2x"></i></center></a>-->
+                      </p>
+                  </div>
+              </div>
+{% endblock %}

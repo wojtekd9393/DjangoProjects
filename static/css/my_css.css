@@ -1,0 +1,27 @@
+.striker {
+    text-decoration: line-through;
+}
+
+.add_item {
+    word-wrap: break-word;
+}
+
+.fa-white {
+    color: white;
+}
+
+.fa-green {
+    color: green;
+}
+
+.fa-red {
+    color: red;
+}
+
+.fa-blue {
+    color: blue;
+}
+
+.fa-black {
+    color: black;
+}
