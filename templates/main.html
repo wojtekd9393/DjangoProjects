@@ -33,12 +33,14 @@
   </div>
 </div>
     {% if all_retros %}
-
         {% for retro in all_retros %}
                 <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
                     <div class="card-header"><a href="{% url 'home' retro.id %}" style="color: black">{{ retro.name }}</a></div>
                     <div class="card-body">
                         {{ retro.leader }}</br>
+                    </div>
+                    <div style="margin-left: 300px;">
+                        <a href="{% url 'remove_retro' retro.id %}" ><i class="fas fa-trash-alt fa-white"></i></a>
                     </div>
                 </div>
         {% endfor %}

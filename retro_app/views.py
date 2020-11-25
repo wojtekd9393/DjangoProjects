@@ -53,3 +53,14 @@ def main(request):
     else:
         all_retros = Retro.objects.all()
         return render(request, 'main.html', {'all_retros': all_retros})
+
+
+def go_to_main(request):
+    return redirect('main')
+
+
+def remove_retro(request, retro_id):
+    item = Retro.objects.get(pk=retro_id)
+    item.delete()
+    return redirect('main')
+

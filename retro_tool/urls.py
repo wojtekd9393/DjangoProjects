@@ -15,12 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from retro_app.views import home, delete, edit, main
+from retro_app.views import home, delete, edit, main, go_to_main, remove_retro
 
 urlpatterns = [
+    path('', go_to_main),
     path('admin/', admin.site.urls),
     path('home/<retro_id>', home, name='home'),
-    path('delete/<list_id>', delete, name='delete'),
+    path('delete/item/<list_id>', delete, name='delete'),
     path('edit/<list_id>', edit, name='edit'),
     path('main/', main, name='main'),
+    path('delete/retro/<retro_id>', remove_retro, name='remove_retro'),
 ]
