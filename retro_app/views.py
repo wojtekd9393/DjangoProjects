@@ -49,10 +49,16 @@ def main(request):
         if form.is_valid():
             form.save()
             all_retros = Retro.objects.all()
-            return render(request, 'main.html', {'all_retros': all_retros})
+            retros_with_amount_of_cards = []
+            for retro in all_retros:
+                retros_with_amount_of_cards.append([retro, retro.list_set.count()])
+            return render(request, 'main.html', {'all_retros': all_retros, 'all_items': retros_with_amount_of_cards})
     else:
         all_retros = Retro.objects.all()
-        return render(request, 'main.html', {'all_retros': all_retros})
+        retros_with_amount_of_cards = []
+        for retro in all_retros:
+            retros_with_amount_of_cards.append([retro, retro.list_set.count()])
+        return render(request, 'main.html', {'all_retros': all_retros, 'all_items': retros_with_amount_of_cards})
 
 
 def go_to_main(request):
