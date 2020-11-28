@@ -82,14 +82,18 @@ def dashboard(request):
 
 
 def register(request):
+    isValid = True
     if request.method == "GET":
-        return render(
-            request, "register.html", {"form": UserCreationForm}
-        )
+        isValid = True
+        return render(request, "register.html", {"form": UserCreationForm, "isValid": isValid})
     elif request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
+            isValid = True
             user = form.save()
             login(request, user)
             return redirect(reverse("dashboard"))
+        else:
+            isValid = False
+            return render(request, "register.html", {"form": UserCreationForm, "isValid": isValid})
 
