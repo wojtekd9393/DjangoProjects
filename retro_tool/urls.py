@@ -14,8 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from retro_app.views import home, delete, edit, main, go_to_main, remove_retro
+from django.urls import path, include
+from retro_app.views import home, delete, edit, main, go_to_main, remove_retro, dashboard
 
 urlpatterns = [
     path('', go_to_main),
@@ -25,4 +25,6 @@ urlpatterns = [
     path('edit/<list_id>', edit, name='edit'),
     path('main/', main, name='main'),
     path('delete/retro/<retro_id>', remove_retro, name='remove_retro'),
+    path('dashboard', dashboard, name='dashboard'),
+    path('accounts/', include('django.contrib.auth.urls'))
 ]

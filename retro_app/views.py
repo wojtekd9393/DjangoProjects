@@ -70,3 +70,7 @@ def remove_retro(request, retro_id):
     item.delete()
     return redirect('main')
 
+
+def dashboard(request):
+    return render(request, 'dashboard.html')
+
