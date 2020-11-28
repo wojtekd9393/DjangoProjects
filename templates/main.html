@@ -20,6 +20,7 @@
           <label for="leader">Leader</label>
           <input class="form-control mr-sm-2 add_item" type="search" placeholder="" aria-label="Search", size="30" id="leader" name="leader"></br>
 <!--          <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="completed" value="3">-->
+          <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="author" value="{{user.id}}">
           <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit" name="retro">Create Retro</button>
       </form>
       </div>
@@ -56,4 +57,5 @@
                   </div>
                 </div>
 <a href="{% url 'dashboard' %}">Back to Dashboard</a>
+<p>{{user.id}}</p>
 {% endblock %}

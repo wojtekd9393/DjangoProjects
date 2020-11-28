@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -45,23 +46,25 @@ def edit(request, list_id):
         return render(request, 'edit.html', {'item': item})
 
 
+@login_required
 def main(request):
+    user = request.user
     if request.method == 'POST':
         form = RetroForm(request.POST or None)
 
         if form.is_valid():
             form.save()
-            all_retros = Retro.objects.all()
+            all_retros = Retro.objects.filter(author=user.id)
             retros_with_amount_of_cards = []
             for retro in all_retros:
                 retros_with_amount_of_cards.append([retro, retro.list_set.count()])
-            return render(request, 'main.html', {'all_retros': all_retros, 'all_items': retros_with_amount_of_cards})
+            return render(request, 'main.html', {'all_retros': all_retros, 'all_items': retros_with_amount_of_cards, 'u': user})
     else:
-        all_retros = Retro.objects.all()
+        all_retros = Retro.objects.filter(author=user.id)
         retros_with_amount_of_cards = []
         for retro in all_retros:
             retros_with_amount_of_cards.append([retro, retro.list_set.count()])
-        return render(request, 'main.html', {'all_retros': all_retros, 'all_items': retros_with_amount_of_cards})
+        return render(request, 'main.html', {'all_retros': all_retros, 'all_items': retros_with_amount_of_cards, 'u': user})
 
 
 def go_to_main(request):

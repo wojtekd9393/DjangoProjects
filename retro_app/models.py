@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
 # Create your models here.
 
@@ -6,6 +7,10 @@ from django.db import models
 class Retro(models.Model):
     name = models.CharField(max_length=64)
     leader = models.CharField(max_length=32)
+    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name + " (" + self.author.username + ")"
 
 
 class List(models.Model):
