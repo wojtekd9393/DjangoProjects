@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from retro_app.views import home, delete, edit, main, go_to_main, remove_retro, dashboard
+from retro_app.views import home, delete, edit, main, go_to_main, remove_retro, dashboard, register
 
 urlpatterns = [
     path('', go_to_main),
@@ -26,5 +26,21 @@ urlpatterns = [
     path('main/', main, name='main'),
     path('delete/retro/<retro_id>', remove_retro, name='remove_retro'),
     path('dashboard', dashboard, name='dashboard'),
+    path('register', register, name='register'),
     path('accounts/', include('django.contrib.auth.urls'))
 ]
+
+"""
+include('django.contrib.auth.urls')
+
+This will include the following URL patterns:
+
+accounts/login/ [name='login']
+accounts/logout/ [name='logout']
+accounts/password_change/ [name='password_change']
+accounts/password_change/done/ [name='password_change_done']
+accounts/password_reset/ [name='password_reset']
+accounts/password_reset/done/ [name='password_reset_done']
+accounts/reset/<uidb64>/<token>/ [name='password_reset_confirm']
+accounts/reset/done/ [name='password_reset_complete']
+"""
