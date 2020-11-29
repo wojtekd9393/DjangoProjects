@@ -20,7 +20,15 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-
+            <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Settings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'main' %}">My boards</a>
+            </li>
         </ul>
       </div>
           {% if user.is_authenticated %}
@@ -35,7 +43,9 @@
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
           </div>
-           {% endif %}
+            {% else %}
+                <a class="btn btn-secondary nav-link"  href="{% url 'login' %}">Login</a>
+            {% endif %}
           </div>
     </nav>
       <br/>
