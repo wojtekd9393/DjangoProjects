@@ -29,7 +29,7 @@
         </button>
       </div>
       <div class="modal-body">
-      <form class="form-inline my-2 my-lg-0" method="post">
+      <form class="form-inline my-2 my-lg-0" method="post" data-url="{{ request.build_absolute_uri|safe }}">
             {% csrf_token %}
           <input class="form-control mr-sm-2" type="search" placeholder="" aria-label="Search", size="30" name="item">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="completed" value="1">
@@ -87,12 +87,12 @@
         </button>
       </div>
       <div class="modal-body">
-      <form class="form-inline my-2 my-lg-0" method="post">
+      <form class="form3 form-inline my-2 my-lg-0" id="form3" method="post">
             {% csrf_token %}
-          <input class="form-control mr-sm-2 add_item" type="search" placeholder="" aria-label="Search", size="30" name="item">
+          <input class="form-control mr-sm-2 add_item" type="search" placeholder="" aria-label="Search", size="30" name="item" id="itemBlue">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="completed" value="3">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="retro" value="{{retro_id}}">
-          <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit" name="list3">Add Item</button>
+          <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" name="list3" id="createButton">Add Item</button>
       </form>
       </div>
       <div class="modal-footer">
@@ -162,7 +162,7 @@
               {% endif %}
               {% endfor %}
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-4" id="blueList">
               <h3><i class="fas fa-square fa-blue"></i> Action Points</h3>
               <div class="card">
                   <div>
@@ -175,13 +175,12 @@
               </div></br>
               {% for things in all_items %}
               {% if things.completed == 3 %}
-                <div class="card text-white bg-primary mb-3">
-<!--                <div class="card-header">To Improve</div>-->
+                <div class="card text-white bg-primary mb-3" id="blueCard" data-id="{{ things.id }}">
                     <div class="card-body">
                         {{ things.item }}</br>
                         <div style="margin-left: 270px;">
-                            <a href="{% url 'edit' things.id %}"><i class="fas fa-edit fa-white"></i></a>
-                            <a href="{% url 'delete' things.id %}" ><i class="fas fa-trash-alt fa-white"></i></a>
+                            <a href="{% url 'edit' things.id %}" item_edit="{{ things.item }}" class="updateButton"><i class="fas fa-edit fa-white"></i></a>
+                            <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}"></i>
                         </div>
                     </div>
                 </div>
@@ -189,4 +188,64 @@
               {% endfor %}
           </div>
         </div>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+    var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
+
+    $("#createButton").click(function() {
+    var serializedData = $("#form3").serialize();
+
+        $.ajax({
+            url: window.location.href,
+            data: serializedData,
+            type: 'POST',
+            success: function(response) {
+                $("#blueList").append('<div class="card text-white bg-primary mb-3" id="blueCard" data-id="' + response.task.id + '"><div class="card-body">'
+                +response.task.item+ '<div style="margin-left: 270px;"><a href="/edit/'+response.task.id+'"><i class="fas fa-edit fa-white"></i></a> <i class="fas fa-trash-alt fa-white" data-id="' + response.task.id + '"></i></div></div></div>')
+                $("#exampleModal3 .close").click();
+            }
+        })
+
+        $("#form3")[0].reset();
+    });
+
+    $("#blueList").on('click', '.card', function() {
+        var dataId = $(this).data('id');
+
+                var cardItem = $('#blueCard[data-id="' + dataId + '"]');
+<!--                cardItem.toggleClass("bg-danger");-->
+<!--                cardItem.removeClass("bg-primary");-->
+<!--                cardItem.addClass("bg-danger");-->
+
+<!--                cardItem.css('font-size', '200%');-->
+<!--                $("#blueList").append(cardItem);-->
+
+
+    }).on('click', '.fa-trash-alt', function(event) {
+        event.stopPropagation();
+
+        var dataId = $(this).data('id');
+
+        $.ajax({
+            url: '/delete/item/' + dataId,
+            data: {
+                csrfmiddlewaretoken: csrfToken,
+                id: dataId
+            },
+            type: 'post',
+            success: function() {
+                $('#blueCard[data-id="' + dataId + '"]').remove();
+            }
+        });
+
+    });
+
+});
+
+</script>
 {% endblock %}

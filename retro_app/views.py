@@ -7,6 +7,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
+
 # Create your views here.
 
 
@@ -15,10 +18,9 @@ def home(request, retro_id):
         form = ListForm(request.POST or None)
 
         if form.is_valid():
-            form.save()
-            all_items = List.objects.filter(retro=retro_id)
-            messages.success(request, ('Item has been added to List!'))
-            return render(request, 'home.html', {'all_items': all_items, 'retro_id': retro_id})
+            new_task = form.save()
+            # all_items = List.objects.filter(retro=retro_id)
+            return JsonResponse({'task': model_to_dict(new_task), 'retro_id': retro_id}, status=200)
     else:
         all_items = List.objects.filter(retro=retro_id)
         return render(request, 'home.html', {'all_items': all_items, 'retro_id': retro_id})
@@ -27,8 +29,9 @@ def home(request, retro_id):
 def delete(request, list_id):
     item = List.objects.get(pk=list_id)
     item.delete()
-    messages.success(request, ('Item has been deleted!'))
-    return redirect('home', retro_id=item.retro.id)
+    # messages.success(request, ('Item has been deleted!'))
+    # return redirect('home', retro_id=item.retro.id)
+    return JsonResponse({'result': 'ok'}, status=200)
 
 
 def edit(request, list_id):

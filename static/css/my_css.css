@@ -25,3 +25,7 @@
 .fa-black {
     color: black;
 }
+
+.fa-trash-alt:hover {
+    cursor: pointer;
+}
