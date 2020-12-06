@@ -29,12 +29,12 @@
         </button>
       </div>
       <div class="modal-body">
-      <form class="form-inline my-2 my-lg-0" method="post" data-url="{{ request.build_absolute_uri|safe }}">
+      <form class="form-inline my-2 my-lg-0" id="form1" method="post" onkeydown="return event.key != 'Enter';" data-url="{{ request.build_absolute_uri|safe }}">
             {% csrf_token %}
           <input class="form-control mr-sm-2" type="search" placeholder="" aria-label="Search", size="30" name="item">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="completed" value="1">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="retro" value="{{retro_id}}">
-          <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit" name="list1">Add Item</button>
+          <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" name="list1" id="createButton1">Add Item</button>
       </form>
       </div>
       <div class="modal-footer">
@@ -58,12 +58,12 @@
         </button>
       </div>
       <div class="modal-body">
-      <form class="form-inline my-2 my-lg-0" method="post">
+      <form class="form-inline my-2 my-lg-0" id="form2" method="post" onkeydown="return event.key != 'Enter';">
             {% csrf_token %}
           <input class="form-control mr-sm-2 add_item" type="search" placeholder="" aria-label="Search", size="30" name="item">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="completed" value="2">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="retro" value="{{retro_id}}">
-          <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit" name="list2">Add Item</button>
+          <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" name="list2" id="createButton2">Add Item</button>
       </form>
       </div>
       <div class="modal-footer">
@@ -76,6 +76,11 @@
   </div>
 </div>
 
+<!-- Ten zapis powoduje, ze enterem nie mozna zaakceptowac formularza:
+onkeydown="return event.key != 'Enter';"
+minus jest taki, ze entera nie mozna tez uzyc w textarea
+poprawic w przyszlosci !!!-->
+
 <!-- Modal okno nr 3-->
 <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -87,12 +92,12 @@
         </button>
       </div>
       <div class="modal-body">
-      <form class="form3 form-inline my-2 my-lg-0" id="form3" method="post">
+      <form class="form3 form-inline my-2 my-lg-0" id="form3" method="post" onkeydown="return event.key != 'Enter';">
             {% csrf_token %}
           <input class="form-control mr-sm-2 add_item" type="search" placeholder="" aria-label="Search", size="30" name="item" id="itemBlue">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="completed" value="3">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="retro" value="{{retro_id}}">
-          <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" name="list3" id="createButton">Add Item</button>
+          <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" name="list3" id="createButton3">Add Item</button>
       </form>
       </div>
       <div class="modal-footer">
@@ -107,7 +112,7 @@
 
 
       <div class="row">
-          <div class="col-sm-4">
+          <div class="col-sm-4" id="greenList">
 <!--           <h5 class="card-title">What Went Well</h5>-->
               <h3><i class="fas fa-square fa-green"></i> Went Well</h3>
               <div class="card">
@@ -121,13 +126,13 @@
               </div> </br>
               {% for things in all_items %}
               {% if things.completed == 1 %}
-                <div class="card text-white bg-success mb-3">
+                <div class="card text-white bg-success mb-3" id="greenCard" data-id="{{ things.id }}">
 <!--                <div class="card-header">To Improve</div>-->
                     <div class="card-body">
                         {{ things.item }}</br>
                         <div style="margin-left: 270px;">
                             <a href="{% url 'edit' things.id %}"><i class="fas fa-edit fa-white"></i></a>
-                            <a href="{% url 'delete' things.id %}" ><i class="fas fa-trash-alt fa-white"></i></a>
+                            <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
                         </div>
                     </div>
                 </div>
@@ -136,7 +141,7 @@
           </div>
 
 
-          <div class="col-sm-4">
+          <div class="col-sm-4" id="redList">
               <h3><i class="fas fa-square fa-red"></i> To Improve</h3>
               <div class="card">
                   <div>
@@ -149,13 +154,13 @@
               </div></br>
               {% for things in all_items %}
               {% if things.completed == 2 %}
-                <div class="card text-white bg-danger mb-3">
+                <div class="card text-white bg-danger mb-3" id="redCard" data-id="{{ things.id }}">
 <!--                <div class="card-header">To Improve</div>-->
                     <div class="card-body">
                         {{ things.item }}</br>
                         <div style="margin-left: 270px;">
                             <a href="{% url 'edit' things.id %}"><i class="fas fa-edit fa-white"></i></a>
-                            <a href="{% url 'delete' things.id %}" ><i class="fas fa-trash-alt fa-white"></i></a>
+                            <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
                         </div>
                     </div>
                 </div>
@@ -180,7 +185,7 @@
                         {{ things.item }}</br>
                         <div style="margin-left: 270px;">
                             <a href="{% url 'edit' things.id %}" item_edit="{{ things.item }}" class="updateButton"><i class="fas fa-edit fa-white"></i></a>
-                            <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}"></i>
+                            <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
                         </div>
                     </div>
                 </div>
@@ -197,7 +202,89 @@ $(document).ready(function(){
 
     var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
 
-    $("#createButton").click(function() {
+    $("#createButton1").click(function() {
+        var serializedData = $("#form1").serialize();
+
+        $.ajax({
+            url: window.location.href,
+            data: serializedData,
+            type: 'POST',
+            success: function(response) {
+                $("#greenList").append('<div class="card text-white bg-success mb-3" id="greenCard" data-id="' + response.task.id + '"><div class="card-body">'
+                +response.task.item+ '<div style="margin-left: 270px;"><a href="/edit/'+response.task.id+'"><i class="fas fa-edit fa-white"></i></a> <i class="fas fa-trash-alt fa-white" data-id="' + response.task.id + '" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i></div></div></div>')
+                $("#exampleModal .close").click();
+            }
+        })
+
+        $("#form1")[0].reset();
+    });
+
+    $("#greenList").on('click', '.card', function() {
+        var dataId = $(this).data('id');
+
+                var cardItem = $('#greenCard[data-id="' + dataId + '"]');
+
+    }).on('click', '.fa-trash-alt', function(event) {
+        event.stopPropagation();
+
+        var dataId = $(this).data('id');
+
+        $.ajax({
+            url: '/delete/item/' + dataId,
+            data: {
+                csrfmiddlewaretoken: csrfToken,
+                id: dataId
+            },
+            type: 'post',
+            success: function() {
+                $('#greenCard[data-id="' + dataId + '"]').remove();
+            }
+        });
+
+    });
+
+    $("#createButton2").click(function() {
+        var serializedData = $("#form2").serialize();
+
+        $.ajax({
+            url: window.location.href,
+            data: serializedData,
+            type: 'POST',
+            success: function(response) {
+                $("#redList").append('<div class="card text-white bg-danger mb-3" id="redCard" data-id="' + response.task.id + '"><div class="card-body">'
+                +response.task.item+ '<div style="margin-left: 270px;"><a href="/edit/'+response.task.id+'"><i class="fas fa-edit fa-white"></i></a> <i class="fas fa-trash-alt fa-white" data-id="' + response.task.id + '" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i></div></div></div>')
+                $("#exampleModal2 .close").click();
+            }
+        })
+
+        $("#form2")[0].reset();
+    });
+
+    $("#redList").on('click', '.card', function() {
+        var dataId = $(this).data('id');
+
+                var cardItem = $('#redCard[data-id="' + dataId + '"]');
+
+    }).on('click', '.fa-trash-alt', function(event) {
+        event.stopPropagation();
+
+        var dataId = $(this).data('id');
+
+        $.ajax({
+            url: '/delete/item/' + dataId,
+            data: {
+                csrfmiddlewaretoken: csrfToken,
+                id: dataId
+            },
+            type: 'post',
+            success: function() {
+                $('#redCard[data-id="' + dataId + '"]').remove();
+            }
+        });
+
+    });
+
+    $("#createButton3").click(function() {
     var serializedData = $("#form3").serialize();
 
         $.ajax({
@@ -206,7 +293,7 @@ $(document).ready(function(){
             type: 'POST',
             success: function(response) {
                 $("#blueList").append('<div class="card text-white bg-primary mb-3" id="blueCard" data-id="' + response.task.id + '"><div class="card-body">'
-                +response.task.item+ '<div style="margin-left: 270px;"><a href="/edit/'+response.task.id+'"><i class="fas fa-edit fa-white"></i></a> <i class="fas fa-trash-alt fa-white" data-id="' + response.task.id + '"></i></div></div></div>')
+                +response.task.item+ '<div style="margin-left: 270px;"><a href="/edit/'+response.task.id+'"><i class="fas fa-edit fa-white"></i></a> <i class="fas fa-trash-alt fa-white" data-id="' + response.task.id + '" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i></div></div></div>')
                 $("#exampleModal3 .close").click();
             }
         })
