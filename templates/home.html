@@ -31,7 +31,7 @@
       <div class="modal-body">
       <form class="form-inline my-2 my-lg-0" id="form1" method="post" onkeydown="return event.key != 'Enter';" data-url="{{ request.build_absolute_uri|safe }}">
             {% csrf_token %}
-          <input class="form-control mr-sm-2" type="search" placeholder="" aria-label="Search", size="30" name="item">
+          <input class="form-control mr-sm-2" type="text" placeholder="" aria-label="Search", size="30" name="item">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="completed" value="1">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="retro" value="{{retro_id}}">
           <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" name="list1" id="createButton1">Add Item</button>
@@ -60,7 +60,7 @@
       <div class="modal-body">
       <form class="form-inline my-2 my-lg-0" id="form2" method="post" onkeydown="return event.key != 'Enter';">
             {% csrf_token %}
-          <input class="form-control mr-sm-2 add_item" type="search" placeholder="" aria-label="Search", size="30" name="item">
+          <input class="form-control mr-sm-2 add_item" type="text" placeholder="" aria-label="Search", size="30" name="item">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="completed" value="2">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="retro" value="{{retro_id}}">
           <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" name="list2" id="createButton2">Add Item</button>
@@ -94,7 +94,7 @@ poprawic w przyszlosci !!!-->
       <div class="modal-body">
       <form class="form3 form-inline my-2 my-lg-0" id="form3" method="post" onkeydown="return event.key != 'Enter';">
             {% csrf_token %}
-          <input class="form-control mr-sm-2 add_item" type="search" placeholder="" aria-label="Search", size="30" name="item" id="itemBlue">
+          <input class="form-control mr-sm-2 add_item" type="text" placeholder="" aria-label="Search", size="30" name="item" id="itemBlue">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="completed" value="3">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="retro" value="{{retro_id}}">
           <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" name="list3" id="createButton3">Add Item</button>
@@ -112,7 +112,7 @@ poprawic w przyszlosci !!!-->
 
 
       <div class="row">
-          <div class="col-sm-4" id="greenList">
+          <div class="col-sm-4">
 <!--           <h5 class="card-title">What Went Well</h5>-->
               <h3><i class="fas fa-square fa-green"></i> Went Well</h3>
               <div class="card">
@@ -124,24 +124,26 @@ poprawic w przyszlosci !!!-->
                       </p>
                   </div>
               </div> </br>
-              {% for things in all_items %}
-              {% if things.completed == 1 %}
-                <div class="card text-white bg-success mb-3" id="greenCard" data-id="{{ things.id }}">
-<!--                <div class="card-header">To Improve</div>-->
-                    <div class="card-body">
-                        {{ things.item }}</br>
-                        <div style="margin-left: 270px;">
-                            <a href="{% url 'edit' things.id %}"><i class="fas fa-edit fa-white"></i></a>
-                            <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
+              <div id="greenList">
+                  {% for things in all_items %}
+                  {% if things.completed == 1 %}
+                    <div class="card text-white bg-success mb-3" id="greenCard" data-id="{{ things.id }}">
+    <!--                <div class="card-header">To Improve</div>-->
+                        <div class="card-body">
+                            {{ things.item }}</br>
+                            <div style="margin-left: 270px;">
+                                <a href="{% url 'edit' things.id %}"><i class="fas fa-edit fa-white"></i></a>
+                                <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
+                            </div>
                         </div>
                     </div>
-                </div>
-              {% endif %}
-              {% endfor %}
+                  {% endif %}
+                  {% endfor %}
+              </div>
           </div>
 
 
-          <div class="col-sm-4" id="redList">
+          <div class="col-sm-4">
               <h3><i class="fas fa-square fa-red"></i> To Improve</h3>
               <div class="card">
                   <div>
@@ -152,22 +154,24 @@ poprawic w przyszlosci !!!-->
                       </p>
                   </div>
               </div></br>
-              {% for things in all_items %}
-              {% if things.completed == 2 %}
-                <div class="card text-white bg-danger mb-3" id="redCard" data-id="{{ things.id }}">
-<!--                <div class="card-header">To Improve</div>-->
-                    <div class="card-body">
-                        {{ things.item }}</br>
-                        <div style="margin-left: 270px;">
-                            <a href="{% url 'edit' things.id %}"><i class="fas fa-edit fa-white"></i></a>
-                            <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
+              <div id="redList">
+                  {% for things in all_items %}
+                  {% if things.completed == 2 %}
+                    <div class="card text-white bg-danger mb-3" id="redCard" data-id="{{ things.id }}">
+    <!--                <div class="card-header">To Improve</div>-->
+                        <div class="card-body">
+                            {{ things.item }}</br>
+                            <div style="margin-left: 270px;">
+                                <a href="{% url 'edit' things.id %}"><i class="fas fa-edit fa-white"></i></a>
+                                <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
+                            </div>
                         </div>
                     </div>
-                </div>
-              {% endif %}
-              {% endfor %}
+                  {% endif %}
+                  {% endfor %}
+              </div>
           </div>
-          <div class="col-sm-4" id="blueList">
+          <div class="col-sm-4">
               <h3><i class="fas fa-square fa-blue"></i> Action Points</h3>
               <div class="card">
                   <div>
@@ -178,19 +182,21 @@ poprawic w przyszlosci !!!-->
                       </p>
                   </div>
               </div></br>
-              {% for things in all_items %}
-              {% if things.completed == 3 %}
-                <div class="card text-white bg-primary mb-3" id="blueCard" data-id="{{ things.id }}">
-                    <div class="card-body">
-                        {{ things.item }}</br>
-                        <div style="margin-left: 270px;">
-                            <a href="{% url 'edit' things.id %}" item_edit="{{ things.item }}" class="updateButton"><i class="fas fa-edit fa-white"></i></a>
-                            <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
+              <div id="blueList">
+                  {% for things in all_items %}
+                  {% if things.completed == 3 %}
+                    <div class="card text-white bg-primary mb-3" id="blueCard" data-id="{{ things.id }}">
+                        <div class="card-body">
+                            {{ things.item }}</br>
+                            <div style="margin-left: 270px;">
+                                <a href="{% url 'edit' things.id %}" item_edit="{{ things.item }}" class="updateButton"><i class="fas fa-edit fa-white"></i></a>
+                                <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
+                            </div>
                         </div>
                     </div>
-                </div>
-              {% endif %}
-              {% endfor %}
+                  {% endif %}
+                  {% endfor %}
+              </div>
           </div>
         </div>
 {% endblock %}
@@ -210,7 +216,7 @@ $(document).ready(function(){
             data: serializedData,
             type: 'POST',
             success: function(response) {
-                $("#greenList").append('<div class="card text-white bg-success mb-3" id="greenCard" data-id="' + response.task.id + '"><div class="card-body">'
+                $("#greenList").prepend('<div class="card text-white bg-success mb-3" id="greenCard" data-id="' + response.task.id + '"><div class="card-body">'
                 +response.task.item+ '<div style="margin-left: 270px;"><a href="/edit/'+response.task.id+'"><i class="fas fa-edit fa-white"></i></a> <i class="fas fa-trash-alt fa-white" data-id="' + response.task.id + '" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i></div></div></div>')
                 $("#exampleModal .close").click();
             }
@@ -251,7 +257,7 @@ $(document).ready(function(){
             data: serializedData,
             type: 'POST',
             success: function(response) {
-                $("#redList").append('<div class="card text-white bg-danger mb-3" id="redCard" data-id="' + response.task.id + '"><div class="card-body">'
+                $("#redList").prepend('<div class="card text-white bg-danger mb-3" id="redCard" data-id="' + response.task.id + '"><div class="card-body">'
                 +response.task.item+ '<div style="margin-left: 270px;"><a href="/edit/'+response.task.id+'"><i class="fas fa-edit fa-white"></i></a> <i class="fas fa-trash-alt fa-white" data-id="' + response.task.id + '" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i></div></div></div>')
                 $("#exampleModal2 .close").click();
             }
@@ -292,7 +298,7 @@ $(document).ready(function(){
             data: serializedData,
             type: 'POST',
             success: function(response) {
-                $("#blueList").append('<div class="card text-white bg-primary mb-3" id="blueCard" data-id="' + response.task.id + '"><div class="card-body">'
+                $("#blueList").prepend('<div class="card text-white bg-primary mb-3" id="blueCard" data-id="' + response.task.id + '"><div class="card-body">'
                 +response.task.item+ '<div style="margin-left: 270px;"><a href="/edit/'+response.task.id+'"><i class="fas fa-edit fa-white"></i></a> <i class="fas fa-trash-alt fa-white" data-id="' + response.task.id + '" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i></div></div></div>')
                 $("#exampleModal3 .close").click();
             }
@@ -305,6 +311,8 @@ $(document).ready(function(){
         var dataId = $(this).data('id');
 
                 var cardItem = $('#blueCard[data-id="' + dataId + '"]');
+                // cardItem.hide().slideDown();
+                // $("#blueList").append(cardItem);
 <!--                cardItem.toggleClass("bg-danger");-->
 <!--                cardItem.removeClass("bg-primary");-->
 <!--                cardItem.addClass("bg-danger");-->

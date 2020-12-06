@@ -18,6 +18,9 @@ class List(models.Model):
     completed = models.PositiveSmallIntegerField(default=1)
     retro = models.ForeignKey(Retro, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ['-id']
+
     def __str__(self):
         return self.item + ' | ' + str(self.completed)
 

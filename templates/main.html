@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<!-- Modal window for retro fom-->
+<!-- Modal window for retro form-->
 <div class="modal fade" id="retroModal" tabindex="-1" role="dialog" aria-labelledby="retroModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -36,12 +36,12 @@
     {% if all_items %}
         {% for retro, amountOfCards in all_items %}
                 <div class="card text-white bg-primary mb-3" style="width: 20rem; float: left; margin: 10px;">
-                    <div class="card-header"><a href="{% url 'home' retro.id %}" style="color: black">{{ retro.name }} ({{amountOfCards}} cards)</a></div>
+                    <div class="card-header">
+                        <a href="{% url 'home' retro.id %}" style="color: black; float: left;">{{ retro.name }} ({{amountOfCards}} cards)</a>
+                        <a href="{% url 'remove_retro' retro.id %}" ><i class="fas fa-trash-alt fa-white" style="float: right;"></i></a>
+                    </div>
                     <div class="card-body">
                         {{ retro.leader }}</br>
-                    </div>
-                    <div style="margin-left: 290px; float: right;">
-                        <a href="{% url 'remove_retro' retro.id %}" ><i class="fas fa-trash-alt fa-white"></i></a>
                     </div>
                 </div>
         {% endfor %}
@@ -49,9 +49,8 @@
                 <div class="card " style="float: left; margin: 10px; width: 20rem;">
                   <div>
                       <p class="card-text">
-                   <a data-target="#retroModal" data-toggle="modal" class="MainNavText" id="Modal"
+                        <a data-target="#retroModal" data-toggle="modal" class="MainNavText" id="Modal"
                            href="#retroModal"><center><i class="fas fa-plus-circle fa-2x"></i></center></a>
-<!--                        <a href="#"><center><i class="fas fa-plus-circle fa-2x"></i></center></a>-->
                           <center><p>Add board</p></center>
                       </p>
                   </div>
