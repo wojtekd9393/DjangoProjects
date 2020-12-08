@@ -1,24 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Register</h2>
+<div style="display: table; margin-right: auto; margin-left: auto;">
+    <h2>Register</h2>
 
-<form method="post">
-    {% csrf_token %}
-        <div class="form-group" style="width: 30rem">
-            <input type="text" class="form-control" name="username" maxlength="150" autocapitalize="none" autocomplete="username" autofocus required placeholder="Username"> <span class="helptext">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</span>
-        </div>
-        <div class="form-group" style="width: 30rem">
-            <input type="password" class="form-control" name="password1" autocomplete="new-password" required placeholder="Password">
-        </div>
-        <div class="form-group" style="width: 30rem">
-            <input type="password" class="form-control" name="password2" autocomplete="new-password" required placeholder="Confirm Password">
-        </div>
-        <input class="btn btn-secondary"  type="submit" value="Register">
-</form>
+    <form method="post">
+        {% csrf_token %}
+            <div class="form-group" style="width: 30rem">
+                <input type="text" class="form-control" name="username" maxlength="150" autocapitalize="none" autocomplete="username" autofocus required placeholder="Username"> <span class="helptext">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</span>
+            </div>
+            <div class="form-group" style="width: 30rem">
+                <input type="password" class="form-control" name="password1" autocomplete="new-password" required placeholder="Password">
+            </div>
+            <div class="form-group" style="width: 30rem">
+                <input type="password" class="form-control" name="password2" autocomplete="new-password" required placeholder="Confirm Password">
+            </div>
+            <input class="btn btn-secondary"  type="submit" value="Register">
+    </form>
 
-<a href="{% url 'login' %}">Back to login</a>
-
+    <a href="{% url 'login' %}">Back to login</a>
+</div>
 <!--bardzo pokretne rozwiazanie; w przyszlosci sprawdzic jak dzialaja validatory-->
 {% if not isValid %}
 Fill the form correctly!
