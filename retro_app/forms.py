@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 class ListForm(forms.ModelForm):
     class Meta:
         model = List
-        fields = ['item', 'completed', 'retro']
+        fields = ['item', 'completed', 'retro', 'author']
 
 
 class RetroForm(forms.ModelForm):

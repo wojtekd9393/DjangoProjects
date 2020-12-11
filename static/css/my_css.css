@@ -29,3 +29,11 @@
 .fa-trash-alt:hover {
     cursor: pointer;
 }
+
+.disabled:hover {
+    cursor:not-allowed;
+ }
+
+.disabled {
+    color: red;
+ }

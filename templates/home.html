@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
+
+    {% block settings %}
+        {% if author.id == user.id %}
+            <a class="dropdown-item" href="{% url 'settings' retro_id %}">Settings</a>
+        {% endif %}
+    {% endblock %}
+
 {% block content %}
 <!--    {% if messages %}-->
 <!--    {% for message in messages %}-->
@@ -34,6 +41,7 @@
           <input class="form-control mr-sm-2" type="text" placeholder="" aria-label="Search", size="30" name="item">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="completed" value="1">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="retro" value="{{retro_id}}">
+          <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="author" value="{{user.id}}">
           <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" name="list1" id="createButton1">Add Item</button>
       </form>
       </div>
@@ -63,6 +71,7 @@
           <input class="form-control mr-sm-2 add_item" type="text" placeholder="" aria-label="Search", size="30" name="item">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="completed" value="2">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="retro" value="{{retro_id}}">
+          <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="author" value="{{user.id}}">
           <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" name="list2" id="createButton2">Add Item</button>
       </form>
       </div>
@@ -97,6 +106,7 @@ poprawic w przyszlosci !!!-->
           <input class="form-control mr-sm-2 add_item" type="text" placeholder="" aria-label="Search", size="30" name="item" id="itemBlue">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="completed" value="3">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="retro" value="{{retro_id}}">
+          <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="author" value="{{user.id}}">
           <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" name="list3" id="createButton3">Add Item</button>
       </form>
       </div>
@@ -110,7 +120,6 @@ poprawic w przyszlosci !!!-->
   </div>
 </div>
 
-
       <div class="row">
           <div class="col-sm-4">
 <!--           <h5 class="card-title">What Went Well</h5>-->
@@ -119,7 +128,7 @@ poprawic w przyszlosci !!!-->
                   <div>
                       <p class="card-text">
                           <a data-target="#exampleModal" data-toggle="modal" class="MainNavText" id="Modal1"
-                            href="#exampleModal"><center><i class="fas fa-plus-square fa-black fa-2x"></i></center></a>
+                            href="#exampleModal" {% if user.is_authenticated == False %} style="pointer-events: none;" {% endif %}><center><i class="fas fa-plus-square fa-black fa-2x"></i></center></a>
 <!--                        <a href="#"><center><i class="fas fa-plus-square fa-2x"></i></center></a>-->
                       </p>
                   </div>
@@ -132,8 +141,13 @@ poprawic w przyszlosci !!!-->
                         <div class="card-body">
                             {{ things.item }}</br>
                             <div style="margin-left: 270px;">
-                                <a href="{% url 'edit' things.id %}"><i class="fas fa-edit fa-white"></i></a>
-                                <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
+                                {% if user.is_authenticated and things.author.id == user.id %}
+                                    <a href="{% url 'edit' things.id %}"><i class="fas fa-edit fa-white"></i></a>
+                                    <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
+                                {% else %}
+                                    <a href="{% url 'edit' things.id %}" style="pointer-events: none;"><i class="fas fa-edit fa-white" style="visibility:hidden;"></i></a>
+                                    <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item" style="visibility:hidden;"></i>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -142,15 +156,13 @@ poprawic w przyszlosci !!!-->
               </div>
           </div>
 
-
           <div class="col-sm-4">
               <h3><i class="fas fa-square fa-red"></i> To Improve</h3>
               <div class="card">
                   <div>
                       <p class="card-text">
                           <a data-target="#exampleModal2" data-toggle="modal" class="MainNavText" id="Modal2"
-                            href="#exampleModal"><center><i class="fas fa-plus-square fa-black fa-2x"></i></center></a>
-<!--                        <a href="#"><center><i class="fas fa-plus-square fa-2x"></i></center></a>-->
+                            href="#exampleModal" {% if user.is_authenticated == False %} style="pointer-events: none;" {% endif %}><center><i class="fas fa-plus-square fa-black fa-2x"></i></center></a>
                       </p>
                   </div>
               </div></br>
@@ -162,8 +174,13 @@ poprawic w przyszlosci !!!-->
                         <div class="card-body">
                             {{ things.item }}</br>
                             <div style="margin-left: 270px;">
-                                <a href="{% url 'edit' things.id %}"><i class="fas fa-edit fa-white"></i></a>
-                                <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
+                                {% if user.is_authenticated and things.author.id == user.id %}
+                                    <a href="{% url 'edit' things.id %}"><i class="fas fa-edit fa-white"></i></a>
+                                    <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
+                                {% else %}
+                                    <a href="{% url 'edit' things.id %}" style="pointer-events: none;"><i class="fas fa-edit fa-white" style="visibility:hidden;"></i></a>
+                                    <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item" style="visibility:hidden;"></i>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -171,13 +188,14 @@ poprawic w przyszlosci !!!-->
                   {% endfor %}
               </div>
           </div>
+
           <div class="col-sm-4">
               <h3><i class="fas fa-square fa-blue"></i> Action Points</h3>
               <div class="card">
                   <div>
                       <p class="card-text">
                           <a data-target="#exampleModal3" data-toggle="modal" class="MainNavText" id="Modal3"
-                            href="#exampleModal"><center><i class="fas fa-plus-square fa-black fa-2x"></i></center></a>
+                            href="#exampleModal" {% if user.is_authenticated == False %} style="pointer-events: none;" {% endif %}><center><i class="fas fa-plus-square fa-black fa-2x"></i></center></a>
 <!--                        <a href="#"><center><i class="fas fa-plus-square fa-2x"></i></center></a>-->
                       </p>
                   </div>
@@ -189,8 +207,13 @@ poprawic w przyszlosci !!!-->
                         <div class="card-body">
                             {{ things.item }}</br>
                             <div style="margin-left: 270px;">
-                                <a href="{% url 'edit' things.id %}" item_edit="{{ things.item }}" class="updateButton"><i class="fas fa-edit fa-white"></i></a>
-                                <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
+                                {% if user.is_authenticated and things.author.id == user.id %}
+                                    <a href="{% url 'edit' things.id %}"><i class="fas fa-edit fa-white"></i></a>
+                                    <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
+                                {% else %}
+                                    <a href="{% url 'edit' things.id %}" style="pointer-events: none;"><i class="fas fa-edit fa-white" style="visibility:hidden;"></i></a>
+                                    <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item" style="visibility:hidden;"></i>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

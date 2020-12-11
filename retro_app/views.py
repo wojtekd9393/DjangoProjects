@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import List, Retro
 from .forms import ListForm, RetroForm
-from django.contrib import messages
+# from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
@@ -22,8 +22,10 @@ def home(request, retro_id):
             # all_items = List.objects.filter(retro=retro_id)
             return JsonResponse({'task': model_to_dict(new_task), 'retro_id': retro_id}, status=200)
     else:
+        retro = Retro.objects.get(pk=retro_id)
+        author = retro.author
         all_items = List.objects.filter(retro=retro_id)
-        return render(request, 'home.html', {'all_items': all_items, 'retro_id': retro_id})
+        return render(request, 'home.html', {'all_items': all_items, 'retro_id': retro_id, 'author': author})
 
 
 def delete(request, list_id):
@@ -42,7 +44,7 @@ def edit(request, list_id):
 
         if form.is_valid():
             form.save()
-            messages.success(request, ('Item has been edited!'))
+            # messages.success(request, ('Item has been edited!'))
             return redirect('home', retro_id=item.retro.id)
     else:
         item = List.objects.get(pk=list_id)
@@ -99,4 +101,11 @@ def register(request):
         else:
             isValid = False
             return render(request, "register.html", {"form": UserCreationForm, "isValid": isValid})
+
+
+def settings(request, retro_id):
+    retro = Retro.objects.get(pk=retro_id)
+    author = retro.author
+    return render(request, 'settings.html', {'retro_id': retro_id, 'author': author})
+
 
