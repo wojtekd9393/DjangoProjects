@@ -3,34 +3,31 @@
 {% block content %}
 
     <h3>Settings</h3>
-    <p>This section will be updated later!</p>
-    <li>Enable voting</li> voting [False/True]
+    <p style="color: red;">This section will be updated later!</p>
+    <li>Voting</li> <small>If enabled, users can vote.</small>
 
     <form action="{% url 'voting' retro_id %}" method="POST">
         {% csrf_token %}
         <div>
             <input type="radio" id="voting_disable"
              name="voting" value="False" {% if not voting %} checked {% endif %}>
-            <label for="voting_disable">Disable</label>
+            <label for="voting_disable">Disabled</label>
 
             <input type="radio" id="voting_enable"
              name="voting" value="True" {% if voting %} checked {% endif %}>
-            <label for="voting_enable">Enable</label>
+            <label for="voting_enable">Enabled</label>
         </div>
+
+    <li>How many votes</li> <small>Determines how many times user can vote.</small>
+    <li>Editing - isActive [False/True]</li> <small>If enabled, users can still add, edit and delete cards.</small>
+        <li>Set timer</li> <small>Time for completing retro board.</small> <br/>
         <button type="submit" class="btn btn-primary btn-sm">Save</button>
     </form>
-
-
-
-    <li>How many votes</li> range [1-10]
-    <li>Enable editing</li> isEditable [False/True]
-    <li>Set timer</li> range [0-5min]
-
 <br/>
 <br/>
     {{ retro_id }}
     {{ author }} <br/>
     {{ voting }}
-    <a href="{% url 'main' %}">Back to my boards</a>
+    <a href="{% url 'home' retro_id %}">Back to current retro board</a>
 
 {% endblock %}

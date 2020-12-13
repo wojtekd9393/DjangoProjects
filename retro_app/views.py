@@ -26,7 +26,7 @@ def home(request, retro_id):
         retro = Retro.objects.get(pk=retro_id)
         author = retro.author
         all_items = List.objects.filter(retro=retro_id)
-        return render(request, 'home.html', {'all_items': all_items, 'retro_id': retro_id, 'author': author})
+        return render(request, 'home.html', {'all_items': all_items, 'retro_id': retro_id, 'author': author, 'retro': retro})
 
 
 def delete(request, list_id):
