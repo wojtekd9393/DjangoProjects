@@ -8,6 +8,7 @@ class Retro(models.Model):
     name = models.CharField(max_length=64)
     leader = models.CharField(max_length=32)
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    voting = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name + " (" + self.author.username + ")"

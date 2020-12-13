@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import List, Retro
 from .forms import ListForm, RetroForm
 # from django.contrib import messages
@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
@@ -63,13 +64,13 @@ def main(request):
             retros_with_amount_of_cards = []
             for retro in all_retros:
                 retros_with_amount_of_cards.append([retro, retro.list_set.count()])
-            return render(request, 'main.html', {'all_retros': all_retros, 'all_items': retros_with_amount_of_cards, 'u': user})
+            return render(request, 'main.html', {'all_retros': all_retros, 'all_items': retros_with_amount_of_cards})
     else:
         all_retros = Retro.objects.filter(author=user.id)
         retros_with_amount_of_cards = []
         for retro in all_retros:
             retros_with_amount_of_cards.append([retro, retro.list_set.count()])
-        return render(request, 'main.html', {'all_retros': all_retros, 'all_items': retros_with_amount_of_cards, 'u': user})
+        return render(request, 'main.html', {'all_retros': all_retros, 'all_items': retros_with_amount_of_cards})
 
 
 def go_to_main(request):
@@ -106,6 +107,15 @@ def register(request):
 def settings(request, retro_id):
     retro = Retro.objects.get(pk=retro_id)
     author = retro.author
-    return render(request, 'settings.html', {'retro_id': retro_id, 'author': author})
+    voting = retro.voting
+    return render(request, 'settings.html', {'retro_id': retro_id, 'author': author, 'voting': voting})
+
+
+def voting(request, retro_id):
+    retro = get_object_or_404(Retro, id=retro_id)
+    retro.voting = request.POST.get("voting")
+    retro.save()
+    return HttpResponseRedirect(reverse('settings', args=[str(retro_id)]))
+
 
 

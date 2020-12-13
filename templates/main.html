@@ -17,7 +17,7 @@
             {% csrf_token %}
           <label for="name">Name</label>
           <input class="form-control mr-sm-2 add_item" type="search" placeholder="" aria-label="Search", size="30" id="name" name="name"> </br>
-          <label for="leader">Leader</label>
+          <label for="leader">Leader</label> <small>(The person who will lead the retro)</small>
           <input class="form-control mr-sm-2 add_item" type="search" placeholder="" aria-label="Search", size="30" id="leader" name="leader"></br>
 <!--          <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="completed" value="3">-->
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="author" value="{{user.id}}">
