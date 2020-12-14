@@ -15,6 +15,7 @@ from django.forms.models import model_to_dict
 
 
 def home(request, retro_id):
+    # request.session['my_votes'] = 0
     if request.method == 'POST':
         form = ListForm(request.POST or None)
 
@@ -26,7 +27,18 @@ def home(request, retro_id):
         retro = Retro.objects.get(pk=retro_id)
         author = retro.author
         all_items = List.objects.filter(retro=retro_id)
-        return render(request, 'home.html', {'all_items': all_items, 'retro_id': retro_id, 'author': author, 'retro': retro})
+        cards_with_amount_of_votes = []
+        my_votes = 0
+        limit = False
+        for card in all_items:
+            cards_with_amount_of_votes.append([card, card.get_votes()])
+            if request.user in card.votes.all():
+                my_votes = my_votes + 1
+        if my_votes == retro.votes:
+            limit = True
+        else:
+            limit = False
+        return render(request, 'home.html', {'all_items': all_items, 'retro_id': retro_id, 'author': author, 'retro': retro, "cards": cards_with_amount_of_votes, 'limit': limit})
 
 
 def delete(request, list_id):
@@ -108,14 +120,28 @@ def settings(request, retro_id):
     retro = Retro.objects.get(pk=retro_id)
     author = retro.author
     voting = retro.voting
-    return render(request, 'settings.html', {'retro_id': retro_id, 'author': author, 'voting': voting})
+    votes = retro.votes
+    return render(request, 'settings.html', {'retro_id': retro_id, 'author': author, 'voting': voting, 'votes': votes})
 
 
 def voting(request, retro_id):
     retro = get_object_or_404(Retro, id=retro_id)
     retro.voting = request.POST.get("voting")
+    retro.votes = request.POST.get('num_of_votes')
     retro.save()
+    # request.session['num_of_votes'] = retro.votes
     return HttpResponseRedirect(reverse('settings', args=[str(retro_id)]))
+
+
+def card_vote(request, card_id):
+    card = get_object_or_404(List, id=card_id)
+    card.votes.add(request.user)
+    # request.session['my_votes'] = request.session['my_votes'] + 1
+    # print(request.user in card.votes.all())
+    # request.session['num_of_votes'] = str(int(request.session['num_of_votes']) - 1)
+    # print("My votes:", request.session.get('my_votes'))
+    retro_id = card.retro.id
+    return HttpResponseRedirect(reverse('home', args=[str(retro_id)]))
 
 
 

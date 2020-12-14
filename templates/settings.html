@@ -18,16 +18,17 @@
             <label for="voting_enable">Enabled</label>
         </div>
 
-    <li>How many votes</li> <small>Determines how many times user can vote.</small>
+    <li>How many votes [1-5]</li> <small>Determines how many times user can vote.</small><br/>
+        <input type="number" name="num_of_votes" value="{{ votes }}" min="1" max="5"/>
     <li>Editing - isActive [False/True]</li> <small>If enabled, users can still add, edit and delete cards.</small>
         <li>Set timer</li> <small>Time for completing retro board.</small> <br/>
         <button type="submit" class="btn btn-primary btn-sm">Save</button>
     </form>
 <br/>
-<br/>
-    {{ retro_id }}
-    {{ author }} <br/>
-    {{ voting }}
+    Retro id: {{ retro_id }} <br/>
+    Board author: {{ author }} <br/>
+    Voting: {{ voting }} <br/>
+    Number of votes: {{ votes }} <br/>
     <a href="{% url 'home' retro_id %}">Back to current retro board</a>
 
 {% endblock %}
