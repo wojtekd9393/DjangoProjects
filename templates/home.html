@@ -149,7 +149,10 @@ poprawic w przyszlosci !!!-->
                                     <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item" style="visibility:hidden;"></i>
                                 {% endif %}
                             </div>
-                            {% if retro.voting %}<div><a class="btn btn-small btn-info" href="{% url 'card_vote' things.id %}" name="card_id" value="{{ things.id }}" {% if user in things.votes.all or limit == True %} style="pointer-events: none;" {% endif %}><i class="far fa-thumbs-up"></i> Vote [{{ votes }}]</a></div>{% endif %}
+                            {% if user.is_authenticated %}
+                                {% if retro.voting %}<div><a class="btn btn-xs btn-info" href="{% url 'card_vote' things.id %}" name="card_id" value="{{ things.id }}" {% if user in things.votes.all or limit == True %} style="pointer-events: none;" {% endif %}><i class="far fa-thumbs-up"></i> [{{ votes }}]</a></div>{% endif %}
+                                {% if retro.voting and user in things.votes.all %}<div><a class="btn btn-xs btn-warning" href="{% url 'card_vote_down' things.id %}" name="card_id" value="{{ things.id }}"><i class="fas fa-minus-circle"></i> Remove</a></div>{% endif %}
+                            {% endif %}
                         </div>
                     </div>
                   {% endif %}
@@ -183,7 +186,10 @@ poprawic w przyszlosci !!!-->
                                     <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item" style="visibility:hidden;"></i>
                                 {% endif %}
                             </div>
-                            {% if retro.voting %}<div><a class="btn btn-small btn-info" href="{% url 'card_vote' things.id %}" name="card_id" value="{{ things.id }}" {% if user in things.votes.all or limit == True %} style="pointer-events: none;" {% endif %}><i class="far fa-thumbs-up"></i> Vote [{{ votes }}]</a></div>{% endif %}
+                            {% if user.is_authenticated %}
+                                {% if retro.voting %}<div><a class="btn btn-xs btn-info" href="{% url 'card_vote' things.id %}" name="card_id" value="{{ things.id }}" {% if user in things.votes.all or limit == True %} style="pointer-events: none;" {% endif %}><i class="far fa-thumbs-up"></i> [{{ votes }}]</a></div>{% endif %}
+                                {% if retro.voting and user in things.votes.all %}<div><a class="btn btn-xs btn-warning" href="{% url 'card_vote_down' things.id %}" name="card_id" value="{{ things.id }}"><i class="fas fa-minus-circle"></i> Remove</a></div>{% endif %}
+                            {% endif %}
                         </div>
                     </div>
                   {% endif %}
@@ -217,7 +223,10 @@ poprawic w przyszlosci !!!-->
                                     <i class="fas fa-trash-alt fa-white" data-id="{{ things.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item" style="visibility:hidden;"></i>
                                 {% endif %}
                             </div>
-                            {% if retro.voting %}<div><a class="btn btn-small btn-info" href="{% url 'card_vote' things.id %}" name="card_id" value="{{ things.id }}" {% if user in things.votes.all or limit == True %} style="pointer-events: none;" {% endif %}><i class="far fa-thumbs-up"></i> Vote [{{ votes }}]</a></div>{% endif %}
+                            {% if user.is_authenticated %}
+                                {% if retro.voting %}<div><a class="btn btn-xs btn-info" href="{% url 'card_vote' things.id %}" name="card_id" value="{{ things.id }}" {% if user in things.votes.all or limit == True %} style="pointer-events: none;" {% endif %}><i class="far fa-thumbs-up"></i> [{{ votes }}]</a></div>{% endif %}
+                                {% if retro.voting and user in things.votes.all %}<div><a class="btn btn-xs btn-warning" href="{% url 'card_vote_down' things.id %}" name="card_id" value="{{ things.id }}"><i class="fas fa-minus-circle"></i> Remove</a></div>{% endif %}
+                            {% endif %}
                         </div>
                     </div>
                   {% endif %}

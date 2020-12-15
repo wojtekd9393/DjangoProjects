@@ -144,4 +144,12 @@ def card_vote(request, card_id):
     return HttpResponseRedirect(reverse('home', args=[str(retro_id)]))
 
 
+def card_vote_down(request, card_id):
+    card = get_object_or_404(List, id=card_id)
+    card.votes.remove(request.user)
+    retro_id = card.retro.id
+    return HttpResponseRedirect(reverse('home', args=[str(retro_id)]))
+
+
+
 
