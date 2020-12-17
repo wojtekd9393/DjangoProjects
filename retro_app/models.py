@@ -10,6 +10,7 @@ class Retro(models.Model):
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     voting = models.BooleanField(default=False)
     votes = models.PositiveSmallIntegerField(default=1)
+    archived = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name + " (" + self.author.username + ")"

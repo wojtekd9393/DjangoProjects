@@ -35,6 +35,7 @@
 </div>
     {% if all_items %}
         {% for retro, amountOfCards in all_items %}
+            {% if not retro.archived %}
                 <div class="card text-white bg-primary mb-3" style="width: 20rem; float: left; margin: 10px;">
                     <div class="card-header">
                         <a href="{% url 'home' retro.id %}" style="color: black; float: left;">{{ retro.name }} ({{amountOfCards}} cards)</a>
@@ -44,6 +45,7 @@
                         {{ retro.leader }}</br>
                     </div>
                 </div>
+            {% endif %}
         {% endfor %}
     {% endif %}
                 <div class="card " style="float: left; margin: 10px; width: 20rem;">

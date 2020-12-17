@@ -20,7 +20,17 @@
 
     <li>How many votes [1-5]</li> <small>Determines how many times user can vote.</small><br/>
         <input type="number" name="num_of_votes" value="{{ votes }}" min="1" max="5"/>
-    <li>Editing - isActive [False/True]</li> <small>If enabled, users can still add, edit and delete cards.</small>
+
+    <li>Archived</li> <small>If No, users can't add, edit and delete cards. Voting is also prohibited!</small>
+        <div>
+            <input type="radio" id="not_archived"
+             name="archived" value="False" {% if not archived %} checked {% endif %}>
+            <label for="not_archived">No</label>
+
+            <input type="radio" id="archived"
+             name="archived" value="True" {% if archived %} checked {% endif %}>
+            <label for="archived">Yes</label>
+        </div>
         <li>Set timer</li> <small>Time for completing retro board.</small> <br/>
         <button type="submit" class="btn btn-primary btn-sm">Save</button>
     </form>
@@ -29,6 +39,7 @@
     Board author: {{ author }} <br/>
     Voting: {{ voting }} <br/>
     Number of votes: {{ votes }} <br/>
-    <a href="{% url 'home' retro_id %}">Back to current retro board</a>
+    <a href="{% url 'home' retro_id %}">Back to current retro board</a> <br/>
+    <a href="{% url 'archived' %}">Go to Archives</a>
 
 {% endblock %}

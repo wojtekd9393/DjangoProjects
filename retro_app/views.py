@@ -121,13 +121,15 @@ def settings(request, retro_id):
     author = retro.author
     voting = retro.voting
     votes = retro.votes
-    return render(request, 'settings.html', {'retro_id': retro_id, 'author': author, 'voting': voting, 'votes': votes})
+    archived = retro.archived
+    return render(request, 'settings.html', {'retro_id': retro_id, 'author': author, 'voting': voting, 'votes': votes, 'archived': archived})
 
 
 def voting(request, retro_id):
     retro = get_object_or_404(Retro, id=retro_id)
     retro.voting = request.POST.get("voting")
     retro.votes = request.POST.get('num_of_votes')
+    retro.archived = request.POST.get('archived')
     retro.save()
     # request.session['num_of_votes'] = retro.votes
     return HttpResponseRedirect(reverse('settings', args=[str(retro_id)]))
@@ -149,6 +151,16 @@ def card_vote_down(request, card_id):
     card.votes.remove(request.user)
     retro_id = card.retro.id
     return HttpResponseRedirect(reverse('home', args=[str(retro_id)]))
+
+
+@login_required
+def archived(request):
+    user = request.user
+    archived_retros = Retro.objects.filter(author=user.id, archived=True)
+    retros_with_amount_of_cards = []
+    for retro in archived_retros:
+        retros_with_amount_of_cards.append([retro, retro.list_set.count()])
+    return render(request, 'archived.html', {'archived_retros': archived_retros, 'all_items': retros_with_amount_of_cards})
 
 
 

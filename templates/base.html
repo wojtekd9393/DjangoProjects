@@ -32,6 +32,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'main' %}">My boards</a>
             </li>
+            <li class="nav-item">
+
+            </li>
         </ul>
       </div>
           {% if user.is_authenticated %}
@@ -42,6 +45,7 @@
 
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <a class="dropdown-item" href="{% url 'main' %}">My boards</a>
+              <a class="dropdown-item" href="{% url 'archived' %}">Archives</a>
               <a class="dropdown-item" href="{% url 'password_change' %}">Change password</a>
               {% block settings %}
 
