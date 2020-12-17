@@ -125,5 +125,5 @@ STATICFILES_DIRS = [
 ]
 
 # To what page I should go after login/logout action
-LOGIN_REDIRECT_URL = 'dashboard'
+LOGIN_REDIRECT_URL = 'main'
 LOGOUT_REDIRECT_URL = 'dashboard'

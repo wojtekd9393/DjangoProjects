@@ -4,7 +4,7 @@
 
     <div class="jumbotron">
       <h1 class="display-4">Welcome on Retro Tool page!</h1>
-      <p class="lead">This is a very simple tool which can make your retros great again! Don't waste your time and Sign up for free! </p>
+        <p class="lead">This is a very simple tool which can make your retros great again! {% if not user.is_authenticated %} Don't waste your time and <a href="{% url 'register' %}">Sign up</a> for free! {% endif %} </p>
       <hr class="my-4">
       <p>RetroTool provides 3 columns: Went Well, To Improve, Action Points and Voting system.</p>
       <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
@@ -15,7 +15,7 @@
             <a href="{% url 'password_change' %}">Change password</a> <br>
             <a href="{% url 'main' %}">My boards</a> <br>
         {% else %}
-            <a href="{% url 'login' %}">Login</a>
+            Are you already registered? <a href="{% url 'login' %}">Login</a> here!
         {% endif %}
     </div>
 

@@ -86,7 +86,7 @@ def main(request):
 
 
 def go_to_main(request):
-    return redirect('main')
+    return redirect('dashboard')
 
 
 def remove_retro(request, retro_id):
