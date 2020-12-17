@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from retro_app.views import home, delete, edit, main, go_to_main, remove_retro, dashboard, register, settings, voting, card_vote, card_vote_down, archived
+from retro_app.views import home, delete, edit, main, go_to_main, remove_retro, dashboard, register, settings, card_vote, card_vote_down, archived
 
 urlpatterns = [
     path('', go_to_main),
@@ -29,7 +29,6 @@ urlpatterns = [
     path('register', register, name='register'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('home/<retro_id>/settings/', settings, name="settings"),
-    path('voting/<retro_id>', voting, name="voting"),
     path('vote/<card_id>', card_vote, name="card_vote"),
     path('vote-down/<card_id>', card_vote_down, name="card_vote_down"),
     path('archived/', archived, name="archived"),

@@ -2,11 +2,12 @@
 
 {% block content %}
 
+{% if user.id == author.id %}
     <h3>Settings</h3>
     <p style="color: red;">This section will be updated later!</p>
     <li>Voting</li> <small>If enabled, users can vote.</small>
 
-    <form action="{% url 'voting' retro_id %}" method="POST">
+    <form action="{% url 'settings' retro_id %}" method="POST">
         {% csrf_token %}
         <div>
             <input type="radio" id="voting_disable"
@@ -34,12 +35,15 @@
         <li>Set timer</li> <small>Time for completing retro board.</small> <br/>
         <button type="submit" class="btn btn-primary btn-sm">Save</button>
     </form>
-<br/>
+    <br/>
     Retro id: {{ retro_id }} <br/>
     Board author: {{ author }} <br/>
     Voting: {{ voting }} <br/>
     Number of votes: {{ votes }} <br/>
     <a href="{% url 'home' retro_id %}">Back to current retro board</a> <br/>
     <a href="{% url 'archived' %}">Go to Archives</a>
+{% else %}
+    You shouldn't be here! Get out!
+{% endif %}
 
 {% endblock %}

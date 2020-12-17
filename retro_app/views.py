@@ -34,7 +34,7 @@ def home(request, retro_id):
             cards_with_amount_of_votes.append([card, card.get_votes()])
             if request.user in card.votes.all():
                 my_votes = my_votes + 1
-        if my_votes == retro.votes:
+        if my_votes >= retro.votes:
             limit = True
         else:
             limit = False
@@ -116,23 +116,22 @@ def register(request):
             return render(request, "register.html", {"form": UserCreationForm, "isValid": isValid})
 
 
+@login_required
 def settings(request, retro_id):
+    if request.method == "POST":
+        retro = Retro.objects.get(pk=retro_id)
+        retro.voting = request.POST.get('voting')
+        retro.votes = request.POST.get('num_of_votes')
+        retro.archived = request.POST.get('archived')
+        retro.save()
+
+    # if I changed settings, I have to get retro instance again to "update" its fields
     retro = Retro.objects.get(pk=retro_id)
     author = retro.author
     voting = retro.voting
     votes = retro.votes
     archived = retro.archived
     return render(request, 'settings.html', {'retro_id': retro_id, 'author': author, 'voting': voting, 'votes': votes, 'archived': archived})
-
-
-def voting(request, retro_id):
-    retro = get_object_or_404(Retro, id=retro_id)
-    retro.voting = request.POST.get("voting")
-    retro.votes = request.POST.get('num_of_votes')
-    retro.archived = request.POST.get('archived')
-    retro.save()
-    # request.session['num_of_votes'] = retro.votes
-    return HttpResponseRedirect(reverse('settings', args=[str(retro_id)]))
 
 
 def card_vote(request, card_id):
