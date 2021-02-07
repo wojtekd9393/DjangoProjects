@@ -15,51 +15,29 @@
     <title>Retro Tool</title>
   </head>
   <body>
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="{% url 'dashboard' %}">Retro Tool</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
-            </li>
-            <li class="nav-item">
-
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'main' %}">My boards</a>
-            </li>
-            <li class="nav-item">
-
-            </li>
-        </ul>
-      </div>
+      <nav class="new_nav clearfix">
+          <div class="logo"><a href="">Retro Tool</a></div>
+          <ul>
+              <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+              <li><a href="{% url 'main' %}">My boards</a></li>
+              <li><a href="{% url 'archived' %}">Archives</a></li>
+              {% if not user.is_authenticated %}
+                <li><a href="{% url 'login' %}">Log In</a></li>
+                <li><a href="{% url 'register' %}">Sign Up</a></li>
+              {% endif %}
+          </ul>
           {% if user.is_authenticated %}
-          <div class="dropleft" style="color: white; ">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Hello, {{ user.username|default:'Guest' }}!
-            </button>
-
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" href="{% url 'main' %}">My boards</a>
-              <a class="dropdown-item" href="{% url 'archived' %}">Archives</a>
-              <a class="dropdown-item" href="{% url 'password_change' %}">Change password</a>
-              {% block settings %}
-
-              {% endblock %}
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-          </div>
-            {% else %}
-                <a class="btn btn-secondary nav-link"  href="{% url 'login' %}">Login</a>
-            {% endif %}
-          </div>
-    </nav>
-      <br/>
-
+              <div class="dropdown">
+                  <a class="dropbtn" href="">Hello, {{ user.username }}!</a>
+                  <div class="dropdown-content">
+                      {% block settings %}
+                      {% endblock %}
+                      <a href="{% url 'password_change' %}">Change password</a>
+                      <a href="{% url 'logout' %}">Log Out</a>
+                  </div>
+              </div>
+          {% endif %}
+      </nav>
 
 <!--      <form class="form-inline my-2 my-lg-0" method="post">-->
 <!--            {% csrf_token %}-->
