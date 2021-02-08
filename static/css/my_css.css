@@ -146,13 +146,23 @@
  }
 
  div.actions{
-    margin-left: 270px;
+    float:right;
+    margin-top: 5px;
  }
 
  .card-body p {
     text-align: justify;
+    margin-bottom: 0;
  }
 
- .btn-group {
+div.vote {
     float: right;
- }
+    font-size: 16px;
+}
+
+div.vote a {
+    margin-right: 5px;
+}
+a.unvote:hover i  {
+
+}
