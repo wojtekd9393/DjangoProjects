@@ -1,20 +1,42 @@
-{% extends 'base.html' %}
 {% load static %}
-{% block content %}
-
-    <div class="jumbotron agile">
-      <h1 class="display-4">Welcome on Retro Tool page!</h1>
-        <p class="lead">Try this tool to improve your retros. {% if not user.is_authenticated %} Don't waste your time and <a href="{% url 'register' %}">Sign up</a> for free! {% endif %} </p>
-        {% if not user.is_authenticated %}
-            <p class="lead">Are you already registered? <a href="{% url 'login' %}">Login</a> here!</p>
-        {% endif %}
-      <hr class="my-4">
-      <p>Retro Tool provides:</p>
-        <ul class="features">
-            <li>3 columns: Went Well, To Improve, Action Points</li>
-            <li>Space for retro archiving</li>
-            <li>Voting system</li>
-        </ul>
-    </div>
-
-{% endblock %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@1,300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/my_css.css' %}">
+    <script type="text/javascript"> (function() { var css = document.createElement('link'); css.href = 'https://use.fontawesome.com/releases/v5.1.0/css/all.css'; css.rel = 'stylesheet'; css.type = 'text/css'; document.getElementsByTagName('head')[0].appendChild(css); })(); </script>
+    <title>Retro Tool</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="bg clearfix">
+        <nav>
+          <ul>
+            <li><a href="#">How to use?</a></li>
+            <li><a href="#">Features</a></li>
+            <li><a href="#">FAQ</a></li>
+            {% if not user.is_authenticated %}
+              <li class="nav_right"><a href="{% url 'login' %}"><i class="fas fa-user fa-white"></i> Login</a></li>
+              <li class="nav_right"><a href="{% url 'register' %}">Register</a></li>
+            {% else %}
+              <li class="nav_right"><a href="{% url 'main' %}"><i class="fas fa-user fa-white"></i> {{ user.username }}</a></li>
+              <li class="nav_right"><a href="{% url 'logout' %}">Log Out</a></li>
+            {% endif %}
+          </ul>
+        </nav>
+        <h1>Climb the Agile mountains with MyRetro</h1>
+        <h2>Effective. Simple. Nice.</h2>
+        <a href="{% url 'login' %}" class="login">Log In</a>
+    </header>
+  </body>
+</html>
