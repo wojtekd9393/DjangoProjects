@@ -15,30 +15,31 @@
     <title>Retro Tool</title>
   </head>
   <body>
+    <header class="retro_header clearfix">
+      <div class="logo"><a href="">My Retro</a></div>
       <nav class="new_nav clearfix">
-          <div class="logo"><a href="">Retro Tool</a></div>
           <ul>
-              <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-              <li><a href="{% url 'main' %}">My boards</a></li>
-              <li><a href="{% url 'archived' %}">Archives</a></li>
+              <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+              <li><a href="{% url 'main' %}"><i class="fas fa-chalkboard"></i> My boards</a></li>
+              <li><a href="{% url 'archived' %}"><i class="fas fa-archive"></i> Archives</a></li>
               {% if not user.is_authenticated %}
-                <li><a href="{% url 'login' %}">Log In</a></li>
-                <li><a href="{% url 'register' %}">Sign Up</a></li>
+<!--                <li><a href="{% url 'login' %}">Log In</a></li>-->
+<!--                <li><a href="{% url 'register' %}">Sign Up</a></li>-->
               {% endif %}
           </ul>
-          {% if user.is_authenticated %}
-              <div class="dropdown">
-                  <a class="dropbtn" href="">Hello, {{ user.username }}!</a>
-                  <div class="dropdown-content">
-                      {% block settings %}
-                      {% endblock %}
-                      <a href="{% url 'password_change' %}">Change password</a>
-                      <a href="{% url 'logout' %}">Log Out</a>
-                  </div>
-              </div>
-          {% endif %}
       </nav>
-
+      {% if user.is_authenticated %}
+        <div class="dropdown">
+            <a class="login" href="#"><i class="fas fa-user"></i> {{ user.username }}</a>
+                <div class="dropdown-content">
+                    {% block settings %}
+                    {% endblock %}
+                    <a href="{% url 'password_change' %}"><i class="fas fa-unlock-alt"></i> Change password</a>
+                    <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+                </div>
+        </div>
+      {% endif %}
+    </header>
 <!--      <form class="form-inline my-2 my-lg-0" method="post">-->
 <!--            {% csrf_token %}-->
 <!--          <input class="form-control mr-sm-2 add_item" type="search" placeholder="Add Item" aria-label="Search", size="100" name="item">-->

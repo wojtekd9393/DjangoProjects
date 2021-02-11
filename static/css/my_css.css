@@ -1,3 +1,7 @@
+ body {
+    overflow-y: scroll;
+ }
+
 .add_item {
     word-wrap: break-word;
 }
@@ -35,8 +39,14 @@
  }
 
 .new_nav {
-    margin-bottom: 20px;
+    padding: 5px;
+    width: 40%;
+    float: left;
+}
+
+header.retro_header {
     background-color: #1e88e5;
+    margin-bottom: 20px;
 }
 
 .new_nav ul {
@@ -46,27 +56,35 @@
 .new_nav ul li {
     float: left;
     margin: 0 10px;
+
 }
 
 .new_nav a {
     display: block;
     text-decoration: none;
-    font-size: 18px;
+    font-size: 16px;
     color: white;
-    padding: 10px 20px;
-    box-sizing: border-box;
-    border: 2px solid transparent;
-    line-height: 30px;
+    padding: 5px 20px;
+    line-height: 24px;
 }
-.new_nav div.logo a {
-    font-size: 24px;
-    line-height: 30px;
-    margin-left: 10px;
+
+.new_nav li:hover {
+    background-color: #7aafff;
 }
-.new_nav ul li a:hover {
-    border-bottom: 2px solid white;
-    border-top: 2px solid white;
-    /*background-color: #2e99e5;*/
+
+div.logo a {
+    text-decoration: none;
+    font-size: 20px;
+    line-height: 24px;
+    color: white;
+}
+
+div.logo {
+    font-weight: bold;
+    float: left;
+    margin: 10px;
+    margin-right: 20%;
+    margin-left: 30px;
 }
 
 .new_nav ul li:nth-child(4) {
@@ -83,28 +101,34 @@
     clear: both;
 }
 
-.logo {
-    float: left; font-weight: bold;
-}
+
 .dropdown {
-  float: right;
   position: relative;
-  box-sizing: border-box;
-  margin-right: 20px;
-  width: 200px;
-  text-align: center;
+  float: left;
+  padding: 10px;
+  margin-left: 21%;
 }
 
-.dropbtn {
+.login {
+  display: block;
   color: white;
-  border: none;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.dropdown:hover a.login {
+    text-decoration: none;
+    color: white;
 }
 
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #1e88e5 ;
-  width: 200px;
+  padding: 5px;
+  background-color: #247bff;
+  top: 40px;
+  right: -20px;
+  width: 180px;
   z-index: 1;
 }
 
@@ -113,17 +137,16 @@
   text-decoration: none;
   display: block;
   font-size: 16px;
+  padding: 5px 0 5px 5px;
 }
 
-.dropdown-content a:hover {background-color: #90caf9;}
+.dropdown-content a:hover {
+    background-color: #7aafff;
+}
 
-.dropdown:hover .dropdown-content {display: block;}
-
-.dropdown:hover .dropbtn {background-color: #1976d2;}
-
- body {
-    overflow-y: scroll;
- }
+.dropdown:hover .dropdown-content {
+    display: block;
+}
 
  div.actions{
     float:right;
@@ -163,18 +186,19 @@ header.bg h1 {
     text-align: center;
     letter-spacing: 1px;
     font-family: 'Roboto Mono', monospace;
+    line-height: 170%;
 }
 
 header.bg h2 {
     position: absolute;
-    top: 45%;
+    top: 50%;
     right: 30%;
     color: black;
     font-size: 32px;
     font-family: 'Roboto Mono', monospace;
 }
 
-header.bg a.login {
+header.bg a.signup {
     position: absolute;
     padding: 10px 120px;
     border: 2px solid white;
@@ -185,11 +209,11 @@ header.bg a.login {
     text-decoration: none;
 }
 
-header.bg a.login:hover {
+header.bg a.signup:hover {
     background-color: rgba(0, 75, 150, 0.5);
 }
 
-header.bg a.login {
+header.bg a.signup {
     bottom: 20%;
     left: 40%;
 }
@@ -200,22 +224,23 @@ header.bg nav {
     right: 0;
     background-color: rgba(0,100,255, 0.5);
     width: 100%;
+    height: 48px;
 }
 
-header.bg nav ul {
+header.bg nav>ul {
     list-style: none;
 }
 
-header.bg nav ul li {
+header.bg nav>ul>li {
     float: left;
     transition: 0.2s;
 }
 
-header.bg nav ul li.nav_right {
+header.bg nav>ul li.nav_right {
     float: right;
 }
 
-header.bg nav ul li a {
+header.bg nav>ul li a {
     display: block;
     padding: 10px 40px;
     color: white;
@@ -223,7 +248,41 @@ header.bg nav ul li a {
     font-size: 24px;
 }
 
-header.bg nav ul li:hover {
+header.bg nav>ul li:hover {
     background-color: rgba(255, 255, 255, 0.3);
     cursor: pointer;
+}
+
+header.bg nav>ul li.nav_right:hover ul {
+    display: block;
+}
+
+header.bg nav>ul li.nav_right:hover ul li a {
+    font-size: 22px;
+}
+ul.inner_list {
+    display: none;
+    list-style: none;
+}
+
+ul.inner_list li {
+    display: block;
+    float: none;
+    background-color: rgba(0, 100, 255, 0.5);
+}
+
+ul.inner_list li a {
+    color: black;
+
+}
+
+header.bg nav>ul li.nav_right:hover ul.inner_list li:hover a {
+    color: white;
+    background-color: rgba(0, 0, 255, 0.4);
+    background-color: rgba(0, 66, 166, 1);
+    font-size: 22px;
+}
+
+i {
+    margin-right: 2px;
 }
