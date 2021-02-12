@@ -178,7 +178,7 @@ header.bg {
 
 header.bg h1 {
     position: absolute;
-    top: 20%;
+    top: 10%;
     left: 20%;
     font-size: 40px;
     color: black;
@@ -191,8 +191,8 @@ header.bg h1 {
 
 header.bg h2 {
     position: absolute;
-    top: 50%;
-    right: 30%;
+    top: 40%;
+    left: 35%;
     color: black;
     font-size: 32px;
     font-family: 'Roboto Mono', monospace;
@@ -200,6 +200,8 @@ header.bg h2 {
 
 header.bg a.signup {
     position: absolute;
+    bottom: 25%;
+    left: 40%;
     padding: 10px 120px;
     border: 2px solid white;
     font-size: 22px;
@@ -211,11 +213,6 @@ header.bg a.signup {
 
 header.bg a.signup:hover {
     background-color: rgba(0, 75, 150, 0.5);
-}
-
-header.bg a.signup {
-    bottom: 20%;
-    left: 40%;
 }
 
 header.bg nav {
@@ -258,28 +255,6 @@ header.bg nav>ul li.nav_right:hover ul {
 }
 
 header.bg nav>ul li.nav_right:hover ul li a {
-    font-size: 22px;
-}
-ul.inner_list {
-    display: none;
-    list-style: none;
-}
-
-ul.inner_list li {
-    display: block;
-    float: none;
-    background-color: rgba(0, 100, 255, 0.5);
-}
-
-ul.inner_list li a {
-    color: black;
-
-}
-
-header.bg nav>ul li.nav_right:hover ul.inner_list li:hover a {
-    color: white;
-    background-color: rgba(0, 0, 255, 0.4);
-    background-color: rgba(0, 66, 166, 1);
     font-size: 22px;
 }
 
