@@ -85,10 +85,6 @@ def main(request):
         return render(request, 'main.html', {'all_retros': all_retros, 'all_items': retros_with_amount_of_cards})
 
 
-def go_to_main(request):
-    return redirect('dashboard')
-
-
 def remove_retro(request, retro_id):
     item = Retro.objects.get(pk=retro_id)
     item.delete()
