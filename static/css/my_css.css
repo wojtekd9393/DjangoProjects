@@ -179,40 +179,46 @@ header.bg {
 header.bg h1 {
     position: absolute;
     top: 10%;
-    left: 20%;
-    font-size: 40px;
+    left: 15%;
+    font-size: 60px;
     color: black;
-    width: 60%;
+    width: 70%;
     text-align: center;
     letter-spacing: 1px;
-    font-family: 'Roboto Mono', monospace;
+    font-family: 'Raleway', sans-serif;
+    font-weight: bold;
     line-height: 170%;
 }
 
 header.bg h2 {
     position: absolute;
-    top: 40%;
-    left: 35%;
+    width: 40%;
+    top: 35%;
+    left: 30%;
     color: black;
-    font-size: 32px;
-    font-family: 'Roboto Mono', monospace;
+    font-size: 36px;
+    text-align: center;
+    font-family: 'Roboto Mono', monospace, sans-serif;
 }
 
 header.bg a.signup {
     position: absolute;
-    bottom: 25%;
+    width: 20%;
+    bottom: 30%;
     left: 40%;
-    padding: 10px 120px;
+    padding: 10px 60px;
     border: 2px solid white;
-    font-size: 22px;
+    font-size: 24px;
     color: white;
     font-family: 'Lato', sans-serif;
+    text-align: center;
     text-transform: uppercase;
+    letter-spacing: 1px;
     text-decoration: none;
 }
 
 header.bg a.signup:hover {
-    background-color: rgba(0, 75, 150, 0.5);
+    background-color: rgba(0, 50, 170, 0.5);
 }
 
 header.bg nav {
@@ -256,6 +262,12 @@ header.bg nav>ul li.nav_right:hover ul {
 
 header.bg nav>ul li.nav_right:hover ul li a {
     font-size: 22px;
+}
+
+section.features {
+    width: 80%;
+    margin: 50px auto;
+    text-align: justify;
 }
 
 i {
