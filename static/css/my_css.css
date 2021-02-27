@@ -169,21 +169,33 @@ div.vote a {
 
 header.bg {
     position: relative;
-    height: 100vh;
-    background-image: url(../img/mountains3.png);
-    background-attachment: fixed;
+}
+
+header.bg div.my_retro {
+    position: absolute;
+    width: 50%;
+    top: 10%;
+    left: 5%;
+}
+
+header.bg div.agile_picture {
+    position: absolute;
+    width: 50%;
+    height: 80vh;
+    top: 10%;
+    right: 0;
+    background-image: url(../img/image1.png);
     background-repeat: no-repeat;
     background-size: cover;
 }
 
 header.bg h1 {
-    position: absolute;
-    top: 10%;
-    left: 15%;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    margin-left: 10%;
+    margin-right: 10%;
     font-size: 60px;
     color: black;
-    width: 70%;
-    text-align: center;
     letter-spacing: 1px;
     font-family: 'Raleway', sans-serif;
     font-weight: bold;
@@ -191,21 +203,21 @@ header.bg h1 {
 }
 
 header.bg h2 {
-    position: absolute;
-    width: 40%;
-    top: 35%;
-    left: 30%;
+    margin-left: 10%;
+    margin-right: 10%;
     color: black;
-    font-size: 36px;
-    text-align: center;
+    font-size: 28px;
     font-family: 'Roboto Mono', monospace, sans-serif;
+    line-height: 170%;
 }
 
 header.bg a.signup {
-    position: absolute;
-    width: 20%;
-    bottom: 30%;
-    left: 40%;
+    display: block;
+    width: 40%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 50px;
+    background-color: rgb(0,100,255);
     padding: 10px 60px;
     border: 2px solid white;
     font-size: 24px;
@@ -218,7 +230,7 @@ header.bg a.signup {
 }
 
 header.bg a.signup:hover {
-    background-color: rgba(0, 50, 170, 0.5);
+    background-color: rgb(0,50,255, 0.9);
 }
 
 header.bg nav {
@@ -262,12 +274,6 @@ header.bg nav>ul li.nav_right:hover ul {
 
 header.bg nav>ul li.nav_right:hover ul li a {
     font-size: 22px;
-}
-
-section.features {
-    width: 80%;
-    margin: 50px auto;
-    text-align: justify;
 }
 
 i {
