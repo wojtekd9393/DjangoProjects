@@ -1,13 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import List, Retro
 from .forms import ListForm, RetroForm
-# from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
 
@@ -44,8 +42,6 @@ def home(request, retro_id):
 def delete(request, list_id):
     item = List.objects.get(pk=list_id)
     item.delete()
-    # messages.success(request, ('Item has been deleted!'))
-    # return redirect('home', retro_id=item.retro.id)
     return JsonResponse({'result': 'ok'}, status=200)
 
 
@@ -57,7 +53,6 @@ def edit(request, list_id):
 
         if form.is_valid():
             form.save()
-            # messages.success(request, ('Item has been edited!'))
             return redirect('home', retro_id=item.retro.id)
     else:
         item = List.objects.get(pk=list_id)
@@ -121,13 +116,9 @@ def settings(request, retro_id):
         retro.archived = request.POST.get('archived')
         retro.save()
 
-    # if I changed settings, I have to get retro instance again to "update" its fields
+    # if I changed board settings, I have to get retro instance again to "update" its fields
     retro = Retro.objects.get(pk=retro_id)
-    author = retro.author
-    voting = retro.voting
-    votes = retro.votes
-    archived = retro.archived
-    return render(request, 'settings.html', {'retro_id': retro_id, 'author': author, 'voting': voting, 'votes': votes, 'archived': archived})
+    return render(request, 'settings.html', {'retro': retro})
 
 
 def card_vote(request, card_id):
