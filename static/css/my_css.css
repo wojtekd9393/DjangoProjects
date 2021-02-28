@@ -103,20 +103,20 @@ div.logo a {
 }
 
 .dropdown {
-  width: 25%;
-  position: relative;
-  float: left;
-  padding: 10px 0;
-  padding-left: 15%;
+    position: relative;
+    width: 25%;
+    float: left;
+    padding: 10px 0;
+    padding-left: 10%;
 }
 
 .login {
-  display: block;
-  color: white;
-  font-size: 16px;
-  line-height: 24px;
-  text-decoration: none;
-  padding-right: 5%;
+    display: block;
+    text-align: center;
+    color: white;
+    font-size: 16px;
+    line-height: 24px;
+    text-decoration: none;
 }
 
 .dropdown:hover a.login {
@@ -125,23 +125,23 @@ div.logo a {
 }
 
 .dropdown-content {
-  display: none;
-  position: absolute;
-  padding: 5px;
-  background-color: #247bff;
-  top: 40px;
-  right: 0%;
-  width: 180px;
-  z-index: 1;
+    display: none;
+    position: absolute;
+    padding: 5px;
+    background-color: #247bff;
+    top: 40px;
+    right: 0%;
+    width: 180px;
+    z-index: 1;
 }
 
 .dropdown-content a {
-  color: white;
-  text-decoration: none;
-  display: block;
-  font-size: 16px;
-  line-height: 24px;
-  padding: 5px;
+    color: white;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    line-height: 24px;
+    padding: 5px;
 }
 
 .dropdown-content a:hover {

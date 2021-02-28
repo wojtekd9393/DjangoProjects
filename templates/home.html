@@ -3,27 +3,11 @@
 
     {% block settings %}
         {% if author.id == user.id %}
-            <a class=".dropdown-content" href="{% url 'settings' retro_id %}"><i class="fas fa-sliders-h"></i> Settings</a>
+            <a class=".dropdown-content" href="{% url 'settings' retro_id %}"><i class="fas fa-sliders-h"></i> Board settings</a>
         {% endif %}
     {% endblock %}
 
 {% block content %}
-<!--    {% if messages %}-->
-<!--    {% for message in messages %}-->
-<!--        <div class="alert alert-warning alert-dismissable" role="alert">-->
-<!--            <button class="close" data-dismiss="alert">-->
-<!--                <small><sup>x</sup></small>-->
-<!--            </button>-->
-<!--            {{ message }}-->
-<!--        </div>-->
-<!--    {% endfor %}-->
-<!--    {% endif %}-->
-
-
-<!-- Button trigger modal -->
-<!--<button type="button" class="btn btn-primary" data-val="dsdsds" data-toggle="modal" data-target="#exampleModal">-->
-<!--  Launch demo modal-->
-<!--</button>-->
 
 <!-- Modal okno nr 1-->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -113,14 +97,12 @@ poprawic w przyszlosci !!!-->
 
       <div class="row">
           <div class="col-sm-4">
-<!--           <h5 class="card-title">What Went Well</h5>-->
               <h3><i class="fas fa-square fa-green"></i> Went Well</h3>
               <div class="card">
                   <div>
                       <p class="card-text">
                           <a data-target="#exampleModal" data-toggle="modal" class="MainNavText" id="Modal1"
                             href="#exampleModal" {% if user.is_authenticated == False or retro.voting or retro.archived %} style="pointer-events: none;" {% endif %}><center><i class="fas fa-plus-square fa-black fa-2x"></i></center></a>
-<!--                        <a href="#"><center><i class="fas fa-plus-square fa-2x"></i></center></a>-->
                       </p>
                   </div>
               </div> </br>
@@ -128,7 +110,6 @@ poprawic w przyszlosci !!!-->
                   {% for things, votes in cards %}
                   {% if things.completed == 1 %}
                     <div class="card text-white bg-success mb-3" id="greenCard" data-id="{{ things.id }}">
-    <!--                <div class="card-header">To Improve</div>-->
                         <div class="card-body">
                             <p>{{ things.item }}</p>
                             <div class="actions">
@@ -167,7 +148,6 @@ poprawic w przyszlosci !!!-->
                   {% for things, votes in cards %}
                   {% if things.completed == 2 %}
                     <div class="card text-white bg-danger mb-3" id="redCard" data-id="{{ things.id }}">
-    <!--                <div class="card-header">To Improve</div>-->
                         <div class="card-body">
                             <p>{{ things.item }}</p>
                             <div class="actions">
@@ -199,7 +179,6 @@ poprawic w przyszlosci !!!-->
                       <p class="card-text">
                           <a data-target="#exampleModal3" data-toggle="modal" class="MainNavText" id="Modal3"
                             href="#exampleModal" {% if user.is_authenticated == False or retro.voting or retro.archived %} style="pointer-events: none;" {% endif %}><center><i class="fas fa-plus-square fa-black fa-2x"></i></center></a>
-<!--                        <a href="#"><center><i class="fas fa-plus-square fa-2x"></i></center></a>-->
                       </p>
                   </div>
               </div></br>
@@ -225,7 +204,6 @@ poprawic w przyszlosci !!!-->
                                 </div>
                             {% endif %}
                         </div>
-<!--                        <div class="card-footer bg-transparent border-danger">Footer</div>-->
                     </div>
                   {% endif %}
                   {% endfor %}
