@@ -18,7 +18,7 @@ class Retro(models.Model):
 
 class List(models.Model):
     item = models.CharField(max_length=200)
-    completed = models.PositiveSmallIntegerField(default=1)
+    category = models.PositiveSmallIntegerField(default=1)
     retro = models.ForeignKey(Retro, on_delete=models.CASCADE)
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     votes = models.ManyToManyField(get_user_model(), related_name='card_votes')
