@@ -2,7 +2,7 @@
 {% load static %}
 
     {% block settings %}
-        {% if author.id == user.id %}
+        {% if retro.author.id == user.id %}
             <a class=".dropdown-content" href="{% url 'settings' retro_id %}"><i class="fas fa-sliders-h"></i> Board settings</a>
         {% endif %}
     {% endblock %}

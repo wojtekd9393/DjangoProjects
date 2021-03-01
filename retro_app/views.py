@@ -13,21 +13,16 @@ from django.forms.models import model_to_dict
 
 
 def home(request, retro_id):
-    # request.session['my_votes'] = 0
     if request.method == 'POST':
         form = ListForm(request.POST or None)
-
         if form.is_valid():
             new_task = form.save()
-            # all_items = List.objects.filter(retro=retro_id)
             return JsonResponse({'task': model_to_dict(new_task), 'retro_id': retro_id}, status=200)
     else:
         retro = Retro.objects.get(pk=retro_id)
-        author = retro.author
         all_items = List.objects.filter(retro=retro_id)
         cards_with_amount_of_votes = []
         my_votes = 0
-        limit = False
         for card in all_items:
             cards_with_amount_of_votes.append([card, card.get_votes()])
             if request.user in card.votes.all():
@@ -36,7 +31,7 @@ def home(request, retro_id):
             limit = True
         else:
             limit = False
-        return render(request, 'home.html', {'all_items': all_items, 'retro_id': retro_id, 'author': author, 'retro': retro, "cards": cards_with_amount_of_votes, 'limit': limit})
+        return render(request, 'home.html', {'all_items': all_items, 'retro_id': retro_id, 'retro': retro, "cards": cards_with_amount_of_votes, 'limit': limit})
 
 
 def delete(request, list_id):
@@ -48,11 +43,11 @@ def delete(request, list_id):
 def edit(request, list_id):
     if request.method == 'POST':
         item = List.objects.get(pk=list_id)
-
         form = ListForm(request.POST or None, instance=item)
-
         if form.is_valid():
             form.save()
+            return redirect('home', retro_id=item.retro.id)
+        else:
             return redirect('home', retro_id=item.retro.id)
     else:
         item = List.objects.get(pk=list_id)
@@ -64,20 +59,21 @@ def main(request):
     user = request.user
     if request.method == 'POST':
         form = RetroForm(request.POST or None)
-
         if form.is_valid():
             form.save()
-            all_retros = Retro.objects.filter(author=user.id)
+            all_retros = Retro.objects.filter(author=user.id, archived=False)
             retros_with_amount_of_cards = []
             for retro in all_retros:
                 retros_with_amount_of_cards.append([retro, retro.list_set.count()])
-            return render(request, 'main.html', {'all_retros': all_retros, 'all_items': retros_with_amount_of_cards})
+            return render(request, 'main.html', {'all_retros': retros_with_amount_of_cards})
+        else:
+            return redirect('main')
     else:
-        all_retros = Retro.objects.filter(author=user.id)
+        all_retros = Retro.objects.filter(author=user.id, archived=False)
         retros_with_amount_of_cards = []
         for retro in all_retros:
             retros_with_amount_of_cards.append([retro, retro.list_set.count()])
-        return render(request, 'main.html', {'all_retros': all_retros, 'all_items': retros_with_amount_of_cards})
+        return render(request, 'main.html', {'all_retros': retros_with_amount_of_cards})
 
 
 def remove_retro(request, retro_id):
@@ -91,20 +87,16 @@ def dashboard(request):
 
 
 def register(request):
-    isValid = True
-    if request.method == "GET":
-        isValid = True
-        return render(request, "register.html", {"form": UserCreationForm, "isValid": isValid})
-    elif request.method == "POST":
+    if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            isValid = True
             user = form.save()
             login(request, user)
             return redirect(reverse("dashboard"))
         else:
-            isValid = False
-            return render(request, "register.html", {"form": UserCreationForm, "isValid": isValid})
+            return render(request, "register.html", {"form": UserCreationForm})
+    else:
+        return render(request, "register.html", {"form": UserCreationForm})
 
 
 @login_required
@@ -124,10 +116,6 @@ def settings(request, retro_id):
 def card_vote(request, card_id):
     card = get_object_or_404(List, id=card_id)
     card.votes.add(request.user)
-    # request.session['my_votes'] = request.session['my_votes'] + 1
-    # print(request.user in card.votes.all())
-    # request.session['num_of_votes'] = str(int(request.session['num_of_votes']) - 1)
-    # print("My votes:", request.session.get('my_votes'))
     retro_id = card.retro.id
     return HttpResponseRedirect(reverse('home', args=[str(retro_id)]))
 
@@ -146,8 +134,5 @@ def archived(request):
     retros_with_amount_of_cards = []
     for retro in archived_retros:
         retros_with_amount_of_cards.append([retro, retro.list_set.count()])
-    return render(request, 'archived.html', {'archived_retros': archived_retros, 'all_items': retros_with_amount_of_cards})
-
-
-
+    return render(request, 'archived.html', {'all_retros': retros_with_amount_of_cards})
 
