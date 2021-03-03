@@ -104,10 +104,9 @@ div.logo a {
 
 .dropdown {
     position: relative;
-    width: 25%;
-    float: left;
+    float: right;
     padding: 10px 0;
-    padding-left: 10%;
+    margin-right: 30px;
 }
 
 .login {
@@ -124,13 +123,17 @@ div.logo a {
     color: white;
 }
 
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
 .dropdown-content {
     display: none;
     position: absolute;
     padding: 5px;
     background-color: #247bff;
-    top: 40px;
-    right: 0%;
+    top: 44px;      /* line-height(24px) + margin-top(10px) + margin-bottom(10px) */
+    right: -30px;   /* margin-right for .dropdown(30px) */
     width: 180px;
     z-index: 1;
 }
@@ -146,10 +149,6 @@ div.logo a {
 
 .dropdown-content a:hover {
     background-color: #7aafff;
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
 }
 
 header.bg {
