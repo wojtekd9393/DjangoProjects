@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from datetime import date
 
 # Create your models here.
 
@@ -8,6 +9,7 @@ class Retro(models.Model):
     name = models.CharField(max_length=64)
     leader = models.CharField(max_length=32)
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    date = models.DateField(auto_now_add=True)
     voting = models.BooleanField(default=False)
     votes = models.PositiveSmallIntegerField(default=1)
     archived = models.BooleanField(default=False)

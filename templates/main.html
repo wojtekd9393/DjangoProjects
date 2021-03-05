@@ -39,7 +39,8 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    {{ retro.leader }}</br>
+                    {{ retro.date|date:"d-F-Y" }}</br>
+                    {{ retro.leader }}
                 </div>
             </div>
         {% endfor %}
