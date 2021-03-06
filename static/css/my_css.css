@@ -283,3 +283,12 @@ div.vote a {
 i {
     margin-right: 2px;
 }
+
+.add-board {
+    text-align: center;
+}
+
+.board-header {
+    font-size: 12px;
+    margin: 10px 0 0 0;
+}

@@ -32,15 +32,15 @@
         {% for retro, amountOfCards in all_retros %}
             <div class="card text-white bg-primary mb-3" style="width: 30%; float: left; margin: 10px;">
                 <div class="card-header">
-                    <a href="{% url 'home' retro.id %}" style="color: black; float: left;">{{ retro.name }} ({{ amountOfCards }} cards)</a>
+                    <a href="{% url 'home' retro.id %}" style="color: white; font-weight: 500;">{{ retro.name }} ({{ amountOfCards }} cards)</a>
                     <div style="float: right;">
                         <a href="{% url 'settings' retro.id %}" ><i class="fas fa-cog fa-white"></i></a>
                         <a href="{% url 'remove_retro' retro.id %}" ><i class="fas fa-trash-alt fa-white"></i></a>
                     </div>
+                    <div><p class="board-header"><i class="far fa-clock"></i> {{ retro.date|date:"d-F-Y" }}</p></div>
                 </div>
                 <div class="card-body">
-                    {{ retro.date|date:"d-F-Y" }}</br>
-                    {{ retro.leader }}
+                    <p>Lead by: {{ retro.leader }}</p>
                 </div>
             </div>
         {% endfor %}
@@ -50,7 +50,7 @@
                       <p class="card-text">
                         <a data-target="#retroModal" data-toggle="modal" class="MainNavText" id="Modal"
                            href="#retroModal"><center><i class="fas fa-plus-circle fa-2x"></i></center></a>
-                          <center><p>Add board</p></center>
+                          <p class="add-board">Add board</p>
                       </p>
                   </div>
                 </div>

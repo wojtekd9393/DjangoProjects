@@ -5,15 +5,15 @@
         {% for retro, amountOfCards in all_retros %}
                 <div class="card text-white bg-primary mb-3" style="width: 30%; float: left; margin: 10px;">
                     <div class="card-header">
-                        <a href="{% url 'home' retro.id %}" style="color: black; float: left;">{{ retro.name }} ({{ amountOfCards }} cards)</a>
+                        <a href="{% url 'home' retro.id %}" style="color: black;">{{ retro.name }} ({{ amountOfCards }} cards)</a>
                         <div style="float: right;">
                             <a href="{% url 'settings' retro.id %}" ><i class="fas fa-cog fa-white"></i></a>
                             <a href="{% url 'remove_retro' retro.id %}" ><i class="fas fa-trash-alt fa-white"></i></a>
                         </div>
                     </div>
                     <div class="card-body">
-                        {{ retro.date|date:"d-F-Y" }}</br>
-                        {{ retro.leader }}
+                        <p>{{ retro.date|date:"d-F-Y" }}</p>
+                        <p>{{ retro.leader }}</p>
                     </div>
                 </div>
         {% endfor %}
