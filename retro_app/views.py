@@ -31,7 +31,8 @@ def home(request, retro_id):
             limit = True
         else:
             limit = False
-        return render(request, 'home.html', {'all_items': all_items, 'retro_id': retro_id, 'retro': retro, "cards": cards_with_amount_of_votes, 'limit': limit})
+        context = {'all_items': all_items, 'retro_id': retro_id, 'retro': retro, "cards": cards_with_amount_of_votes, 'limit': limit}
+        return render(request, 'home.html', context)
 
 
 def delete(request, list_id):
@@ -62,18 +63,18 @@ def main(request):
         if form.is_valid():
             form.save()
             all_retros = Retro.objects.filter(author=user.id, archived=False)
-            retros_with_amount_of_cards = []
-            for retro in all_retros:
-                retros_with_amount_of_cards.append([retro, retro.list_set.count()])
-            return render(request, 'main.html', {'all_retros': retros_with_amount_of_cards})
+            number_of_retros = len(all_retros)
+            retros_with_amount_of_cards = get_data_from_retro(all_retros)
+            context = {'all_retros': retros_with_amount_of_cards, 'number_of_retros': number_of_retros}
+            return render(request, 'main.html', context)
         else:
             return redirect('main')
     else:
         all_retros = Retro.objects.filter(author=user.id, archived=False)
-        retros_with_amount_of_cards = []
-        for retro in all_retros:
-            retros_with_amount_of_cards.append([retro, retro.list_set.count()])
-        return render(request, 'main.html', {'all_retros': retros_with_amount_of_cards})
+        number_of_retros = len(all_retros)
+        retros_with_amount_of_cards = get_data_from_retro(all_retros)
+        context = {'all_retros': retros_with_amount_of_cards, 'number_of_retros': number_of_retros}
+        return render(request, 'main.html', context)
 
 
 def remove_retro(request, retro_id):
@@ -131,8 +132,21 @@ def card_vote_down(request, card_id):
 def archived(request):
     user = request.user
     archived_retros = Retro.objects.filter(author=user.id, archived=True)
-    retros_with_amount_of_cards = []
-    for retro in archived_retros:
-        retros_with_amount_of_cards.append([retro, retro.list_set.count()])
-    return render(request, 'archived.html', {'all_retros': retros_with_amount_of_cards})
+    number_of_retros = len(archived_retros)
+    retros_with_amount_of_cards = get_data_from_retro(archived_retros)
+    context = {'all_retros': retros_with_amount_of_cards, 'number_of_retros': number_of_retros}
+    return render(request, 'archived.html', context)
 
+
+# helper function
+def get_data_from_retro(retros):
+    cards_authors = []
+    retros_with_amount_of_cards = []
+    for retro in retros:
+        for card in retro.list_set.all():
+            if card.author not in cards_authors:
+                cards_authors.append(card.author)
+        retros_with_amount_of_cards.append([retro, retro.list_set.count(), len(cards_authors)])
+        cards_authors.clear()
+
+    return retros_with_amount_of_cards

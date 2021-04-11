@@ -284,11 +284,80 @@ i {
     margin-right: 2px;
 }
 
-.add-board {
+p.add-board {
     text-align: center;
 }
 
-.board-header {
+p.main-header {
+    margin-left: 2.5%;
+    font-size: 26px;
+}
+
+.my-card, .my-add-board-card {
+    float: left;
+    box-sizing: border-box;
+    width: 20%;
+    padding: 10px;
+    margin: 10px;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+    border-radius: 10px;
+}
+
+.my-card {
+    background-color: #0074D9;
+    color: white;
+    border: transparent solid 1px;
+    transition: 0.2s;
+}
+
+.my-add-board-card {
+    border: black solid 1px;
+}
+
+.my-card:hover {
+    box-shadow: 0 0 4px black;
+}
+
+.my-card p, p.add-board {
+    margin: 0;
+}
+
+.my-retro-name {
+    font-size: 26px;
+}
+
+.my-retro-name a {
+    color: white;
+    text-decoration: none;
+}
+
+.my-retro-date {
     font-size: 12px;
-    margin: 10px 0 0 0;
+}
+
+.my-card-header {
+    padding-bottom: 20px;
+}
+
+div.my-card-header p {
+    text-align: center;
+}
+
+.my-card-properties {
+    margin-bottom: 10px;
+}
+
+.my-card-properties div {
+    float: left;
+    width: 50%;
+}
+
+.my-card-properties div p {
+    text-align: center;
+}
+
+.my-card-icons {
+    padding-top: 10px;
+    float: right;
 }
