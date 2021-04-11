@@ -4,7 +4,6 @@
 
 {% if user.id == retro.author.id %}
     <h3>Settings</h3>
-    <p style="color: red;">This section will be updated later!</p>
     <li>Voting</li> <small>If enabled, users can vote.</small>
 
     <form action="{% url 'settings' retro.id %}" method="POST">
@@ -32,16 +31,11 @@
              name="archived" value="True" {% if retro.archived %} checked {% endif %}>
             <label for="archived">Yes</label>
         </div>
-        <li>Set timer (This function will implemented in the future!)</li> <small>Time for completing retro board.</small> <br/>
+<!--        <li>Set timer (This function will implemented in the future!)</li> <small>Time for completing retro board.</small> <br/>-->
         <button type="submit" class="btn btn-primary btn-sm">Save</button>
     </form>
-    <br/>
-    Retro id: {{ retro.id }} <br/>
-    Board author: {{ retro.author }} <br/>
-    Voting: {{ retro.voting }} <br/>
-    Number of votes: {{ retro.votes }} <br/>
+
     <a href="{% url 'home' retro.id %}">Back to current retro board</a> <br/>
-    <a href="{% url 'archived' %}">Go to Archives</a>
 {% else %}
     You shouldn't be here! Get out!
 {% endif %}

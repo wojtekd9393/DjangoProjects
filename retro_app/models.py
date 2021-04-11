@@ -6,7 +6,6 @@ from django.contrib.auth import get_user_model
 
 class Retro(models.Model):
     name = models.CharField(max_length=64)
-    leader = models.CharField(max_length=32)
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
     voting = models.BooleanField(default=False)
