@@ -23,37 +23,10 @@
       <form class="form-inline my-2 my-lg-0" id="form1" method="post" onkeydown="return event.key != 'Enter';" data-url="{{ request.build_absolute_uri|safe }}">
             {% csrf_token %}
           <input class="form-control mr-sm-2" type="text" placeholder="" aria-label="Search", size="30" name="item">
-          <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="category" value="1">
+          <input class="form-control mr-sm-2 add_item"  type="hidden" placeholder="" aria-label="Search", size="30" name="category" value="">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="retro" value="{{retro_id}}">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="author" value="{{user.id}}">
           <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" name="list1" id="createButton1">Add Item</button>
-      </form>
-      </div>
-      <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal okno nr 2-->
-<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel2">Adding item</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      <form class="form-inline my-2 my-lg-0" id="form2" method="post" onkeydown="return event.key != 'Enter';">
-            {% csrf_token %}
-          <input class="form-control mr-sm-2 add_item" type="text" placeholder="" aria-label="Search", size="30" name="item">
-          <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="category" value="2">
-          <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="retro" value="{{retro_id}}">
-          <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="author" value="{{user.id}}">
-          <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" name="list2" id="createButton2">Add Item</button>
       </form>
       </div>
       <div class="modal-footer">
@@ -68,40 +41,13 @@ onkeydown="return event.key != 'Enter';"
 minus jest taki, ze entera nie mozna tez uzyc w textarea
 poprawic w przyszlosci !!!-->
 
-<!-- Modal okno nr 3-->
-<div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel3">Adding item</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      <form class="form3 form-inline my-2 my-lg-0" id="form3" method="post" onkeydown="return event.key != 'Enter';">
-            {% csrf_token %}
-          <input class="form-control mr-sm-2 add_item" type="text" placeholder="" aria-label="Search", size="30" name="item" id="itemBlue">
-          <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="category" value="3">
-          <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="retro" value="{{retro_id}}">
-          <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="author" value="{{user.id}}">
-          <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" name="list3" id="createButton3">Add Item</button>
-      </form>
-      </div>
-      <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
       <div class="row">
           <div class="col-sm-4">
               <h3><i class="fas fa-square fa-green"></i> Went Well</h3>
               <div class="card">
                   <div>
                       <p class="card-text">
-                          <a data-target="#exampleModal" data-toggle="modal" class="MainNavText" id="Modal1"
+                          <a data-target="#exampleModal" data-toggle="modal" class="MainNavText modal_button" id="Modal1" data-category="1"
                             href="#exampleModal" {% if user.is_authenticated == False or retro.voting or retro.archived %} style="pointer-events: none;" {% endif %}><center><i class="fas fa-plus-square fa-black fa-2x"></i></center></a>
                       </p>
                   </div>
@@ -139,7 +85,7 @@ poprawic w przyszlosci !!!-->
               <div class="card">
                   <div>
                       <p class="card-text">
-                          <a data-target="#exampleModal2" data-toggle="modal" class="MainNavText" id="Modal2"
+                          <a data-target="#exampleModal" data-toggle="modal" class="MainNavText modal_button" id="Modal2" data-category="2"
                             href="#exampleModal" {% if user.is_authenticated == False or retro.voting or retro.archived %} style="pointer-events: none;" {% endif %}><center><i class="fas fa-plus-square fa-black fa-2x"></i></center></a>
                       </p>
                   </div>
@@ -177,7 +123,7 @@ poprawic w przyszlosci !!!-->
               <div class="card">
                   <div>
                       <p class="card-text">
-                          <a data-target="#exampleModal3" data-toggle="modal" class="MainNavText" id="Modal3"
+                          <a data-target="#exampleModal" data-toggle="modal" class="MainNavText modal_button" id="Modal3" data-category="3"
                             href="#exampleModal" {% if user.is_authenticated == False or retro.voting or retro.archived %} style="pointer-events: none;" {% endif %}><center><i class="fas fa-plus-square fa-black fa-2x"></i></center></a>
                       </p>
                   </div>
@@ -213,5 +159,14 @@ poprawic w przyszlosci !!!-->
 {% endblock %}
 
 {% block javascript %}
+    <script>
+        let icons = document.querySelectorAll(".modal_button > i");
+        icons.forEach(icon => {
+            icon.addEventListener("click", (e) => {
+                let category = icon.parentElement.getAttribute("data-category");
+                document.getElementsByName("category")[0].value = category;
+            });
+        })
+    </script>
     <script type="text/javascript" src="{% static 'js/cards_handling.js' %}"></script>
 {% endblock %}
