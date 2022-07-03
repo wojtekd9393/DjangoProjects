@@ -12,6 +12,7 @@ from django.forms.models import model_to_dict
 # Create your views here.
 
 
+@login_required
 def home(request, retro_id):
     if request.method == 'POST':
         form = ListForm(request.POST or None)

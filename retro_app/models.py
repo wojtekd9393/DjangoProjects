@@ -27,7 +27,7 @@ class List(models.Model):
         ordering = ['-id']
 
     def __str__(self):
-        return self.item + ' | ' + str(self.completed)
+        return self.item + ' | ' + str(self.category)
 
     def get_votes(self):
         return self.votes.count()

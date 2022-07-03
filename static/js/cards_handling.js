@@ -1,5 +1,4 @@
 $(document).ready(function(){
-
     var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
 
     $("#createButton1").click(function() {
@@ -8,7 +7,7 @@ $(document).ready(function(){
         $.ajax({
             url: window.location.href,
             data: serializedData,
-            type: 'POST',
+            method: 'POST',
             success: function(response) {
                 let category = response.task.category;
                 let id = response.task.id;
@@ -42,7 +41,6 @@ $(document).ready(function(){
         $("#form1")[0].reset();
     });
 
-
 //    list = document.getElementById("greenList");
 //    list.onclick = function(event) {
 //        //event.stopPropagation(); // co to robi w tym przypadku?
@@ -65,72 +63,32 @@ $(document).ready(function(){
 //        });
 //        }
 
-//    let cards = document.querySelectorAll(".card .card-body");
-//    console.log(cards);
-//    cards.forEach((el) => {
-//        el.addEventListener("click", (e) =>  {
-//           console.log("click" + e);
-//        });
-//    });
     $("#greenList").on('click', '.card .fa-trash-alt', function(event) {
-        event.stopPropagation(); // co to robi w tym przypadku?
+        event.stopPropagation();
         var dataId = $(this).data('id');
 
         $.ajax({
             url: '/delete/item/' + dataId,
             data: {
-                csrfmiddlewaretoken: csrfToken,
-                id: dataId // działa bez tego, czy jest potrzebne?
+                csrfmiddlewaretoken: csrfToken
             },
-            type: 'post',
+            method: 'POST',
             success: function() {
                 $('#greenCard[data-id="' + dataId + '"]').remove();
             }
         });
     });
 
-//    $("#greenList").on('click', '.card', function() {
-//        var dataId = $(this).data('id');
-//        console.log(dataId);
-//
-//        var cardItem = $('#greenCard[data-id="' + dataId + '"]'); // nigdzie nie używana zmienna!
-//
-//    }).on('click', '.fa-trash-alt', function(event) {
-//        event.stopPropagation();
-//
-//        var dataId = $(this).data('id');
-//        console.log("kosz: " + dataId);
-//        $.ajax({
-//            url: '/delete/item/' + dataId,
-//            data: {
-//                csrfmiddlewaretoken: csrfToken,
-//                id: dataId
-//            },
-//            type: 'post',
-//            success: function() {
-//                $('#greenCard[data-id="' + dataId + '"]').remove();
-//            }
-//        });
-//
-//    });
-
-    $("#redList").on('click', '.card', function() {
-        var dataId = $(this).data('id');
-
-        var cardItem = $('#redCard[data-id="' + dataId + '"]');
-
-    }).on('click', '.fa-trash-alt', function(event) {
+    $("#redList").on('click', '.card .fa-trash-alt', function(event) {
         event.stopPropagation();
-
         var dataId = $(this).data('id');
 
         $.ajax({
             url: '/delete/item/' + dataId,
             data: {
-                csrfmiddlewaretoken: csrfToken,
-                id: dataId
+                csrfmiddlewaretoken: csrfToken
             },
-            type: 'post',
+            method: 'POST',
             success: function() {
                 $('#redCard[data-id="' + dataId + '"]').remove();
             }
@@ -138,28 +96,20 @@ $(document).ready(function(){
 
     });
 
-    $("#blueList").on('click', '.card', function() {
-        var dataId = $(this).data('id');
-
-        var cardItem = $('#blueCard[data-id="' + dataId + '"]');
-
-    }).on('click', '.fa-trash-alt', function(event) {
+    $("#blueList").on('click', '.card .fa-trash-alt', function(event) {
         event.stopPropagation();
-
         var dataId = $(this).data('id');
 
         $.ajax({
             url: '/delete/item/' + dataId,
             data: {
-                csrfmiddlewaretoken: csrfToken,
-                id: dataId
+                csrfmiddlewaretoken: csrfToken
             },
-            type: 'post',
+            method: 'POST',
             success: function() {
                 $('#blueCard[data-id="' + dataId + '"]').remove();
             }
         });
-
     });
 
 });
