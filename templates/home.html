@@ -68,9 +68,9 @@ poprawic w przyszlosci !!!-->
                                     {% endif %}
                                 </div>
                                 {% if retro.voting and user.is_authenticated %}
-                                    <div class="vote">
-                                            {% if user in list.votes.all %}<a class="unvote" href="{% url 'card_vote_down' list.id %}" name="card_id" value="{{ list.id }}"><i class="fas fa-eraser fa-white"></i></a>{% endif %}
-                                            <a href="{% url 'card_vote' list.id %}" name="card_id" value="{{ list.id }}" {% if user in list.votes.all or limit == True %} style="pointer-events: none;" {% endif %}><i class="far fa-thumbs-up fa-white"></i></a><p style="float: right;">{{ votes }}</p>
+                                    <div class="vote" data-id="{{ list.id }}">
+                                        {% if user in list.votes.all %}<i class="fas fa-eraser fa-white" data-id="{{ list.id }}"></i>{% endif %}
+                                        <i class="far fa-thumbs-up fa-white" data-id="{{ list.id }}"></i><p style="float: right;">{{ votes }}</p>
                                     </div>
                                 {% endif %}
                             </div>
@@ -106,9 +106,9 @@ poprawic w przyszlosci !!!-->
                                     {% endif %}
                                 </div>
                                 {% if retro.voting and user.is_authenticated %}
-                                    <div class="vote">
-                                            {% if user in list.votes.all %}<a class="unvote" href="{% url 'card_vote_down' list.id %}" name="card_id" value="{{ list.id }}"><i class="fas fa-eraser fa-white"></i></a>{% endif %}
-                                            <a href="{% url 'card_vote' list.id %}" name="card_id" value="{{ list.id }}" {% if user in list.votes.all or limit == True %} style="pointer-events: none;" {% endif %}><i class="far fa-thumbs-up fa-white"></i></a><p style="float: right;">{{ votes }}</p>
+                                    <div class="vote" data-id="{{ list.id }}">
+                                        {% if user in list.votes.all %}<i class="fas fa-eraser fa-white" data-id="{{ list.id }}"></i>{% endif %}
+                                        <i class="far fa-thumbs-up fa-white" data-id="{{ list.id }}"></i><p style="float: right;">{{ votes }}</p>
                                     </div>
                                 {% endif %}
                             </div>
@@ -144,9 +144,9 @@ poprawic w przyszlosci !!!-->
                                     {% endif %}
                                 </div>
                                 {% if retro.voting and user.is_authenticated %}
-                                    <div class="vote">
-                                            {% if user in list.votes.all %}<a class="unvote" href="{% url 'card_vote_down' list.id %}" name="card_id" value="{{ list.id }}"><i class="fas fa-eraser fa-white"></i></a>{% endif %}
-                                            <a href="{% url 'card_vote' list.id %}" name="card_id" value="{{ list.id }}" {% if user in list.votes.all or limit == True %} style="pointer-events: none;" {% endif %}><i class="far fa-thumbs-up fa-white"></i></a><p style="float: right;">{{ votes }}</p>
+                                    <div class="vote" data-id="{{ list.id }}">
+                                        {% if user in list.votes.all %}<i class="fas fa-eraser fa-white" data-id="{{ list.id }}"></i>{% endif %}
+                                        <i class="far fa-thumbs-up fa-white" data-id="{{ list.id }}"></i><p style="float: right;">{{ votes }}</p>
                                     </div>
                                 {% endif %}
                             </div>
@@ -169,4 +169,5 @@ poprawic w przyszlosci !!!-->
         })
     </script>
     <script type="text/javascript" src="{% static 'js/cards_handling.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/votes_handling.js' %}"></script>
 {% endblock %}

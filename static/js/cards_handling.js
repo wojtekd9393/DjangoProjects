@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(function() {
     var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
 
     $("#createButton1").click(function() {

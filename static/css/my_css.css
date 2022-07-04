@@ -30,6 +30,10 @@
     cursor: pointer;
 }
 
+.fa-thumbs-up:hover {
+    cursor: pointer;
+}
+
 .disabled:hover {
     cursor:not-allowed;
  }
@@ -274,10 +278,6 @@ header.bg nav>ul li.nav_right:hover ul li a {
 div.vote {
     float: right;
     font-size: 16px;
-}
-
-div.vote a {
-    margin-right: 5px;
 }
 
 i {

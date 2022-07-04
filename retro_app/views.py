@@ -18,7 +18,7 @@ def home(request, retro_id):
         form = ListForm(request.POST or None)
         if form.is_valid():
             new_task = form.save()
-            return JsonResponse({'task': model_to_dict(new_task), 'retro_id': retro_id}, status=200)
+            return JsonResponse({'task': model_to_dict(new_task)}, status=200)
     else:
         retro = Retro.objects.get(pk=retro_id)
         all_items = List.objects.filter(retro=retro_id)
@@ -110,23 +110,30 @@ def settings(request, retro_id):
         retro.archived = request.POST.get('archived')
         retro.save()
 
-    # if I changed board settings, I have to get retro instance again to "update" its fields
+    # if I change board settings, I have to get retro instance again to "update" its fields
     retro = Retro.objects.get(pk=retro_id)
     return render(request, 'settings.html', {'retro': retro})
 
 
 def card_vote(request, card_id):
     card = get_object_or_404(List, id=card_id)
-    card.votes.add(request.user)
-    retro_id = card.retro.id
-    return HttpResponseRedirect(reverse('home', args=[str(retro_id)]))
+    if request.user not in card.votes.all():
+        my_votes, retro_votes = get_votes(request.user, card)
+        if my_votes < retro_votes:
+            card.votes.add(request.user)
+            is_voted = True
+        else:
+            is_voted = False
+    else:
+        is_voted = False
+    return JsonResponse({'result': 'ok', "is_voted": is_voted}, status=200)
 
 
 def card_vote_down(request, card_id):
     card = get_object_or_404(List, id=card_id)
-    card.votes.remove(request.user)
-    retro_id = card.retro.id
-    return HttpResponseRedirect(reverse('home', args=[str(retro_id)]))
+    if request.user in card.votes.all():
+        card.votes.remove(request.user)
+        return JsonResponse({'result': 'ok'}, status=200)
 
 
 @login_required
@@ -151,3 +158,16 @@ def get_data_from_retro(retros):
         cards_authors.clear()
 
     return retros_with_amount_of_cards
+
+
+def get_votes(user, card):
+    all_items = List.objects.filter(retro=card.retro.id)
+    my_votes = 0
+    for card in all_items:
+        if user in card.votes.all():
+            my_votes = my_votes + 1
+
+    retro = Retro.objects.get(pk=card.retro.id)
+
+    return my_votes, retro.votes
+
