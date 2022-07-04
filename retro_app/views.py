@@ -5,11 +5,8 @@ from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
-
-# Create your views here.
 
 
 @login_required
@@ -21,18 +18,11 @@ def home(request, retro_id):
             return JsonResponse({'task': model_to_dict(new_task)}, status=200)
     else:
         retro = Retro.objects.get(pk=retro_id)
-        all_items = List.objects.filter(retro=retro_id)
+        cards = List.objects.filter(retro=retro_id)
         cards_with_amount_of_votes = []
-        my_votes = 0
-        for card in all_items:
+        for card in cards:  # maybe that could be simplified a bit
             cards_with_amount_of_votes.append([card, card.get_votes()])
-            if request.user in card.votes.all():
-                my_votes = my_votes + 1
-        if my_votes >= retro.votes:
-            limit = True
-        else:
-            limit = False
-        context = {'all_items': all_items, 'retro_id': retro_id, 'retro': retro, "cards": cards_with_amount_of_votes, 'limit': limit}
+        context = {'retro_id': retro_id, 'retro': retro, 'cards': cards_with_amount_of_votes}
         return render(request, 'home.html', context)
 
 
@@ -48,9 +38,7 @@ def edit(request, list_id):
         form = ListForm(request.POST or None, instance=item)
         if form.is_valid():
             form.save()
-            return redirect('home', retro_id=item.retro.id)
-        else:
-            return redirect('home', retro_id=item.retro.id)
+        return redirect('home', retro_id=item.retro.id)
     else:
         item = List.objects.get(pk=list_id)
         return render(request, 'edit.html', {'item': item})
@@ -146,7 +134,7 @@ def archived(request):
     return render(request, 'archived.html', context)
 
 
-# helper function
+# helper functions
 def get_data_from_retro(retros):
     cards_authors = []
     retros_with_amount_of_cards = []
@@ -170,4 +158,3 @@ def get_votes(user, card):
     retro = Retro.objects.get(pk=card.retro.id)
 
     return my_votes, retro.votes
-
