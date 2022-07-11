@@ -14,15 +14,12 @@ def home(request, retro_id):
     if request.method == 'POST':
         form = ListForm(request.POST or None)
         if form.is_valid():
-            new_task = form.save()
+            new_task = form.save()  # pobrać obiekt retro i przypisać do pola w List
             return JsonResponse({'task': model_to_dict(new_task)}, status=200)
     else:
         retro = Retro.objects.get(pk=retro_id)
         cards = List.objects.filter(retro=retro_id)
-        cards_with_amount_of_votes = []
-        for card in cards:  # maybe that could be simplified a bit
-            cards_with_amount_of_votes.append([card, card.get_votes()])
-        context = {'retro_id': retro_id, 'retro': retro, 'cards': cards_with_amount_of_votes}
+        context = {'retro': retro, 'cards': cards}
         return render(request, 'home.html', context)
 
 
@@ -139,7 +136,8 @@ def get_data_from_retro(retros):
     cards_authors = []
     retros_with_amount_of_cards = []
     for retro in retros:
-        for card in retro.list_set.all():
+        for card in retro.list_set.all():  # related_name w modelu => retro.cards.all()
+            # print(retro.list_set.all())
             if card.author not in cards_authors:
                 cards_authors.append(card.author)
         retros_with_amount_of_cards.append([retro, retro.list_set.count(), len(cards_authors)])

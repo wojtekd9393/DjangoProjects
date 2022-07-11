@@ -3,7 +3,7 @@
 
     {% block settings %}
         {% if retro.author.id == user.id %}
-            <a class=".dropdown-content" href="{% url 'settings' retro_id %}"><i class="fas fa-sliders-h"></i> Board settings</a>
+            <a class=".dropdown-content" href="{% url 'settings' retro.id %}"><i class="fas fa-sliders-h"></i> Board settings</a>
         {% endif %}
     {% endblock %}
 
@@ -24,7 +24,7 @@
             {% csrf_token %}
           <input class="form-control mr-sm-2" type="text" placeholder="" aria-label="Search", size="30" name="item">
           <input class="form-control mr-sm-2 add_item"  type="hidden" placeholder="" aria-label="Search", size="30" name="category" value="">
-          <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="retro" value="{{retro_id}}">
+          <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="retro" value="{{retro.id}}">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="author" value="{{user.id}}">
           <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" name="list1" id="createButton1">Add Item</button>
       </form>
@@ -53,24 +53,24 @@ poprawic w przyszlosci !!!-->
                   </div>
               </div> </br>
               <div id="greenList">
-                  {% for list, votes in cards %}
-                      {% if list.category == 1 %}
-                        <div class="card text-white bg-success mb-3" id="greenCard" data-id="{{ list.id }}">
+                  {% for card in cards %}
+                      {% if card.category == 1 %}
+                        <div class="card text-white bg-success mb-3" id="greenCard" data-id="{{ card.id }}">
                             <div class="card-body">
-                                <p>{{ list.item }}</p>
+                                <p>{{ card.item }}</p>
                                 <div class="actions">
-                                    {% if user.is_authenticated and list.author.id == user.id and not retro.voting and not retro.archived %}
-                                        <a href="{% url 'edit' list.id %}"><i class="fas fa-edit fa-white"></i></a>
-                                        <i class="fas fa-trash-alt fa-white" data-id="{{ list.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
+                                    {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
+                                        <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white"></i></a>
+                                        <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
                                     {% else %}
-                                        <a href="{% url 'edit' list.id %}" style="display: none;"><i class="fas fa-edit fa-white"></i></a>
-                                        <i class="fas fa-trash-alt fa-white" data-id="{{ list.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item" style="display: none;"></i>
+                                        <a href="{% url 'edit' card.id %}" style="display: none;"><i class="fas fa-edit fa-white"></i></a>
+                                        <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item" style="display: none;"></i>
                                     {% endif %}
                                 </div>
                                 {% if retro.voting and user.is_authenticated %}
-                                    <div class="vote" data-id="{{ list.id }}">
-                                        {% if user in list.votes.all %}<i class="fas fa-eraser fa-white" data-id="{{ list.id }}"></i>{% endif %}
-                                        <i class="far fa-thumbs-up fa-white" data-id="{{ list.id }}"></i><p style="float: right;">{{ votes }}</p>
+                                    <div class="vote" data-id="{{ card.id }}">
+                                        {% if user in card.votes.all %}<i class="fas fa-eraser fa-white" data-id="{{ card.id }}"></i>{% endif %}
+                                        <i class="far fa-thumbs-up fa-white" data-id="{{ card.id }}"></i><p style="float: right;">{{ card.get_votes }}</p>
                                     </div>
                                 {% endif %}
                             </div>
@@ -91,24 +91,24 @@ poprawic w przyszlosci !!!-->
                   </div>
               </div></br>
               <div id="redList">
-                  {% for list, votes in cards %}
-                      {% if list.category == 2 %}
-                        <div class="card text-white bg-danger mb-3" id="redCard" data-id="{{ list.id }}">
+                  {% for card in cards %}
+                      {% if card.category == 2 %}
+                        <div class="card text-white bg-danger mb-3" id="redCard" data-id="{{ card.id }}">
                             <div class="card-body">
-                                <p>{{ list.item }}</p>
+                                <p>{{ card.item }}</p>
                                 <div class="actions">
-                                    {% if user.is_authenticated and list.author.id == user.id and not retro.voting and not retro.archived %}
-                                        <a href="{% url 'edit' list.id %}"><i class="fas fa-edit fa-white"></i></a>
-                                        <i class="fas fa-trash-alt fa-white" data-id="{{ list.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
+                                    {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
+                                        <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white"></i></a>
+                                        <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
                                     {% else %}
-                                        <a href="{% url 'edit' list.id %}" style="display: none;"><i class="fas fa-edit fa-white"></i></a>
-                                        <i class="fas fa-trash-alt fa-white" data-id="{{ list.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item" style="display: none;"></i>
+                                        <a href="{% url 'edit' card.id %}" style="display: none;"><i class="fas fa-edit fa-white"></i></a>
+                                        <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item" style="display: none;"></i>
                                     {% endif %}
                                 </div>
                                 {% if retro.voting and user.is_authenticated %}
-                                    <div class="vote" data-id="{{ list.id }}">
-                                        {% if user in list.votes.all %}<i class="fas fa-eraser fa-white" data-id="{{ list.id }}"></i>{% endif %}
-                                        <i class="far fa-thumbs-up fa-white" data-id="{{ list.id }}"></i><p style="float: right;">{{ votes }}</p>
+                                    <div class="vote" data-id="{{ card.id }}">
+                                        {% if user in card.votes.all %}<i class="fas fa-eraser fa-white" data-id="{{ card.id }}"></i>{% endif %}
+                                        <i class="far fa-thumbs-up fa-white" data-id="{{ card.id }}"></i><p style="float: right;">{{ card.get_votes }}</p>
                                     </div>
                                 {% endif %}
                             </div>
@@ -129,24 +129,24 @@ poprawic w przyszlosci !!!-->
                   </div>
               </div></br>
               <div id="blueList">
-                  {% for list, votes in cards %}
-                      {% if list.category == 3 %}
-                        <div class="card text-white bg-primary mb-3" id="blueCard" data-id="{{ list.id }}">
+                  {% for card in cards %}
+                      {% if card.category == 3 %}
+                        <div class="card text-white bg-primary mb-3" id="blueCard" data-id="{{ card.id }}">
                             <div class="card-body">
-                                <p>{{ list.item }}</p>
+                                <p>{{ card.item }}</p>
                                 <div class="actions">
-                                    {% if user.is_authenticated and list.author.id == user.id and not retro.voting and not retro.archived %}
-                                        <a href="{% url 'edit' list.id %}"><i class="fas fa-edit fa-white"></i></a>
-                                        <i class="fas fa-trash-alt fa-white" data-id="{{ list.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
+                                    {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
+                                        <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white"></i></a>
+                                        <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
                                     {% else %}
-                                        <a href="{% url 'edit' list.id %}" style="display: none;"><i class="fas fa-edit fa-white"></i></a>
-                                        <i class="fas fa-trash-alt fa-white" data-id="{{ list.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item" style="display: none;"></i>
+                                        <a href="{% url 'edit' card.id %}" style="display: none;"><i class="fas fa-edit fa-white"></i></a>
+                                        <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item" style="display: none;"></i>
                                     {% endif %}
                                 </div>
                                 {% if retro.voting and user.is_authenticated %}
-                                    <div class="vote" data-id="{{ list.id }}">
-                                        {% if user in list.votes.all %}<i class="fas fa-eraser fa-white" data-id="{{ list.id }}"></i>{% endif %}
-                                        <i class="far fa-thumbs-up fa-white" data-id="{{ list.id }}"></i><p style="float: right;">{{ votes }}</p>
+                                    <div class="vote" data-id="{{ card.id }}">
+                                        {% if user in card.votes.all %}<i class="fas fa-eraser fa-white" data-id="{{ card.id }}"></i>{% endif %}
+                                        <i class="far fa-thumbs-up fa-white" data-id="{{ card.id }}"></i><p style="float: right;">{{ card.get_votes }}</p>
                                     </div>
                                 {% endif %}
                             </div>
