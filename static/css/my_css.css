@@ -30,8 +30,14 @@
     cursor: pointer;
 }
 
+.fa-eraser:hover {
+    cursor: pointer;
+    opacity: 0.5;
+}
+
 .fa-thumbs-up:hover {
     cursor: pointer;
+    opacity: 0.5;
 }
 
 .disabled:hover {
@@ -278,6 +284,10 @@ header.bg nav>ul li.nav_right:hover ul li a {
 div.vote {
     float: right;
     font-size: 16px;
+}
+
+.bold {
+    font-weight: 700;
 }
 
 i {

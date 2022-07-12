@@ -19,7 +19,12 @@ def home(request, retro_id):
     else:
         retro = Retro.objects.get(pk=retro_id)
         cards = List.objects.filter(retro=retro_id)
-        context = {'retro': retro, 'cards': cards}
+        my_votes = List.objects.filter(retro=retro_id, votes=request.user)
+        if len(my_votes) == retro.votes:
+            limit = True
+        else:
+            limit = False
+        context = {'retro': retro, 'cards': cards, 'limit': limit}
         return render(request, 'home.html', context)
 
 
@@ -102,23 +107,28 @@ def settings(request, retro_id):
 
 def card_vote(request, card_id):
     card = get_object_or_404(List, id=card_id)
+    active = True
+    cards = {}
     if request.user not in card.votes.all():
         my_votes, retro_votes = get_votes(request.user, card)
         if my_votes < retro_votes:
             card.votes.add(request.user)
-            is_voted = True
-        else:
-            is_voted = False
-    else:
-        is_voted = False
-    return JsonResponse({'result': 'ok', "is_voted": is_voted}, status=200)
+            if (my_votes + 1) == retro_votes:
+                active = False
+                retro_id = Retro.objects.get(pk=card.retro.id)  # pomysleć czy przekazywać retro_id jako parametr
+                # cards without user votes
+                cards = List.objects.filter(retro=retro_id).exclude(votes=request.user)
+    return JsonResponse({'result': 'ok', 'active': active, 'cards': list(cards.values())}, status=200)
 
 
 def card_vote_down(request, card_id):
     card = get_object_or_404(List, id=card_id)
     if request.user in card.votes.all():
         card.votes.remove(request.user)
-        return JsonResponse({'result': 'ok'}, status=200)
+        retro_id = Retro.objects.get(pk=card.retro.id)  # pomysleć czy przekazywać retro_id jako parametr
+        # cards without user votes
+        cards = List.objects.filter(retro=retro_id).exclude(votes=request.user)
+        return JsonResponse({'result': 'ok', 'cards': list(cards.values())}, status=200)
 
 
 @login_required
