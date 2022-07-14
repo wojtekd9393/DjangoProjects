@@ -18,13 +18,24 @@ def home(request, retro_id):
             return JsonResponse({'task': model_to_dict(new_task)}, status=200)
     else:
         retro = Retro.objects.get(pk=retro_id)
-        cards = List.objects.filter(retro=retro_id)
-        my_votes = List.objects.filter(retro=retro_id, votes=request.user)
-        if len(my_votes) == retro.votes:
+        cards = List.objects.filter(retro=retro)
+        my_votes_number = cards.filter(votes=request.user).count()
+        if my_votes_number == retro.votes:
             limit = True
         else:
             limit = False
-        context = {'retro': retro, 'cards': cards, 'limit': limit}
+
+        green_cards = cards.filter(category=1)
+        red_cards = cards.filter(category=2)
+        blue_cards = cards.filter(category=3)
+
+        context = {
+            'retro': retro,
+            'green_cards': green_cards,
+            'red_cards': red_cards,
+            'blue_cards': blue_cards,
+            'limit': limit
+        }
         return render(request, 'home.html', context)
 
 
@@ -110,25 +121,24 @@ def card_vote(request, card_id):
     active = True
     cards = {}
     if request.user not in card.votes.all():
-        my_votes, retro_votes = get_votes(request.user, card)
-        if my_votes < retro_votes:
-            card.votes.add(request.user)
-            if (my_votes + 1) == retro_votes:
-                active = False
-                retro_id = Retro.objects.get(pk=card.retro.id)  # pomysleć czy przekazywać retro_id jako parametr
-                # cards without user votes
-                cards = List.objects.filter(retro=retro_id).exclude(votes=request.user)
-    return JsonResponse({'result': 'ok', 'active': active, 'cards': list(cards.values())}, status=200)
+        card.votes.add(request.user)
+        retro = card.retro
+        my_votes = List.objects.filter(retro=retro, votes=request.user).count()
+        if my_votes == retro.votes:
+            active = False
+            # cards without user's votes
+            cards = retro.list_set.exclude(votes=request.user)
+        return JsonResponse({'active': active, 'cards': list(cards.values())}, status=200)
 
 
 def card_vote_down(request, card_id):
     card = get_object_or_404(List, id=card_id)
     if request.user in card.votes.all():
         card.votes.remove(request.user)
-        retro_id = Retro.objects.get(pk=card.retro.id)  # pomysleć czy przekazywać retro_id jako parametr
-        # cards without user votes
-        cards = List.objects.filter(retro=retro_id).exclude(votes=request.user)
-        return JsonResponse({'result': 'ok', 'cards': list(cards.values())}, status=200)
+        retro = card.retro
+        # cards without user's votes
+        cards = retro.list_set.exclude(votes=request.user)
+        return JsonResponse({'cards': list(cards.values())}, status=200)
 
 
 @login_required
@@ -147,7 +157,6 @@ def get_data_from_retro(retros):
     retros_with_amount_of_cards = []
     for retro in retros:
         for card in retro.list_set.all():  # related_name w modelu => retro.cards.all()
-            # print(retro.list_set.all())
             if card.author not in cards_authors:
                 cards_authors.append(card.author)
         retros_with_amount_of_cards.append([retro, retro.list_set.count(), len(cards_authors)])
@@ -155,14 +164,3 @@ def get_data_from_retro(retros):
 
     return retros_with_amount_of_cards
 
-
-def get_votes(user, card):
-    all_items = List.objects.filter(retro=card.retro.id)
-    my_votes = 0
-    for card in all_items:
-        if user in card.votes.all():
-            my_votes = my_votes + 1
-
-    retro = Retro.objects.get(pk=card.retro.id)
-
-    return my_votes, retro.votes

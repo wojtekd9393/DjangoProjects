@@ -35,7 +35,7 @@
     opacity: 0.5;
 }
 
-.fa-thumbs-up:hover {
+span > .fa-thumbs-up:hover {
     cursor: pointer;
     opacity: 0.5;
 }
