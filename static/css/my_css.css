@@ -283,6 +283,15 @@ header.bg nav>ul li.nav_right:hover ul li a {
 
 div.vote {
     float: right;
+    font-size: 0;
+}
+
+div.vote  p, span {
+    font-size: 16px;
+    margin-left: 4px;
+}
+
+div.vote i {
     font-size: 16px;
 }
 

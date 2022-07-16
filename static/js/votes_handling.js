@@ -26,7 +26,6 @@ $(document).ready(function() {
 
                 let eraser = document.createElement('i');
                 eraser.classList.add('fas', 'fa-eraser', 'fa-white');
-                eraser.style.marginRight = "2px";
                 eraser.setAttribute("data-id", cardId);
                 d.insertBefore(eraser, thumbUp.parentElement); // before span
 
