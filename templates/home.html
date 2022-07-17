@@ -24,7 +24,6 @@
             {% csrf_token %}
           <input class="form-control mr-sm-2" type="text" placeholder="" aria-label="Search", size="30" name="item">
           <input class="form-control mr-sm-2 add_item"  type="hidden" placeholder="" aria-label="Search", size="30" name="category" value="">
-          <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="retro" value="{{retro.id}}">
           <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="author" value="{{user.id}}">
           <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" name="list1" id="createButton1">Add Item</button>
       </form>

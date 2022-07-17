@@ -26,9 +26,9 @@
     </div>
   </div>
 </div>
-    <p class="main-header">{{ number_of_retros }} Board{{ number_of_retros|pluralize:"s" }}</p>
+    <p class="main-header">{{ all_retros|length }} Board{{ all_retros|length|pluralize:"s" }}</p>
     {% if all_retros %}
-        {% for retro, amountOfCards, board_users in all_retros %}
+        {% for retro, board_users in all_retros %}
             <div class="my-card">
                 <a href="{% url 'home' retro.id %}">
                     <div class="my-card-header">
@@ -38,7 +38,7 @@
                     <div class="my-card-properties clearfix">
                         <div>
                             <p>Cards</p>
-                            <p>{{ amountOfCards }}</p>
+                            <p>{{ retro.cards.all|length }}</p>
                         </div>
                         <div>
                             <p>Users</p>

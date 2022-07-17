@@ -14,8 +14,11 @@ def home(request, retro_id):
     if request.method == 'POST':
         form = ListForm(request.POST or None)
         if form.is_valid():
-            new_task = form.save()  # pobrać obiekt retro i przypisać do pola w List
-            return JsonResponse({'task': model_to_dict(new_task)}, status=200)
+            new_card = form.save(commit=False)
+            retro = Retro.objects.get(pk=retro_id)
+            new_card.retro = retro
+            new_card.save()
+            return JsonResponse({'task': model_to_dict(new_card)}, status=200)
     else:
         retro = Retro.objects.get(pk=retro_id)
         cards = List.objects.filter(retro=retro)
@@ -59,23 +62,24 @@ def edit(request, list_id):
 
 @login_required
 def main(request):
-    user = request.user
     if request.method == 'POST':
         form = RetroForm(request.POST or None)
         if form.is_valid():
             form.save()
-            all_retros = Retro.objects.filter(author=user.id, archived=False)
-            number_of_retros = len(all_retros)
-            retros_with_amount_of_cards = get_data_from_retro(all_retros)
-            context = {'all_retros': retros_with_amount_of_cards, 'number_of_retros': number_of_retros}
+            all_retros = Retro.objects.filter(author=request.user.id, archived=False)
+            retros_with_authors = []
+            for retro in all_retros:
+                retros_with_authors.append((retro, get_num_of_authors(retro)))
+            context = {'all_retros': retros_with_authors}
             return render(request, 'main.html', context)
         else:
             return redirect('main')
     else:
-        all_retros = Retro.objects.filter(author=user.id, archived=False)
-        number_of_retros = len(all_retros)
-        retros_with_amount_of_cards = get_data_from_retro(all_retros)
-        context = {'all_retros': retros_with_amount_of_cards, 'number_of_retros': number_of_retros}
+        all_retros = Retro.objects.filter(author=request.user.id, archived=False)
+        retros_with_authors = []
+        for retro in all_retros:
+            retros_with_authors.append((retro, get_num_of_authors(retro)))
+        context = {'all_retros': retros_with_authors}
         return render(request, 'main.html', context)
 
 
@@ -143,7 +147,7 @@ def card_vote(request, card_id):
         if my_votes == retro.votes:
             active = False
             # cards without user's votes
-            cards = retro.list_set.exclude(votes=request.user)
+            cards = retro.cards.exclude(votes=request.user)
         return JsonResponse({'active': active, 'cards': list(cards.values())}, status=200)
 
 
@@ -153,30 +157,24 @@ def card_vote_down(request, card_id):
         card.votes.remove(request.user)
         retro = card.retro
         # cards without user's votes
-        cards = retro.list_set.exclude(votes=request.user)
+        cards = retro.cards.exclude(votes=request.user)
         return JsonResponse({'cards': list(cards.values())}, status=200)
 
 
 @login_required
 def archived(request):
-    user = request.user
-    archived_retros = Retro.objects.filter(author=user.id, archived=True)
-    number_of_retros = len(archived_retros)
-    retros_with_amount_of_cards = get_data_from_retro(archived_retros)
-    context = {'all_retros': retros_with_amount_of_cards, 'number_of_retros': number_of_retros}
+    archived_retros = Retro.objects.filter(author=request.user.id, archived=True)
+    retros_with_authors = []
+    for retro in archived_retros:
+        retros_with_authors.append((retro, get_num_of_authors(retro)))
+    context = {'all_retros': retros_with_authors}
     return render(request, 'archived.html', context)
 
 
 # helper functions
-def get_data_from_retro(retros):
-    cards_authors = []
-    retros_with_amount_of_cards = []
-    for retro in retros:
-        for card in retro.list_set.all():  # related_name w modelu => retro.cards.all()
-            if card.author not in cards_authors:
-                cards_authors.append(card.author)
-        retros_with_amount_of_cards.append([retro, retro.list_set.count(), len(cards_authors)])
-        cards_authors.clear()
-
-    return retros_with_amount_of_cards
-
+def get_num_of_authors(retro):
+    authors = []
+    for card in retro.cards.all():
+        if card.author not in authors:
+            authors.append(card.author)
+    return len(authors)
