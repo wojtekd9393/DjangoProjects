@@ -4,8 +4,8 @@ from retro_app.views import home, delete, edit, main, remove_retro, dashboard, r
 urlpatterns = [
     path('', dashboard),
     path('home/<retro_id>', home, name='home'),
-    path('delete/item/<list_id>', delete, name='delete'),
-    path('edit/<list_id>', edit, name='edit'),
+    path('delete/card/<card_id>', delete, name='delete'),
+    path('edit/<card_id>', edit, name='edit'),
     path('main/', main, name='main'),
     path('delete/retro/<retro_id>', remove_retro, name='remove_retro'),
     path('dashboard', dashboard, name='dashboard'),

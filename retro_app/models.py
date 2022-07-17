@@ -14,8 +14,8 @@ class Retro(models.Model):
         return self.name + " (" + self.author.username + ")"
 
 
-class List(models.Model):
-    item = models.CharField(max_length=200)
+class Card(models.Model):
+    body = models.CharField(max_length=200)
     category = models.PositiveSmallIntegerField(default=1)
     retro = models.ForeignKey(Retro, on_delete=models.CASCADE, related_name='cards')
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
@@ -25,7 +25,7 @@ class List(models.Model):
         ordering = ['-id']
 
     def __str__(self):
-        return self.item + ' | ' + str(self.category)
+        return self.body + ' | ' + str(self.category)
 
     def get_votes(self):
         return self.votes.count()

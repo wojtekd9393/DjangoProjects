@@ -14,7 +14,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Adding item</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Adding card</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -22,10 +22,10 @@
       <div class="modal-body">
       <form class="form-inline my-2 my-lg-0" id="form1" method="post" onkeydown="return event.key != 'Enter';" data-url="{{ request.build_absolute_uri|safe }}">
             {% csrf_token %}
-          <input class="form-control mr-sm-2" type="text" placeholder="" aria-label="Search", size="30" name="item">
-          <input class="form-control mr-sm-2 add_item"  type="hidden" placeholder="" aria-label="Search", size="30" name="category" value="">
-          <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="author" value="{{user.id}}">
-          <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" name="list1" id="createButton1">Add Item</button>
+          <input class="form-control mr-sm-2" type="text" placeholder="" aria-label="Search", size="30" name="body">
+          <input class="form-control mr-sm-2 add_card"  type="hidden" placeholder="" aria-label="Search", size="30" name="category" value="">
+          <input class="form-control mr-sm-2 add_card" type="hidden" placeholder="" aria-label="Search", size="30" name="author" value="{{user.id}}">
+          <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" name="list1" id="createButton1">Add Card</button>
       </form>
       </div>
       <div class="modal-footer">
@@ -55,14 +55,14 @@ poprawic w przyszlosci !!!-->
                   {% for card in green_cards %}
                     <div class="card text-white bg-success mb-3" id="greenCard" data-id="{{ card.id }}">
                         <div class="card-body">
-                            <p>{{ card.item }}</p>
+                            <p>{{ card.body }}</p>
                             <div class="actions">
                                 {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
                                     <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white"></i></a>
-                                    <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
+                                    <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
                                 {% else %}
                                     <a href="{% url 'edit' card.id %}" style="display: none;"><i class="fas fa-edit fa-white"></i></a>
-                                    <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item" style="display: none;"></i>
+                                    <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card" style="display: none;"></i>
                                 {% endif %}
                             </div>
                             {% if retro.voting and user.is_authenticated %}
@@ -91,14 +91,14 @@ poprawic w przyszlosci !!!-->
                   {% for card in red_cards %}
                     <div class="card text-white bg-danger mb-3" id="redCard" data-id="{{ card.id }}">
                         <div class="card-body">
-                            <p>{{ card.item }}</p>
+                            <p>{{ card.body }}</p>
                             <div class="actions">
                                 {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
                                     <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white"></i></a>
-                                    <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
+                                    <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
                                 {% else %}
                                     <a href="{% url 'edit' card.id %}" style="display: none;"><i class="fas fa-edit fa-white"></i></a>
-                                    <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item" style="display: none;"></i>
+                                    <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card" style="display: none;"></i>
                                 {% endif %}
                             </div>
                             {% if retro.voting and user.is_authenticated %}
@@ -127,14 +127,14 @@ poprawic w przyszlosci !!!-->
                   {% for card in blue_cards %}
                     <div class="card text-white bg-primary mb-3" id="blueCard" data-id="{{ card.id }}">
                         <div class="card-body">
-                            <p>{{ card.item }}</p>
+                            <p>{{ card.body }}</p>
                             <div class="actions">
                                 {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
                                     <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white"></i></a>
-                                    <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item"></i>
+                                    <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
                                 {% else %}
                                     <a href="{% url 'edit' card.id %}" style="display: none;"><i class="fas fa-edit fa-white"></i></a>
-                                    <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete item" style="display: none;"></i>
+                                    <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card" style="display: none;"></i>
                                 {% endif %}
                             </div>
                             {% if retro.voting and user.is_authenticated %}

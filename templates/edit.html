@@ -1,17 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% if item %}
+    {% if card %}
         <form class="form-inline my-2 my-lg-0" method="post">
             {% csrf_token %}
-          <input class="form-control mr-sm-2" type="search" placeholder="{{ item.item }}" value="{{ item.item }}"
-                 aria-label="Search", name="item">
-            <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="Add Item" aria-label="Search", size="100" name="category" value="{{item.category}}">
-            <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="Add Item" aria-label="Search", size="100" name="retro" value="{{item.retro.id}}">
-            <input class="form-control mr-sm-2 add_item" type="hidden" placeholder="" aria-label="Search", size="30" name="author" value="{{user.id}}">
-          <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Edit Item</button>
-
+            <input class="form-control mr-sm-2" type="search" placeholder="{{ card.body }}" value="{{ card.body }}"
+                 aria-label="Search", name="body">
+            <input class="form-control mr-sm-2 add_card" type="hidden" placeholder="Add Card" aria-label="Search", size="100" name="category" value="{{ card.category }}">
+            <input class="form-control mr-sm-2 add_card" type="hidden" placeholder="Add Card" aria-label="Search", size="100" name="retro" value="{{ card.retro.id }}">
+            <input class="form-control mr-sm-2 add_card" type="hidden" placeholder="" aria-label="Search", size="30" name="author" value="{{ user.id }}">
+            <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Edit Card</button>
         </form>
-        <a href="{% url 'home' item.retro.id %}">Back to Retro board</a>
+        <a href="{% url 'home' card.retro.id %}">Back to Retro board</a>
     {% endif %}
 {% endblock %}

@@ -1,7 +1,6 @@
 from django.contrib import admin
-from .models import List, Retro
-# Register your models here.
+from .models import Card, Retro
 
-admin.site.register(List)
+admin.site.register(Card)
 admin.site.register(Retro)
 

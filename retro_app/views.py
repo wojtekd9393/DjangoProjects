@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import List, Retro
-from .forms import ListForm, RetroForm
+from .models import Card, Retro
+from .forms import CardForm, RetroForm
 from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
@@ -12,16 +12,16 @@ from django.forms.models import model_to_dict
 @login_required
 def home(request, retro_id):
     if request.method == 'POST':
-        form = ListForm(request.POST or None)
+        form = CardForm(request.POST or None)
         if form.is_valid():
             new_card = form.save(commit=False)
             retro = Retro.objects.get(pk=retro_id)
             new_card.retro = retro
             new_card.save()
-            return JsonResponse({'task': model_to_dict(new_card)}, status=200)
+            return JsonResponse({'card': model_to_dict(new_card)}, status=200)
     else:
         retro = Retro.objects.get(pk=retro_id)
-        cards = List.objects.filter(retro=retro)
+        cards = Card.objects.filter(retro=retro)
         my_votes_number = cards.filter(votes=request.user).count()
         if my_votes_number == retro.votes:
             limit = True
@@ -42,22 +42,25 @@ def home(request, retro_id):
         return render(request, 'home.html', context)
 
 
-def delete(request, list_id):
-    item = List.objects.get(pk=list_id)
-    item.delete()
+def delete(request, card_id):
+    card = Card.objects.get(pk=card_id)
+    card.delete()
     return JsonResponse({'result': 'ok'}, status=200)
 
 
-def edit(request, list_id):
+def edit(request, card_id):
+    card = get_object_or_404(Card, id=card_id)
+    print(request)
     if request.method == 'POST':
-        item = List.objects.get(pk=list_id)
-        form = ListForm(request.POST or None, instance=item)
+        print(request.POST)
+        form = CardForm(request.POST or None, instance=card)
+        print(form.errors)
+        print(card.body)
         if form.is_valid():
             form.save()
-        return redirect('home', retro_id=item.retro.id)
+        return redirect('home', retro_id=card.retro.id)
     else:
-        item = List.objects.get(pk=list_id)
-        return render(request, 'edit.html', {'item': item})
+        return render(request, 'edit.html', {'card': card})
 
 
 @login_required
@@ -137,13 +140,13 @@ def restore_retro(request, retro_id):
 
 
 def card_vote(request, card_id):
-    card = get_object_or_404(List, id=card_id)
+    card = get_object_or_404(Card, id=card_id)
     active = True
     cards = {}
     if request.user not in card.votes.all():
         card.votes.add(request.user)
         retro = card.retro
-        my_votes = List.objects.filter(retro=retro, votes=request.user).count()
+        my_votes = Card.objects.filter(retro=retro, votes=request.user).count()
         if my_votes == retro.votes:
             active = False
             # cards without user's votes
@@ -152,7 +155,7 @@ def card_vote(request, card_id):
 
 
 def card_vote_down(request, card_id):
-    card = get_object_or_404(List, id=card_id)
+    card = get_object_or_404(Card, id=card_id)
     if request.user in card.votes.all():
         card.votes.remove(request.user)
         retro = card.retro

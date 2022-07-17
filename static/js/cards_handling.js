@@ -9,25 +9,26 @@ $(document).ready(function() {
             data: serializedData,
             method: 'POST',
             success: function(response) {
-                let category = response.task.category;
-                let id = response.task.id;
-                let item = response.task.item;
+                let category = response.card.category;
+                let id = response.card.id;
+                let body = response.card.body;
                 switch(category) {
                 case 1:
+                console.log(body);
                     let greenCard = `
-                        <div class="card text-white bg-success mb-3" id="greenCard" data-id=${id}><div class="card-body"><p>${item}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete item"></i></div></div></div>
+                        <div class="card text-white bg-success mb-3" id="greenCard" data-id=${id}><div class="card-body"><p>${body}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
                     `;
                     $("#greenList").prepend(greenCard)
                     break;
                 case 2:
                     let redCard = `
-                        <div class="card text-white bg-danger mb-3" id="redCard" data-id=${id}><div class="card-body"><p>${item}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete item"></i></div></div></div>
+                        <div class="card text-white bg-danger mb-3" id="redCard" data-id=${id}><div class="card-body"><p>${body}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
                     `;
                     $("#redList").prepend(redCard)
                     break;
                 case 3:
                     let blueCard = `
-                        <div class="card text-white bg-primary mb-3" id="blueCard" data-id=${id}><div class="card-body"><p>${item}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete item"></i></div></div></div>
+                        <div class="card text-white bg-primary mb-3" id="blueCard" data-id=${id}><div class="card-body"><p>${body}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
                     `;
                     $("#blueList").prepend(blueCard)
                     break;
@@ -68,7 +69,7 @@ $(document).ready(function() {
         var dataId = $(this).data('id');
 
         $.ajax({
-            url: '/delete/item/' + dataId,
+            url: '/delete/card/' + dataId,
             data: {
                 csrfmiddlewaretoken: csrfToken
             },
@@ -84,7 +85,7 @@ $(document).ready(function() {
         var dataId = $(this).data('id');
 
         $.ajax({
-            url: '/delete/item/' + dataId,
+            url: '/delete/card/' + dataId,
             data: {
                 csrfmiddlewaretoken: csrfToken
             },
@@ -101,7 +102,7 @@ $(document).ready(function() {
         var dataId = $(this).data('id');
 
         $.ajax({
-            url: '/delete/item/' + dataId,
+            url: '/delete/card/' + dataId,
             data: {
                 csrfmiddlewaretoken: csrfToken
             },

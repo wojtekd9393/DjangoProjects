@@ -1,11 +1,11 @@
 from django import forms
-from .models import List, Retro
+from .models import Card, Retro
 
 
-class ListForm(forms.ModelForm):
+class CardForm(forms.ModelForm):
     class Meta:
-        model = List
-        fields = ['item', 'category', 'author']
+        model = Card
+        fields = ['body', 'category', 'author']
 
 
 class RetroForm(forms.ModelForm):
