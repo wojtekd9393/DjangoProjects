@@ -116,6 +116,22 @@ def settings(request, retro_id):
     return render(request, 'settings.html', {'retro': retro})
 
 
+@login_required
+def archive(request, retro_id):
+    retro = Retro.objects.get(pk=retro_id)
+    retro.archived = True
+    retro.save()
+    return redirect('main')
+
+
+@login_required
+def restore_retro(request, retro_id):
+    retro = Retro.objects.get(pk=retro_id)
+    retro.archived = False
+    retro.save()
+    return redirect('archived')
+
+
 def card_vote(request, card_id):
     card = get_object_or_404(List, id=card_id)
     active = True

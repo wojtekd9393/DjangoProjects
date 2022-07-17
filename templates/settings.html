@@ -21,7 +21,7 @@
     <li>How many votes [1-5]</li> <small>Determines how many times user can vote.</small><br/>
         <input type="number" name="num_of_votes" value="{{ retro.votes }}" min="1" max="5"/>
 
-    <li>Archived</li> <small>If No, users can't add, edit and delete cards. Voting is also prohibited!</small>
+    <li>Archived</li> <small>If Yes, users can't add, edit and delete cards. Voting is also prohibited!</small>
         <div>
             <input type="radio" id="not_archived"
              name="archived" value="False" {% if not retro.archived %} checked {% endif %}>

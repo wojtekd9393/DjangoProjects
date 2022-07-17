@@ -1,28 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <p class="main-header">{{ number_of_retros }} Board(s)</p>
+    <p class="main-header">{{ number_of_retros }} Board{{ number_of_retros|pluralize:"s" }}</p>
     {% if all_retros %}
         {% for retro, amountOfCards, board_users in all_retros %}
             <div class="my-card">
-                <div class="my-card-header">
-                    <p class="my-retro-name"><a href="{% url 'home' retro.id %}">{{ retro.name }}</a></p>
-                    <p class="my-retro-date"><i class="far fa-clock"></i> {{ retro.date|date:"d-F-Y" }}</p>
-                </div>
-                <div class="my-card-properties clearfix">
-                    <div>
-                        <p>Cards</p>
-                        <p>{{ amountOfCards }}</p>
+                <a href="{% url 'home' retro.id %}">
+                    <div class="my-card-header">
+                        <h4 class="my-retro-name">{{ retro.name }}</h4>
+                        <p class="my-retro-date"><i class="far fa-clock"></i> {{ retro.date|date:"d-F-Y" }}</p>
                     </div>
-                    <div>
-                        <p>Users</p>
-                        <p>{{ board_users }}</p>
+                    <div class="my-card-properties clearfix">
+                        <div>
+                            <p>Cards</p>
+                            <p>{{ amountOfCards }}</p>
+                        </div>
+                        <div>
+                            <p>Users</p>
+                            <p>{{ board_users }}</p>
+                        </div>
                     </div>
-                </div>
+                </a>
                 <div class="my-card-footer clearfix">
                     <p class="my-card-icons">
-                        <a href="{% url 'settings' retro.id %}" ><i class="fas fa-cog fa-white"></i></a>
-                        <a href="{% url 'remove_retro' retro.id %}" ><i class="fas fa-trash-alt fa-white"></i></a>
+                        <a href="{% url 'remove_retro' retro.id %}" ><i class="fas fa-trash-alt fa-white"></i> Delete</a>
+                        <a href="{% url 'restore_retro' retro.id %}" ><i class="fas fa-undo fa-white"></i> Restore</a>
                     </p>
                 </div>
             </div>

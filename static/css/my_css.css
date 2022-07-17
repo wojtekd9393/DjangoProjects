@@ -312,38 +312,69 @@ p.main-header {
     font-size: 26px;
 }
 
-.my-card, .my-add-board-card {
+div.my-card-footer {
+    padding: 10px 8px;
+    border-top: 2px solid white;
+}
+
+div.my-card-footer a {
     float: left;
     box-sizing: border-box;
+    padding: 4px 8px;
+    font-size: 14px;
+    color: white;
+    border-radius: 2px;
+    text-decoration: none;
+}
+
+div.my-card-footer a:hover {
+    text-decoration: none;
+    background-color: #0e6ec2;
+}
+
+.my-add-board-card {
+    float: left;
     width: 20%;
+    margin: 10px;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+    border: black solid 1px;
+    border-radius: 10px;
+}
+
+.my-add-board-card a {
+    display: block;
+    margin: 0 auto;
     padding: 10px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.my-card {
+    background-color: #0d5fa6;
+    color: white;
+    border: transparent solid 1px;
+    transition: 0.2s;
+    float: left;
+    width: 20%;
     margin: 10px;
     margin-left: 2.5%;
     margin-right: 2.5%;
     border-radius: 10px;
 }
 
-.my-card {
-    background-color: #0074D9;
-    color: white;
-    border: transparent solid 1px;
-    transition: 0.2s;
-}
-
-.my-add-board-card {
-    border: black solid 1px;
-}
-
-.my-card:hover {
-    box-shadow: 0 0 4px black;
-}
-
 .my-card p, p.add-board {
     margin: 0;
 }
 
+div.my-card > a {
+    display: block;
+    color: white;
+    text-decoration: none;
+}
+
 .my-retro-name {
-    font-size: 26px;
+    font-size: 20px;
 }
 
 .my-retro-name a {
@@ -351,32 +382,31 @@ p.main-header {
     text-decoration: none;
 }
 
-.my-retro-date {
+p.my-retro-date {
+    text-align: left;
     font-size: 12px;
 }
 
-.my-card-header {
-    padding-bottom: 20px;
+div.my-card:hover {
+    box-shadow: 0 0 4px black;
 }
 
-div.my-card-header p {
-    text-align: center;
+div.my-card-header {
+    padding: 12px 16px;
+    border-bottom: 2px solid white;
 }
 
-.my-card-properties {
-    margin-bottom: 10px;
+div.my-card-header h4 {
+    font-weight: bold;
 }
 
 .my-card-properties div {
     float: left;
     width: 50%;
+    padding: 6px;
 }
 
 .my-card-properties div p {
     text-align: center;
-}
-
-.my-card-icons {
-    padding-top: 10px;
-    float: right;
+    font-size: 14px;
 }
