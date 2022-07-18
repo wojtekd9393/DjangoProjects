@@ -42,20 +42,18 @@ def home(request, retro_id):
         return render(request, 'home.html', context)
 
 
+@login_required
 def delete(request, card_id):
     card = Card.objects.get(pk=card_id)
     card.delete()
     return JsonResponse({'result': 'ok'}, status=200)
 
 
+@login_required
 def edit(request, card_id):
     card = get_object_or_404(Card, id=card_id)
-    print(request)
     if request.method == 'POST':
-        print(request.POST)
         form = CardForm(request.POST or None, instance=card)
-        print(form.errors)
-        print(card.body)
         if form.is_valid():
             form.save()
         return redirect('home', retro_id=card.retro.id)
@@ -86,6 +84,7 @@ def main(request):
         return render(request, 'main.html', context)
 
 
+@login_required
 def remove_retro(request, retro_id):
     item = Retro.objects.get(pk=retro_id)
     item.delete()

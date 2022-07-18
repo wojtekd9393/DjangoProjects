@@ -1,23 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div style="display: table; margin-right: auto; margin-left: auto;">
-    <h2>Login</h2>
+<div class="login-register">
     <form method="post">
         {% csrf_token %}
-            <div class="form-group" style="width: 30rem">
-                <input type="text" class="form-control" placeholder="Login" name="username" required autofocus>
-            </div>
-            <div class="form-group" style="width: 30rem">
-                <input type="password" class="form-control" placeholder="Password" name="password" required>
-            </div>
-
-            <input class="btn btn-secondary" type="submit" value="Login">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Username" name="username" required>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" placeholder="Password" name="password" required>
+        </div>
+        <input class="btn btn-primary" type="submit" value="Login">
     </form>
 
-    <br/>
+    {% for field, errors in form.errors.items %}
+        {% for error in errors %}
+            <p class="form-errors">{{ error }}</p>
+        {% endfor %}
+    {% endfor %}
 
-    Not registered? Sign up <a href="{% url 'register' %}">here!</a> <br/><br/>
+    <p class="info">Not registered? Sign up <a href="{% url 'register' %}">here</a>!</p>
     <a href="{% url 'dashboard' %}">Back to dashboard</a>
 </div>
 {% endblock %}
