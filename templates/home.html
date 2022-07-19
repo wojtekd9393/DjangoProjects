@@ -8,6 +8,11 @@
     {% endblock %}
 
 {% block content %}
+<div class="toolbar">
+    <span class="retro-name" >{{ retro.name }}</span>
+    <input type="text" class="input-retro-name hidden" value="{{ retro.name }}" onfocus="this.setSelectionRange(this.value.length,this.value.length);">
+    <button class="reject hidden"><i class="fas fa-times"></i></button> <button class="accept hidden" data-retro-id="{{ retro.id }}"><i class="fas fa-check"></i></button>
+</div>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -38,7 +43,7 @@
 onkeydown="return event.key != 'Enter';"
 minus jest taki, ze entera nie mozna tez uzyc w textarea
 poprawic w przyszlosci !!!-->
-      <div class="row">
+      <div class="row" style="background-color: #e6e6e6;">
           <div class="col-sm-4">
               <h3><i class="fas fa-square fa-green"></i> Went Well</h3>
               <div class="card">
@@ -146,7 +151,7 @@ poprawic w przyszlosci !!!-->
                   {% endfor %}
               </div>
           </div>
-        </div>
+      </div>
 
 <dialog id="modal-delete">
     <div class="modal-delete-content">
@@ -187,6 +192,48 @@ poprawic w przyszlosci !!!-->
 
         modal_btn_secondary.addEventListener("click", () => {
             modal.close();
+        });
+
+        let spanRetroName = document.querySelector("span.retro-name");
+        let inputRetroName = document.querySelector("input.input-retro-name");
+        let rejectButton = document.querySelector("button.reject");
+        let acceptButton = document.querySelector("button.accept");
+
+        spanRetroName.addEventListener("click", () => {
+            spanRetroName.classList.add("hidden");
+            inputRetroName.classList.remove("hidden");
+            inputRetroName.value = spanRetroName.innerHTML;
+            $(inputRetroName).focus();
+            rejectButton.classList.remove("hidden");
+            acceptButton.classList.remove("hidden");
+        });
+
+        rejectButton.addEventListener("click", () => {
+            inputRetroName.classList.add("hidden");
+            rejectButton.classList.add("hidden");
+            acceptButton.classList.add("hidden");
+            spanRetroName.classList.remove("hidden");
+        });
+
+        acceptButton.addEventListener("click", () => {
+            inputRetroName.classList.add("hidden");
+            rejectButton.classList.add("hidden");
+            acceptButton.classList.add("hidden");
+            spanRetroName.classList.remove("hidden");
+
+            let newRetroName = inputRetroName.value != "" ? inputRetroName.value : spanRetroName.innerHTML;
+            let retroId = acceptButton.getAttribute("data-retro-id");
+            spanRetroName.innerHTML = newRetroName;
+
+            var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
+
+            $.ajax({
+                url: '/change_retro_name/' + retroId + '/' + newRetroName,
+                data: {
+                    csrfmiddlewaretoken: csrfToken
+                },
+                method: 'POST'
+            })
         });
     </script>
     <script type="text/javascript" src="{% static 'js/cards_handling.js' %}"></script>

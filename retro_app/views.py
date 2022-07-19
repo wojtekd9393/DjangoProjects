@@ -173,6 +173,14 @@ def archived(request):
     return render(request, 'archived.html', context)
 
 
+def change_retro_name(request, retro_id, new_retro_name):
+    retro = Retro.objects.get(pk=retro_id)
+    if new_retro_name != "" and retro.name != new_retro_name:
+        retro.name = new_retro_name
+        retro.save()
+    return JsonResponse({}, status=200)
+
+
 # helper functions
 def get_num_of_authors(retro):
     authors = []

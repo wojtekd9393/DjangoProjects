@@ -1,5 +1,5 @@
 from django.urls import path, include
-from retro_app.views import home, delete, edit, main, remove_retro, dashboard, register, settings, card_vote, card_vote_down, archived, archive, restore_retro
+from retro_app.views import home, delete, edit, main, remove_retro, dashboard, register, settings, card_vote, card_vote_down, archived, archive, restore_retro, change_retro_name
 
 urlpatterns = [
     path('', dashboard),
@@ -17,6 +17,7 @@ urlpatterns = [
     path('archived/', archived, name="archived"),
     path('archive/<retro_id>', archive, name="archive"),
     path('restore_retro/<retro_id>', restore_retro, name="restore_retro"),
+    path('change_retro_name/<retro_id>/<new_retro_name>', change_retro_name, name="change_retro_name"),
 ]
 
 """
