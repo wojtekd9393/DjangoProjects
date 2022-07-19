@@ -12,25 +12,28 @@ $(document).ready(function() {
                 let category = response.card.category;
                 let id = response.card.id;
                 let body = response.card.body;
+
                 switch(category) {
                 case 1:
-                console.log(body);
                     let greenCard = `
-                        <div class="card text-white bg-success mb-3" id="greenCard" data-id=${id}><div class="card-body"><p>${body}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
+                        <div class="card text-white bg-success mb-3" id="greenCard" data-id=${id}><div class="card-body"><p>${body}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
                     `;
-                    $("#greenList").prepend(greenCard)
+                    $("#greenList").prepend(greenCard);
+                    addModalDialogListeners(id);
                     break;
                 case 2:
                     let redCard = `
-                        <div class="card text-white bg-danger mb-3" id="redCard" data-id=${id}><div class="card-body"><p>${body}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
+                        <div class="card text-white bg-danger mb-3" id="redCard" data-id=${id}><div class="card-body"><p>${body}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
                     `;
-                    $("#redList").prepend(redCard)
+                    $("#redList").prepend(redCard);
+                    addModalDialogListeners(id);
                     break;
                 case 3:
                     let blueCard = `
-                        <div class="card text-white bg-primary mb-3" id="blueCard" data-id=${id}><div class="card-body"><p>${body}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
+                        <div class="card text-white bg-primary mb-3" id="blueCard" data-id=${id}><div class="card-body"><p>${body}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
                     `;
-                    $("#blueList").prepend(blueCard)
+                    $("#blueList").prepend(blueCard);
+                    addModalDialogListeners(id);
                     break;
                 default:
                     console.log("Wrong category: " + category);
@@ -42,31 +45,10 @@ $(document).ready(function() {
         $("#form1")[0].reset();
     });
 
-//    list = document.getElementById("greenList");
-//    list.onclick = function(event) {
-//        //event.stopPropagation(); // co to robi w tym przypadku?
-//        let i = event.target.closest('.card .fa-trash-alt');
-//        // param of closest = The closest ancestor Element or itself, which matches the selectors.
-//        // If there are no such element, null.
-//        if(!i) return;
-//        var dataId = i.getAttribute("data-id");
-//
-//        $.ajax({
-//            url: '/delete/item/' + dataId,
-//            data: {
-//                csrfmiddlewaretoken: csrfToken,
-//                id: dataId // działa bez tego, czy jest potrzebne?
-//            },
-//            type: 'post',
-//            success: function() {
-//                $('#greenCard[data-id="' + dataId + '"]').remove();
-//            }
-//        });
-//        }
-
-    $("#greenList").on('click', '.card .fa-trash-alt', function(event) {
+    $("#modal-delete button.btn-primary").on('click', function(event) {
+        // event.target.closest('.card .fa-trash-alt');
         event.stopPropagation();
-        var dataId = $(this).data('id');
+        var dataId = $(this).attr('data-id');
 
         $.ajax({
             url: '/delete/card/' + dataId,
@@ -75,42 +57,27 @@ $(document).ready(function() {
             },
             method: 'POST',
             success: function() {
-                $('#greenCard[data-id="' + dataId + '"]').remove();
+                const modal = document.getElementById("modal-delete");
+                modal.close();
+                $('div.card[data-id="' + dataId + '"]').remove();
             }
         });
     });
 
-    $("#redList").on('click', '.card .fa-trash-alt', function(event) {
-        event.stopPropagation();
-        var dataId = $(this).data('id');
+    function addModalDialogListeners(id) {
+        const modal = document.getElementById("modal-delete");
+        const modal_btn_primary = document.querySelector("#modal-delete button.btn-primary");
+        const modal_btn_secondary = document.querySelector("#modal-delete button.btn-secondary");
 
-        $.ajax({
-            url: '/delete/card/' + dataId,
-            data: {
-                csrfmiddlewaretoken: csrfToken
-            },
-            method: 'POST',
-            success: function() {
-                $('#redCard[data-id="' + dataId + '"]').remove();
-            }
+        let btn = $("i.fa-trash-alt[data-id="+id+"]")[0];
+        btn.addEventListener("click", () => {
+            modal_btn_primary.setAttribute("data-id", id);
+            modal.showModal();
         });
 
-    });
-
-    $("#blueList").on('click', '.card .fa-trash-alt', function(event) {
-        event.stopPropagation();
-        var dataId = $(this).data('id');
-
-        $.ajax({
-            url: '/delete/card/' + dataId,
-            data: {
-                csrfmiddlewaretoken: csrfToken
-            },
-            method: 'POST',
-            success: function() {
-                $('#blueCard[data-id="' + dataId + '"]').remove();
-            }
+        modal_btn_secondary.addEventListener("click", () => {
+            modal.close();
         });
-    });
+    }
 
 });

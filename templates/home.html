@@ -39,7 +39,6 @@
 onkeydown="return event.key != 'Enter';"
 minus jest taki, ze entera nie mozna tez uzyc w textarea
 poprawic w przyszlosci !!!-->
-
       <div class="row">
           <div class="col-sm-4">
               <h3><i class="fas fa-square fa-green"></i> Went Well</h3>
@@ -58,7 +57,7 @@ poprawic w przyszlosci !!!-->
                             <p>{{ card.body }}</p>
                             <div class="actions">
                                 {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
-                                    <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white"></i></a>
+                                    <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a>
                                     <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
                                 {% else %}
                                     <a href="{% url 'edit' card.id %}" style="display: none;"><i class="fas fa-edit fa-white"></i></a>
@@ -94,7 +93,7 @@ poprawic w przyszlosci !!!-->
                             <p>{{ card.body }}</p>
                             <div class="actions">
                                 {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
-                                    <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white"></i></a>
+                                    <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a>
                                     <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
                                 {% else %}
                                     <a href="{% url 'edit' card.id %}" style="display: none;"><i class="fas fa-edit fa-white"></i></a>
@@ -130,7 +129,7 @@ poprawic w przyszlosci !!!-->
                             <p>{{ card.body }}</p>
                             <div class="actions">
                                 {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
-                                    <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white"></i></a>
+                                    <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a>
                                     <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
                                 {% else %}
                                     <a href="{% url 'edit' card.id %}" style="display: none;"><i class="fas fa-edit fa-white"></i></a>
@@ -149,6 +148,19 @@ poprawic w przyszlosci !!!-->
               </div>
           </div>
         </div>
+
+<dialog id="modal-delete">
+    <div class="modal-delete-content">
+        <div class="modal-delete-icon">
+            <i class="fas fa-exclamation-circle"></i>
+        </div>
+        <h5 id="info">Are you sure you want to delete?</h5>
+        <div class="modal-buttons">
+            <button class="btn btn-primary" data-id="">Yes, delete it</button>
+            <button class="btn btn-secondary">No, keep it</button>
+        </div>
+    </div>
+</dialog>
 {% endblock %}
 
 {% block javascript %}
@@ -160,6 +172,23 @@ poprawic w przyszlosci !!!-->
                 document.getElementsByName("category")[0].value = category;
             });
         })
+
+        const modal = document.getElementById("modal-delete");
+        const modal_btn_primary = document.querySelector("#modal-delete button.btn-primary");
+        const modal_btn_secondary = document.querySelector("#modal-delete button.btn-secondary");
+
+        let delete_btns = document.querySelectorAll("i.fa-trash-alt");
+        delete_btns.forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                let cardId = btn.getAttribute("data-id");
+                modal_btn_primary.setAttribute("data-id", cardId);
+                modal.showModal();
+            });
+        })
+
+        modal_btn_secondary.addEventListener("click", () => {
+            modal.close();
+        });
     </script>
     <script type="text/javascript" src="{% static 'js/cards_handling.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/votes_handling.js' %}"></script>
