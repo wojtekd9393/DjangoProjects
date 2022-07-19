@@ -1,8 +1,8 @@
 $(document).ready(function() {
     var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
 
-    $("#createButton1").click(function() {
-        var serializedData = $("#form1").serialize();
+    $("#createButton").click(function() {
+        var serializedData = $("#form").serialize();
 
         $.ajax({
             url: window.location.href,
@@ -42,7 +42,7 @@ $(document).ready(function() {
             }
         })
 
-        $("#form1")[0].reset();
+        $("#form")[0].reset();
     });
 
     $("#modal-delete button.btn-primary").on('click', function(event) {

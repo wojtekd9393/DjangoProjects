@@ -280,10 +280,23 @@ header.bg nav>ul li.nav_right:hover ul li a {
     font-size: 22px;
 }
 
- div.actions{
+div.actions{
     float:right;
     margin-top: 5px;
- }
+}
+
+#greenList, #redList, #blueList {
+    margin-top: 20px;
+}
+
+p.card-text {
+    padding: 10px;
+    text-align: center;
+}
+
+p.card-text a:hover {
+    opacity: 0.7;
+}
 
  .card-body p {
     text-align: justify;
@@ -486,7 +499,7 @@ div.modal-delete-icon {
 /* Add Animation */
 @-webkit-keyframes animatesqueeze {
     0% {
-        transform: scale(0.7);
+        transform: scale(0.85);
     }
     45% {
         transform: scale(1.05);
