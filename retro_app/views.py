@@ -164,6 +164,16 @@ def card_vote_down(request, card_id):
 
 
 @login_required
+def reset_user_votes(request, retro_id):
+    user = request.user
+    cards_with_user_votes = user.card_votes.filter(retro_id=retro_id)
+    for card in cards_with_user_votes:
+        card.votes.remove(user)
+    return redirect('home', retro_id=retro_id)
+    #return JsonResponse({}, status=200)
+
+
+@login_required
 def archived(request):
     archived_retros = Retro.objects.filter(author=request.user.id, archived=True)
     retros_with_authors = []

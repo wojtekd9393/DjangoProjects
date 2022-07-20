@@ -59,8 +59,8 @@ $(document).ready(function() {
                 let currentNumberOfVotes = p.innerHTML;
                 p.innerHTML = parseInt(currentNumberOfVotes, 10) - 1;
 
-                let i = document.querySelector('i.fa-eraser[data-id="' + cardId + '"]');
-                i.remove();
+                let eraser = document.querySelector('i.fa-eraser[data-id="' + cardId + '"]');
+                eraser.remove();
                 let cards = response.cards;
                 cards.forEach((card) => {
                     let id = card.id;

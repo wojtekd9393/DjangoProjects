@@ -5,6 +5,9 @@
         {% if retro.author.id == user.id %}
             <a class=".dropdown-content" href="{% url 'settings' retro.id %}"><i class="fas fa-sliders-h"></i> Board settings</a>
         {% endif %}
+        {% if retro.voting %}
+            <a class=".dropdown-content" href="{% url 'reset_user_votes' retro.id %}"><i class="fas fa-eraser"></i></i> Reset my votes</a>
+        {% endif %}
     {% endblock %}
 
 {% block content %}
@@ -47,7 +50,7 @@
 onkeydown="return event.key != 'Enter';"
 minus jest taki, ze entera nie mozna tez uzyc w textarea
 poprawic w przyszlosci !!!-->
-      <div class="row" style="background-color: #e6e6e6;">
+      <div id="main-div" class="row">
           <div class="col-sm-4">
               <h4><i class="fas fa-square fa-green"></i> Went Well</h4>
               <div class="card">
