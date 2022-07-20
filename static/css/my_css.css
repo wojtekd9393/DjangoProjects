@@ -332,9 +332,19 @@ header.bg nav>ul li.nav_right:hover ul li a {
     font-size: 22px;
 }
 
-div.actions{
+div.actions {
     float:right;
     margin-top: 5px;
+    font-size: 0;
+}
+
+div.actions > * {
+    font-size: 16px;
+    margin-left: 4px;
+}
+
+div.card div.actions span:hover {
+    cursor: default;
 }
 
 #greenList, #redList, #blueList {

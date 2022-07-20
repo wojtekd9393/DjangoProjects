@@ -76,9 +76,6 @@ poprawic w przyszlosci !!!-->
                                 {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
                                     <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a>
                                     <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
-                                {% else %}
-                                    <a href="{% url 'edit' card.id %}" style="display: none;"><i class="fas fa-edit fa-white"></i></a>
-                                    <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card" style="display: none;"></i>
                                 {% endif %}
                             </div>
                             {% if retro.voting and user.is_authenticated %}
@@ -112,9 +109,6 @@ poprawic w przyszlosci !!!-->
                                 {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
                                     <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a>
                                     <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
-                                {% else %}
-                                    <a href="{% url 'edit' card.id %}" style="display: none;"><i class="fas fa-edit fa-white"></i></a>
-                                    <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card" style="display: none;"></i>
                                 {% endif %}
                             </div>
                             {% if retro.voting and user.is_authenticated %}
@@ -148,9 +142,6 @@ poprawic w przyszlosci !!!-->
                                 {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
                                     <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a>
                                     <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
-                                {% else %}
-                                    <a href="{% url 'edit' card.id %}" style="display: none;"><i class="fas fa-edit fa-white"></i></a>
-                                    <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card" style="display: none;"></i>
                                 {% endif %}
                             </div>
                             {% if retro.voting and user.is_authenticated %}
