@@ -68,10 +68,23 @@ span > .fa-thumbs-up:hover {
     text-align: center;
 }
 
-span.retro-name {
+span.retro-name, i.retro-name, span.retro-name-not-author {
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
+    color: #5e5c5c;
+}
+
+span.retro-name-not-author {
+    cursor: default;
+}
+
+i.retro-name {
+    padding-left: 5px;
+}
+
+i.retro-name:hover {
+    opacity: 1;
 }
 
 button.reject {
@@ -324,12 +337,17 @@ div.actions{
 }
 
 p.card-text {
-    padding: 10px;
+    padding: 5px;
     text-align: center;
 }
 
 p.card-text a:hover {
     opacity: 0.7;
+}
+
+.card-body {
+    padding: 10px 20px;
+    font-family: 'Roboto', sans-serif;
 }
 
  .card-body p {

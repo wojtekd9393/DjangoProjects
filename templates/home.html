@@ -9,7 +9,11 @@
 
 {% block content %}
 <div class="toolbar">
-    <span class="retro-name" >{{ retro.name }}</span>
+    {% if retro.author.id == user.id %}
+        <div><span class="retro-name" >{{ retro.name }}</span><i class="fas fa-edit retro-name"></i></div>
+    {% else %}
+        <div><span class="retro-name-not-author" >{{ retro.name }}</span></div>
+    {% endif %}
     <input type="text" class="input-retro-name hidden" value="{{ retro.name }}" onfocus="this.setSelectionRange(this.value.length,this.value.length);">
     <button class="reject hidden"><i class="fas fa-times"></i></button> <button class="accept hidden" data-retro-id="{{ retro.id }}"><i class="fas fa-check"></i></button>
 </div>
@@ -45,7 +49,7 @@ minus jest taki, ze entera nie mozna tez uzyc w textarea
 poprawic w przyszlosci !!!-->
       <div class="row" style="background-color: #e6e6e6;">
           <div class="col-sm-4">
-              <h3><i class="fas fa-square fa-green"></i> Went Well</h3>
+              <h4><i class="fas fa-square fa-green"></i> Went Well</h4>
               <div class="card">
                   <div>
                       <p class="card-text">
@@ -81,7 +85,7 @@ poprawic w przyszlosci !!!-->
           </div>
 
           <div class="col-sm-4">
-              <h3><i class="fas fa-square fa-red"></i> To Improve</h3>
+              <h4><i class="fas fa-square fa-red"></i> To Improve</h4>
               <div class="card">
                   <div>
                       <p class="card-text">
@@ -117,7 +121,7 @@ poprawic w przyszlosci !!!-->
           </div>
 
           <div class="col-sm-4">
-              <h3><i class="fas fa-square fa-blue"></i> Action Points</h3>
+              <h4><i class="fas fa-square fa-blue"></i> Action Points</h4>
               <div class="card">
                   <div>
                       <p class="card-text">
@@ -195,24 +199,29 @@ poprawic w przyszlosci !!!-->
         });
 
         let spanRetroName = document.querySelector("span.retro-name");
+        let iconRetroName = document.querySelector("i.retro-name");
         let inputRetroName = document.querySelector("input.input-retro-name");
         let rejectButton = document.querySelector("button.reject");
         let acceptButton = document.querySelector("button.accept");
 
-        spanRetroName.addEventListener("click", () => {
-            spanRetroName.classList.add("hidden");
-            inputRetroName.classList.remove("hidden");
-            inputRetroName.value = spanRetroName.innerHTML;
-            $(inputRetroName).focus();
-            rejectButton.classList.remove("hidden");
-            acceptButton.classList.remove("hidden");
-        });
+        [spanRetroName, iconRetroName].forEach(item => {
+            item.addEventListener("click", () => {
+                spanRetroName.classList.add("hidden");
+                iconRetroName.style.display = "none";
+                inputRetroName.classList.remove("hidden");
+                inputRetroName.value = spanRetroName.innerHTML;
+                $(inputRetroName).focus();
+                rejectButton.classList.remove("hidden");
+                acceptButton.classList.remove("hidden");
+            })
+        })
 
         rejectButton.addEventListener("click", () => {
             inputRetroName.classList.add("hidden");
             rejectButton.classList.add("hidden");
             acceptButton.classList.add("hidden");
             spanRetroName.classList.remove("hidden");
+            iconRetroName.style.display = "inline-block";
         });
 
         acceptButton.addEventListener("click", () => {
@@ -220,6 +229,7 @@ poprawic w przyszlosci !!!-->
             rejectButton.classList.add("hidden");
             acceptButton.classList.add("hidden");
             spanRetroName.classList.remove("hidden");
+            iconRetroName.style.display = "inline-block";
 
             let newRetroName = inputRetroName.value != "" ? inputRetroName.value : spanRetroName.innerHTML;
             let retroId = acceptButton.getAttribute("data-retro-id");
