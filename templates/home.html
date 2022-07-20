@@ -4,6 +4,12 @@
     {% block settings %}
         {% if retro.author.id == user.id %}
             <a class=".dropdown-content" href="{% url 'settings' retro.id %}"><i class="fas fa-sliders-h"></i> Board settings</a>
+            {% if not retro.archived %}
+                <a class=".dropdown-content" href="{% url 'archive' retro.id %}"><i class="fas fa-archive"></i> Archive board</a>
+            {% else %}
+                <a class=".dropdown-content" href="{% url 'restore_retro' retro.id %}"><i class="fas fa-undo fa-white"></i> Restore board</a>
+            {% endif %}
+            <a class=".dropdown-content" href="{% url 'clear_board' retro.id %}"><i class="fas fa-minus-square"></i> Clear board</a>
         {% endif %}
         {% if retro.voting %}
             <a class=".dropdown-content" href="{% url 'reset_user_votes' retro.id %}"><i class="fas fa-eraser"></i></i> Reset my votes</a>

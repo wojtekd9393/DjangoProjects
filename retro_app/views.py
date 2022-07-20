@@ -191,6 +191,15 @@ def change_retro_name(request, retro_id, new_retro_name):
     return JsonResponse({}, status=200)
 
 
+@login_required
+def clear_board(request, retro_id):
+    retro = Retro.objects.get(pk=retro_id)
+    cards = retro.cards.all()
+    for card in cards:
+        card.delete()
+    return redirect('home', retro_id=retro_id)
+
+
 # helper functions
 def get_num_of_authors(retro):
     authors = []
