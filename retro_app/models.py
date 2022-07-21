@@ -22,7 +22,7 @@ class Card(models.Model):
     votes = models.ManyToManyField(get_user_model(), related_name='card_votes')
 
     class Meta:
-        ordering = ['-id']
+        ordering = ['id']
 
     def __str__(self):
         return self.body + ' | ' + str(self.category)

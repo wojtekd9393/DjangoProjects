@@ -62,8 +62,7 @@ poprawic w przyszlosci !!!-->
               <div class="card">
                   <div>
                       <p class="card-text">
-                          <a data-target="#exampleModal" data-toggle="modal" class="MainNavText modal_button" id="Modal1" data-category="1"
-                            href="#exampleModal" {% if user.is_authenticated == False or retro.voting or retro.archived %} style="pointer-events: none;" {% endif %}><i class="fas fa-plus-square fa-black fa-2x"></i></a>
+                          <a id="add-green-card-btn" class="add-temp-card MainNavText" data-category="1" data-author="{{ user.id }}" {% if user.is_authenticated == False or retro.voting or retro.archived %} style="pointer-events: none;" {% endif %}><i class="fas fa-plus-square fa-black fa-2x"></i></a>
                       </p>
                   </div>
               </div>
@@ -71,7 +70,7 @@ poprawic w przyszlosci !!!-->
                   {% for card in green_cards %}
                     <div class="card text-white bg-success mb-3" id="greenCard" data-id="{{ card.id }}">
                         <div class="card-body">
-                            <p>{{ card.body }}</p>
+                            <p class="pre-line">{{ card.body }}</p>
                             <div class="actions">
                                 {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
                                     <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a>
@@ -95,8 +94,7 @@ poprawic w przyszlosci !!!-->
               <div class="card">
                   <div>
                       <p class="card-text">
-                          <a data-target="#exampleModal" data-toggle="modal" class="MainNavText modal_button" id="Modal2" data-category="2"
-                            href="#exampleModal" {% if user.is_authenticated == False or retro.voting or retro.archived %} style="pointer-events: none;" {% endif %}><i class="fas fa-plus-square fa-black fa-2x"></i></a>
+                          <a id="add-red-card-btn" class="add-temp-card MainNavText" data-category="2" data-author="{{ user.id }}" {% if user.is_authenticated == False or retro.voting or retro.archived %} style="pointer-events: none;" {% endif %}><i class="fas fa-plus-square fa-black fa-2x"></i></a>
                       </p>
                   </div>
               </div>
@@ -104,7 +102,7 @@ poprawic w przyszlosci !!!-->
                   {% for card in red_cards %}
                     <div class="card text-white bg-danger mb-3" id="redCard" data-id="{{ card.id }}">
                         <div class="card-body">
-                            <p>{{ card.body }}</p>
+                            <p class="pre-line">{{ card.body }}</p>
                             <div class="actions">
                                 {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
                                     <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a>
@@ -128,8 +126,7 @@ poprawic w przyszlosci !!!-->
               <div class="card">
                   <div>
                       <p class="card-text">
-                          <a data-target="#exampleModal" data-toggle="modal" class="MainNavText modal_button" id="Modal3" data-category="3"
-                            href="#exampleModal" {% if user.is_authenticated == False or retro.voting or retro.archived %} style="pointer-events: none;" {% endif %}><i class="fas fa-plus-square fa-black fa-2x"></i></a>
+                          <a id="add-blue-card-btn" class="add-temp-card MainNavText" data-category="3" data-author="{{ user.id }}" {% if user.is_authenticated == False or retro.voting or retro.archived %} style="pointer-events: none;" {% endif %}><i class="fas fa-plus-square fa-black fa-2x"></i></a>
                       </p>
                   </div>
               </div>
@@ -137,7 +134,7 @@ poprawic w przyszlosci !!!-->
                   {% for card in blue_cards %}
                     <div class="card text-white bg-primary mb-3" id="blueCard" data-id="{{ card.id }}">
                         <div class="card-body">
-                            <p>{{ card.body }}</p>
+                            <p class="pre-line">{{ card.body }}</p>
                             <div class="actions">
                                 {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
                                     <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a>

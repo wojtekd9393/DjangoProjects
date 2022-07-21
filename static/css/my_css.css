@@ -593,3 +593,52 @@ div.modal-delete-icon {
         transform: scale(1.0);
     }
 }
+
+p.card-text > a.add-temp-card:hover {
+    cursor: pointer;
+}
+
+.temp-card {
+    margin-bottom: 16px;
+    border-radius: 4px;
+    border: 2px solid purple;
+}
+
+.temp-card form > textarea {
+    resize: none;
+    border: 0;
+    overflow-y: hidden;
+    height: 36px;
+}
+
+.temp-card form {
+    padding: 10px 10px;
+}
+
+.temp-card form > textarea:focus {
+    border: 0;
+    box-shadow: none;
+}
+
+.temp-card form > button {
+    display: block;
+    float: left;
+    text-align: right;
+}
+
+.temp-card form > a.reject-card {
+    display: block;
+    float: left;
+}
+
+.temp-card-actions {
+    text-align: right;
+}
+
+.temp-card > form {
+    background-color: white;
+}
+
+p.pre-line {
+    white-space: pre-line;
+}
