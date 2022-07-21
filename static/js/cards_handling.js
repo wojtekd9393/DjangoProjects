@@ -44,47 +44,54 @@ $(document).ready(function() {
             let createButton = document.querySelector('div#'+temp_card_id+' button.add-card');
             createButton.addEventListener("click", (event) => {
                 var temp_card_id = "temp-card-" + event.currentTarget.getAttribute("data-counter");
-                var serializedData = $('div#' + temp_card_id + ' form').serialize();
+                var ta_value = $('div#'+temp_card_id+' form > textarea')[0].value.trim();
 
-                serializedData += "&csrfmiddlewaretoken=";
-                serializedData += csrfToken;
+                // add new card only if the card's content is not an empty string
+                if(ta_value !== "") {
+                    var serializedData = $('div#' + temp_card_id + ' form').serialize();
+                    serializedData += "&csrfmiddlewaretoken=";
+                    serializedData += csrfToken;
 
-                $.ajax({
-                    url: window.location.href,
-                    data: serializedData,
-                    method: 'POST',
-                    success: function(response) {
-                        let category = response.card.category;
-                        let id = response.card.id;
-                        let body = response.card.body;
+                    $.ajax({
+                        url: window.location.href,
+                        data: serializedData,
+                        method: 'POST',
+                        success: function(response) {
+                            let category = response.card.category;
+                            let id = response.card.id;
+                            let body = response.card.body;
 
-                        switch(category) {
-                            case 1:
-                                let greenCard = `
-                                    <div class="card text-white bg-success mb-3" id="greenCard" data-id=${id}><div class="card-body"><p class="pre-line">${body}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
-                                `;
-                                $("#greenList").append(greenCard);
-                                break;
-                            case 2:
-                                let redCard = `
-                                    <div class="card text-white bg-danger mb-3" id="redCard" data-id=${id}><div class="card-body"><p class="pre-line">${body}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
-                                `;
-                                $("#redList").append(redCard);
-                                break;
-                            case 3:
-                                let blueCard = `
-                                    <div class="card text-white bg-primary mb-3" id="blueCard" data-id=${id}><div class="card-body"><p class="pre-line">${body}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
-                                `;
-                                $("#blueList").append(blueCard);
-                                break;
-                            default:
-                                console.log("Wrong card category: " + category);
+                            switch(category) {
+                                case 1:
+                                    let greenCard = `
+                                        <div class="card text-white bg-success mb-3" id="greenCard" data-id=${id}><div class="card-body"><p class="pre-line">${body}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
+                                    `;
+                                    $("#greenList").append(greenCard);
+                                    break;
+                                case 2:
+                                    let redCard = `
+                                        <div class="card text-white bg-danger mb-3" id="redCard" data-id=${id}><div class="card-body"><p class="pre-line">${body}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
+                                    `;
+                                    $("#redList").append(redCard);
+                                    break;
+                                case 3:
+                                    let blueCard = `
+                                        <div class="card text-white bg-primary mb-3" id="blueCard" data-id=${id}><div class="card-body"><p class="pre-line">${body}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
+                                    `;
+                                    $("#blueList").append(blueCard);
+                                    break;
+                                default:
+                                    console.log("Wrong card category: " + category);
+                            }
+                            addModalDialogListeners(id);
+
+                            $('div#' + temp_card_id).remove();
                         }
-                        addModalDialogListeners(id);
-
-                        $('div#' + temp_card_id).remove();
-                    }
-                })
+                    })
+                } else {
+                    // remove empty card
+                    $('div#' + temp_card_id).remove();
+                }
             });
 
             // keep the current counter value

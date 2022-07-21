@@ -1,61 +1,34 @@
 {% extends 'base.html' %}
 {% load static %}
 
-    {% block settings %}
-        {% if retro.author.id == user.id %}
-            <a class=".dropdown-content" href="{% url 'settings' retro.id %}"><i class="fas fa-sliders-h"></i> Board settings</a>
-            {% if not retro.archived %}
-                <a class=".dropdown-content" href="{% url 'archive' retro.id %}"><i class="fas fa-archive"></i> Archive board</a>
-            {% else %}
-                <a class=".dropdown-content" href="{% url 'restore_retro' retro.id %}"><i class="fas fa-undo fa-white"></i> Restore board</a>
-            {% endif %}
-            <a class=".dropdown-content" href="{% url 'clear_board' retro.id %}"><i class="fas fa-minus-square"></i> Clear board</a>
+{% block settings %}
+    {% if retro.author.id == user.id %}
+        <a class=".dropdown-content" href="{% url 'settings' retro.id %}"><i class="fas fa-sliders-h"></i> Board settings</a>
+        {% if not retro.archived %}
+            <a class=".dropdown-content" href="{% url 'archive' retro.id %}"><i class="fas fa-archive"></i> Archive board</a>
+        {% else %}
+            <a class=".dropdown-content" href="{% url 'restore_retro' retro.id %}"><i class="fas fa-undo fa-white"></i> Restore board</a>
         {% endif %}
-        {% if retro.voting %}
-            <a class=".dropdown-content" href="{% url 'reset_user_votes' retro.id %}"><i class="fas fa-eraser"></i></i> Reset my votes</a>
-        {% endif %}
-    {% endblock %}
+        <a class=".dropdown-content" href="{% url 'clear_board' retro.id %}"><i class="fas fa-minus-square"></i> Clear board</a>
+    {% endif %}
+    {% if retro.voting %}
+        <a class=".dropdown-content" href="{% url 'reset_user_votes' retro.id %}"><i class="fas fa-eraser"></i></i> Reset my votes</a>
+    {% endif %}
+{% endblock %}
 
 {% block content %}
-<div class="toolbar">
-    {% if retro.author.id == user.id %}
-        <div><span class="retro-name" >{{ retro.name }}</span><i class="fas fa-edit retro-name"></i></div>
-    {% else %}
-        <div><span class="retro-name-not-author" >{{ retro.name }}</span></div>
-    {% endif %}
-    <input type="text" class="input-retro-name hidden" value="{{ retro.name }}" onfocus="this.setSelectionRange(this.value.length,this.value.length);">
-    <button class="reject hidden"><i class="fas fa-times"></i></button> <button class="accept hidden" data-retro-id="{{ retro.id }}"><i class="fas fa-check"></i></button>
-</div>
-
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Adding card</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      <form class="form-inline my-2 my-lg-0" id="form" method="post" onkeydown="return event.key != 'Enter';" data-url="{{ request.build_absolute_uri|safe }}">
-            {% csrf_token %}
-          <input class="form-control mr-sm-2" type="text" placeholder="" aria-label="Search", size="30" name="body">
-          <input class="form-control mr-sm-2 add_card"  type="hidden" placeholder="" aria-label="Search", size="30" name="category" value="">
-          <input class="form-control mr-sm-2 add_card" type="hidden" placeholder="" aria-label="Search", size="30" name="author" value="{{user.id}}">
-          <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" id="createButton">Add Card</button>
-      </form>
-      </div>
-      <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
+    <div class="toolbar">
+        {% if retro.author.id == user.id %}
+            <div><span class="retro-name" >{{ retro.name }}</span><i class="fas fa-edit retro-name"></i></div>
+        {% else %}
+            <div><span class="retro-name-not-author" >{{ retro.name }}</span></div>
+        {% endif %}
+        <input type="text" class="input-retro-name hidden" value="{{ retro.name }}" onfocus="this.setSelectionRange(this.value.length,this.value.length);">
+        <button class="reject hidden"><i class="fas fa-times"></i></button> <button class="accept hidden" data-retro-id="{{ retro.id }}"><i class="fas fa-check"></i></button>
     </div>
-  </div>
-</div>
 
-<!-- Ten zapis powoduje, ze enterem nie mozna zaakceptowac formularza:
-onkeydown="return event.key != 'Enter';"
-minus jest taki, ze entera nie mozna tez uzyc w textarea
-poprawic w przyszlosci !!!-->
+{% csrf_token %}
+
       <div id="main-div" class="row">
           <div class="col-sm-4">
               <h4><i class="fas fa-square fa-green"></i> Went Well</h4>

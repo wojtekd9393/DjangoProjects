@@ -639,6 +639,6 @@ p.card-text > a.add-temp-card:hover {
     background-color: white;
 }
 
-p.pre-line {
+.pre-line {
     white-space: pre-line;
 }
