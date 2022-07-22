@@ -46,7 +46,7 @@
                             <p class="pre-line">{{ card.body }}</p>
                             <div class="actions">
                                 {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
-                                    <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a>
+                                    <i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i>
                                     <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
                                 {% endif %}
                             </div>
@@ -78,7 +78,7 @@
                             <p class="pre-line">{{ card.body }}</p>
                             <div class="actions">
                                 {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
-                                    <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a>
+                                    <i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i>
                                     <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
                                 {% endif %}
                             </div>
@@ -110,7 +110,7 @@
                             <p class="pre-line">{{ card.body }}</p>
                             <div class="actions">
                                 {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
-                                    <a href="{% url 'edit' card.id %}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a>
+                                    <i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i>
                                     <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
                                 {% endif %}
                             </div>

@@ -1,13 +1,14 @@
 $(document).ready(function() {
 
     var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
-    var counter = 0;
+    var counter = 0; // add card counter
+    var counter2 = 0; // edit card counter
 
     $("a.add-temp-card").each(function(index) {
         $(this).on("click", function(event) {
             let category = parseInt($(this).attr("data-category"));
-
             counter += 1;
+
             // assign id to each newly created div containing the form
             let temp_card_id = "temp-card-" + counter;
 
@@ -65,19 +66,19 @@ $(document).ready(function() {
                             switch(category) {
                                 case 1:
                                     let greenCard = `
-                                        <div class="card text-white bg-success mb-3" id="greenCard" data-id=${id}><div class="card-body"><p class="pre-line">${body}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
+                                        <div class="card text-white bg-success mb-3" id="greenCard" data-id=${id}><div class="card-body"><p class="pre-line">${body}</p><div class="actions"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
                                     `;
                                     $("#greenList").append(greenCard);
                                     break;
                                 case 2:
                                     let redCard = `
-                                        <div class="card text-white bg-danger mb-3" id="redCard" data-id=${id}><div class="card-body"><p class="pre-line">${body}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
+                                        <div class="card text-white bg-danger mb-3" id="redCard" data-id=${id}><div class="card-body"><p class="pre-line">${body}</p><div class="actions"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
                                     `;
                                     $("#redList").append(redCard);
                                     break;
                                 case 3:
                                     let blueCard = `
-                                        <div class="card text-white bg-primary mb-3" id="blueCard" data-id=${id}><div class="card-body"><p class="pre-line">${body}</p><div class="actions"><a href="/edit/${id}"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i></a> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
+                                        <div class="card text-white bg-primary mb-3" id="blueCard" data-id=${id}><div class="card-body"><p class="pre-line">${body}</p><div class="actions"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
                                     `;
                                     $("#blueList").append(blueCard);
                                     break;
@@ -109,6 +110,68 @@ $(document).ready(function() {
             rejectButton.setAttribute("data-counter", counter);
         })
     })
+
+    $("#main-div").on("click", "div.actions > i.fa-edit", function(event) {
+        counter2++;
+        let temp_edit_id = "temp-edit-" + counter2;
+        var card_div = event.target.parentElement.parentElement.parentElement;
+        var id = card_div.getAttribute("data-id");
+
+        $.ajax({
+            url: '/edit/' + id,
+            data: {
+                csrfmiddlewaretoken: csrfToken
+            },
+            method: 'GET',
+            success: function(response) {
+                let card = response.card;
+                let form = `
+                    <div id="${temp_edit_id}" class="temp-card clearfix">
+                      <form method="post">
+                          <textarea class="form-control" placeholder="Type something..." name="body" required oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'">${card.body}</textarea>
+                          <input class="form-control mr-sm-2 add_card" type="hidden" aria-label="Search", size="30" name="category" value=${card.category}>
+                          <div class="temp-card-actions">
+                              <a class="btn btn-sm btn-danger reject-card"><i class="fas fa-times"></i></a>
+                              <button class="btn btn-sm btn-primary add-card" type="button">Edit Card</button>
+                          </div>
+                      </form>
+                    </div>
+                `;
+
+                $(card_div).replaceWith(form);
+
+                // set the initial height of text area depending on its number of lines and padding
+                let ta = document.querySelector('div#' + temp_edit_id + ' textarea');
+                let lines = ta.value.split("\n").length;
+                ta.style.height = lines * 24 + 12 + 'px'; // 24 - line height, 12 - padding (2 x 6)
+
+                let editButton = document.querySelector('div#' + temp_edit_id + ' button.add-card');
+                editButton.addEventListener("click", (event) => {
+                    var serializedData = $('div#' + temp_edit_id + ' form').serialize();
+                    serializedData += "&csrfmiddlewaretoken=";
+                    serializedData += csrfToken;
+
+                    $.ajax({
+                        url: '/edit/' + id,
+                        data: serializedData,
+                        method: 'POST',
+                        success: function(response) {
+                            let new_div = card_div;
+                            new_div.children[0].children[0].innerHTML = response.card.body;
+                            let edit_form = editButton.parentElement.parentElement.parentElement;
+                            $(edit_form).replaceWith(new_div);
+                        }
+                    })
+                })
+
+                let rejectButton = document.querySelector('div#' + temp_edit_id + ' a.reject-card');
+                rejectButton.addEventListener("click", (event) => {
+                    let edit_form = rejectButton.parentElement.parentElement.parentElement;
+                    $(edit_form).replaceWith(card_div);
+                });
+            }
+        })
+    });
 
     $("#modal-delete button.btn-primary").on('click', function(event) {
         // event.target.closest('.card .fa-trash-alt');

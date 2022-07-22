@@ -57,9 +57,9 @@ def edit(request, card_id):
         form = CardForm(request.POST or None, instance=card)
         if form.is_valid():
             form.save()
-        return redirect('home', retro_id=card.retro.id)
+        return JsonResponse({'card': model_to_dict(card)}, status=200)
     else:
-        return render(request, 'edit.html', {'card': card})
+        return JsonResponse({'card': model_to_dict(card)}, status=200)
 
 
 @login_required
