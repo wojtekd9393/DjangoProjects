@@ -6,8 +6,6 @@
             {% csrf_token %}
             <textarea class="form-control" rows=5 name="body" required oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" autofocus onfocus="this.setSelectionRange(this.value.length,this.value.length);">{{ card.body }}</textarea>
             <input class="form-control mr-sm-2 add_card" type="hidden" placeholder="Add Card" aria-label="Search" size="100" name="category" value="{{ card.category }}">
-            <input class="form-control mr-sm-2 add_card" type="hidden" placeholder="Add Card" aria-label="Search" size="100" name="retro" value="{{ card.retro.id }}">
-            <input class="form-control mr-sm-2 add_card" type="hidden" placeholder="" aria-label="Search" size="30" name="author" value="{{ user.id }}">
             <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Edit Card</button>
         </form>
         <a href="{% url 'home' card.retro.id %}">Back to Retro board</a>

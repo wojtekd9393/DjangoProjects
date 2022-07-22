@@ -6,7 +6,6 @@ $(document).ready(function() {
     $("a.add-temp-card").each(function(index) {
         $(this).on("click", function(event) {
             let category = parseInt($(this).attr("data-category"));
-            let author = $(this).attr("data-author");
 
             counter += 1;
             // assign id to each newly created div containing the form
@@ -17,7 +16,6 @@ $(document).ready(function() {
                   <form method="post">
                       <textarea class="form-control" rows=1 placeholder="Type something..." name="body" required oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
                       <input class="form-control mr-sm-2 add_card" type="hidden" aria-label="Search", size="30" name="category" value=${category}>
-                      <input class="form-control mr-sm-2 add_card" type="hidden" aria-label="Search", size="30" name="author" value=${author}>
                       <div class="temp-card-actions">
                           <a class="btn btn-sm btn-danger reject-card"><i class="fas fa-times"></i></a>
                           <button class="btn btn-sm btn-primary add-card" type="button">Add Card</button>

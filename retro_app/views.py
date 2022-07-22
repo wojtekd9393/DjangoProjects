@@ -17,6 +17,7 @@ def home(request, retro_id):
             new_card = form.save(commit=False)
             retro = Retro.objects.get(pk=retro_id)
             new_card.retro = retro
+            new_card.author = request.user
             new_card.save()
             return JsonResponse({'card': model_to_dict(new_card)}, status=200)
     else:
