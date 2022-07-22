@@ -40,11 +40,14 @@ $(document).ready(function() {
                     console.log("Wrong card category: " + category);
             }
 
+            // focus on the textarea belonging to the lately added card
+            $('div#' + temp_card_id + ' form > textarea').focus();
+
             // ADD CARD BUTTON
-            let createButton = document.querySelector('div#'+temp_card_id+' button.add-card');
+            let createButton = document.querySelector('div#' + temp_card_id + ' button.add-card');
             createButton.addEventListener("click", (event) => {
                 var temp_card_id = "temp-card-" + event.currentTarget.getAttribute("data-counter");
-                var ta_value = $('div#'+temp_card_id+' form > textarea')[0].value.trim();
+                var ta_value = $('div#' + temp_card_id + ' form > textarea')[0].value.trim();
 
                 // add new card only if the card's content is not an empty string
                 if(ta_value !== "") {
@@ -98,7 +101,7 @@ $(document).ready(function() {
             createButton.setAttribute("data-counter", counter);
 
             // REJECT CARD BUTTON
-            let rejectButton = document.querySelector('div#'+temp_card_id+' a.reject-card');
+            let rejectButton = document.querySelector('div#' + temp_card_id + ' a.reject-card');
             rejectButton.addEventListener("click", (event) => {
                 var temp_card_id = "temp-card-" + event.currentTarget.getAttribute("data-counter");
                 $('div#' + temp_card_id).remove();
