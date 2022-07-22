@@ -128,7 +128,7 @@ $(document).ready(function() {
                 let form = `
                     <div id="${temp_edit_id}" class="temp-card clearfix">
                       <form method="post">
-                          <textarea class="form-control" placeholder="Type something..." name="body" required oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'">${card.body}</textarea>
+                          <textarea class="form-control" placeholder="Type something..." name="body" required oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" onfocus="this.setSelectionRange(this.value.length,this.value.length);">${card.body}</textarea>
                           <input class="form-control mr-sm-2 add_card" type="hidden" aria-label="Search", size="30" name="category" value=${card.category}>
                           <div class="temp-card-actions">
                               <a class="btn btn-sm btn-danger reject-card"><i class="fas fa-times"></i></a>
@@ -144,6 +144,8 @@ $(document).ready(function() {
                 let ta = document.querySelector('div#' + temp_edit_id + ' textarea');
                 let lines = ta.value.split("\n").length;
                 ta.style.height = lines * 24 + 12 + 'px'; // 24 - line height, 12 - padding (2 x 6)
+
+                $(ta).focus();
 
                 let editButton = document.querySelector('div#' + temp_edit_id + ' button.add-card');
                 editButton.addEventListener("click", (event) => {
