@@ -41,7 +41,7 @@
               </div>
               <div id="greenList">
                   {% for card in green_cards %}
-                    <div class="card text-white bg-success mb-3" id="greenCard" data-id="{{ card.id }}">
+                    <div class="card text-white bg-success mb-3" data-id="{{ card.id }}">
                         <div class="card-body">
                             <p class="pre-line">{{ card.body }}</p>
                             <div class="actions">
@@ -73,7 +73,7 @@
               </div>
               <div id="redList">
                   {% for card in red_cards %}
-                    <div class="card text-white bg-danger mb-3" id="redCard" data-id="{{ card.id }}">
+                    <div class="card text-white bg-danger mb-3" data-id="{{ card.id }}">
                         <div class="card-body">
                             <p class="pre-line">{{ card.body }}</p>
                             <div class="actions">
@@ -105,7 +105,7 @@
               </div>
               <div id="blueList">
                   {% for card in blue_cards %}
-                    <div class="card text-white bg-primary mb-3" id="blueCard" data-id="{{ card.id }}">
+                    <div class="card text-white bg-primary mb-3" data-id="{{ card.id }}">
                         <div class="card-body">
                             <p class="pre-line">{{ card.body }}</p>
                             <div class="actions">

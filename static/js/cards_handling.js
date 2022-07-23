@@ -1,16 +1,16 @@
 $(document).ready(function() {
 
     var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
-    var counter = 0; // add card counter
-    var counter2 = 0; // edit card counter
+    var add_counter = 0;
+    var edit_counter = 0;
 
     $("a.add-temp-card").each(function(index) {
         $(this).on("click", function(event) {
             let category = parseInt($(this).attr("data-category"));
-            counter += 1;
+            add_counter += 1;
 
             // assign id to each newly created div containing the form
-            let temp_card_id = "temp-card-" + counter;
+            let temp_card_id = "temp-card-" + add_counter;
 
             let form = `
                 <div id="${temp_card_id}" class="temp-card clearfix">
@@ -45,7 +45,7 @@ $(document).ready(function() {
             // ADD CARD BUTTON
             let createButton = document.querySelector('div#' + temp_card_id + ' button.add-card');
             createButton.addEventListener("click", (event) => {
-                var temp_card_id = "temp-card-" + event.currentTarget.getAttribute("data-counter");
+                let temp_card_div = createButton.parentElement.parentElement.parentElement;
                 var ta_value = $('div#' + temp_card_id + ' form > textarea')[0].value.trim();
 
                 // add new card only if the card's content is not an empty string
@@ -85,35 +85,32 @@ $(document).ready(function() {
                                 default:
                                     console.log("Wrong card category: " + category);
                             }
+                            // add delete modal dialog events
                             addModalDialogListeners(id);
 
-                            $('div#' + temp_card_id).remove();
+                            // remove temp card
+                            $(temp_card_div).remove();
                         }
                     })
                 } else {
                     // remove empty card
-                    $('div#' + temp_card_id).remove();
+                    $(temp_card_div).remove();
                 }
             });
-
-            // keep the current counter value
-            createButton.setAttribute("data-counter", counter);
 
             // REJECT CARD BUTTON
             let rejectButton = document.querySelector('div#' + temp_card_id + ' a.reject-card');
             rejectButton.addEventListener("click", (event) => {
-                var temp_card_id = "temp-card-" + event.currentTarget.getAttribute("data-counter");
-                $('div#' + temp_card_id).remove();
+                let temp_card_div = rejectButton.parentElement.parentElement.parentElement;
+                // remove temp card
+                $(temp_card_div).remove();
             });
-
-            // keep the current counter value
-            rejectButton.setAttribute("data-counter", counter);
         })
     })
 
     $("#main-div").on("click", "div.actions > i.fa-edit", function(event) {
-        counter2++;
-        let temp_edit_id = "temp-edit-" + counter2;
+        edit_counter++;
+        let temp_edit_id = "temp-edit-" + edit_counter;
         var card_div = event.target.parentElement.parentElement.parentElement;
         var id = card_div.getAttribute("data-id");
 
@@ -138,6 +135,7 @@ $(document).ready(function() {
                     </div>
                 `;
 
+                // replace card with form
                 $(card_div).replaceWith(form);
 
                 // set the initial height of text area depending on its number of lines and padding
@@ -147,6 +145,7 @@ $(document).ready(function() {
 
                 $(ta).focus();
 
+                // EDIT CARD BUTTON
                 let editButton = document.querySelector('div#' + temp_edit_id + ' button.add-card');
                 editButton.addEventListener("click", (event) => {
                     var serializedData = $('div#' + temp_edit_id + ' form').serialize();
@@ -158,17 +157,20 @@ $(document).ready(function() {
                         data: serializedData,
                         method: 'POST',
                         success: function(response) {
-                            let new_div = card_div;
-                            new_div.children[0].children[0].innerHTML = response.card.body;
+                            // update the card body (paragraph element)
+                            card_div.children[0].children[0].innerHTML = response.card.body;
                             let edit_form = editButton.parentElement.parentElement.parentElement;
-                            $(edit_form).replaceWith(new_div);
+                            // replace form with card containing edited content
+                            $(edit_form).replaceWith(card_div);
                         }
                     })
                 })
 
+                // REJECT CARD BUTTON
                 let rejectButton = document.querySelector('div#' + temp_edit_id + ' a.reject-card');
                 rejectButton.addEventListener("click", (event) => {
                     let edit_form = rejectButton.parentElement.parentElement.parentElement;
+                    // restore original card by replacing the form
                     $(edit_form).replaceWith(card_div);
                 });
             }
@@ -176,7 +178,6 @@ $(document).ready(function() {
     });
 
     $("#modal-delete button.btn-primary").on('click', function(event) {
-        // event.target.closest('.card .fa-trash-alt');
         event.stopPropagation();
         var dataId = $(this).attr('data-id');
 
