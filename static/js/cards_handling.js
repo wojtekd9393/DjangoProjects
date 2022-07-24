@@ -137,11 +137,13 @@ $(document).ready(function() {
 
                 // replace card with form
                 $(card_div).replaceWith(form);
-
                 // set the initial height of text area depending on its number of lines and padding
                 let ta = document.querySelector('div#' + temp_edit_id + ' textarea');
-                let lines = ta.value.split("\n").length;
-                ta.style.height = lines * 24 + 12 + 'px'; // 24 - line height, 12 - padding (2 x 6)
+                // 24px - line height, 12px - left & right padding (2 x 6px)
+                let lineHeight = 24;
+                let padding = 6;
+                let lines = Math.ceil((ta.scrollHeight - 2 * padding) / lineHeight);
+                ta.style.height = lines * lineHeight + 2 * padding + 'px';
 
                 $(ta).focus();
 
