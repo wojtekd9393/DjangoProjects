@@ -1,28 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="login-register">
-    <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <input type="text" class="form-control" name="username" maxlength="150" placeholder="Username" required>
-        </div>
-        <div class="form-group">
-            <input type="password" class="form-control" name="password1" placeholder="Password" required>
-        </div>
-        <div class="form-group">
-            <input type="password" class="form-control" name="password2" placeholder="Confirm Password" required>
-        </div>
-        <input class="btn btn-primary" type="submit" value="Register">
-    </form>
+    <div class="login-register">
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" class="form-control" name="username" maxlength="150" placeholder="Username" required>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" name="password1" placeholder="Password" required>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" name="password2" placeholder="Confirm Password" required>
+            </div>
+            <input class="btn btn-primary" type="submit" value="Register">
+        </form>
 
-<!-- Nie działa wyświetlanie błędów, poprawić w przyszłości!    -->
-    {% for field, errors in form.errors.items %}
-        {% for error in errors %}
-            <p class="form-errors">{{ error }}</p>
+        {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+                <p class="form-errors">{{ error }}</p>
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
 
-    <p class="info">Have an account already? <a href="{% url 'login' %}">Login</a></p>
-</div>
+        <p class="info">Have an account already? <a href="{% url 'login' %}">Login</a></p>
+    </div>
 {% endblock %}

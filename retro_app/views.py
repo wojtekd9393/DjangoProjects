@@ -104,9 +104,10 @@ def register(request):
             login(request, user)
             return redirect(reverse("dashboard"))
         else:
-            return render(request, "register.html", {"form": UserCreationForm})
+            return render(request, "register.html", {"form": form})
     else:
-        return render(request, "register.html", {"form": UserCreationForm})
+        form = UserCreationForm()
+        return render(request, "register.html", {"form": form})
 
 
 @login_required

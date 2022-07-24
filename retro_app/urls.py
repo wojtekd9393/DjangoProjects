@@ -2,13 +2,12 @@ from django.urls import path, include
 from retro_app.views import *
 
 urlpatterns = [
-    path('', dashboard),
+    path('', dashboard, name='dashboard'),
     path('home/<retro_id>', home, name='home'),
     path('delete/card/<card_id>', delete, name='delete'),
     path('edit/<card_id>', edit, name='edit'),
     path('main/', main, name='main'),
     path('delete/retro/<retro_id>', remove_retro, name='remove_retro'),
-    path('dashboard', dashboard, name='dashboard'),
     path('register', register, name='register'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('home/<retro_id>/settings/', settings, name="settings"),

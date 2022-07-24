@@ -643,3 +643,11 @@ p.card-text > a.add-temp-card:hover {
 .pre-line {
     white-space: pre-line;
 }
+
+div#logged-user-info {
+    margin: 20px auto;
+}
+
+div#logged-user-info > p {
+    text-align: center;
+}
