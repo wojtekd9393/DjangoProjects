@@ -12,7 +12,7 @@
         <a class=".dropdown-content" href="{% url 'clear_board' retro.id %}"><i class="fas fa-minus-square"></i> Clear board</a>
     {% endif %}
     {% if retro.voting %}
-        <a class=".dropdown-content" href="{% url 'reset_user_votes' retro.id %}"><i class="fas fa-eraser"></i></i> Reset my votes</a>
+        <a class=".dropdown-content" href="{% url 'reset_user_votes' retro.id %}"><i class="fas fa-eraser"></i> Reset my votes</a>
     {% endif %}
 {% endblock %}
 
@@ -35,7 +35,7 @@
               <div class="card">
                   <div>
                       <p class="card-text">
-                          <a id="add-green-card-btn" class="add-temp-card MainNavText" data-category="1" {% if user.is_authenticated == False or retro.voting or retro.archived %} style="pointer-events: none;" {% endif %}><i class="fas fa-plus-square fa-black fa-2x"></i></a>
+                          <a class="add-temp-card MainNavText" data-category="1" {% if user.is_authenticated == False or retro.voting or retro.archived %} style="pointer-events: none;" {% endif %}><i class="fas fa-plus-square fa-black fa-2x"></i></a>
                       </p>
                   </div>
               </div>
@@ -67,7 +67,7 @@
               <div class="card">
                   <div>
                       <p class="card-text">
-                          <a id="add-red-card-btn" class="add-temp-card MainNavText" data-category="2" {% if user.is_authenticated == False or retro.voting or retro.archived %} style="pointer-events: none;" {% endif %}><i class="fas fa-plus-square fa-black fa-2x"></i></a>
+                          <a class="add-temp-card MainNavText" data-category="2" {% if user.is_authenticated == False or retro.voting or retro.archived %} style="pointer-events: none;" {% endif %}><i class="fas fa-plus-square fa-black fa-2x"></i></a>
                       </p>
                   </div>
               </div>
@@ -99,7 +99,7 @@
               <div class="card">
                   <div>
                       <p class="card-text">
-                          <a id="add-blue-card-btn" class="add-temp-card MainNavText" data-category="3" {% if user.is_authenticated == False or retro.voting or retro.archived %} style="pointer-events: none;" {% endif %}><i class="fas fa-plus-square fa-black fa-2x"></i></a>
+                          <a class="add-temp-card MainNavText" data-category="3" {% if user.is_authenticated == False or retro.voting or retro.archived %} style="pointer-events: none;" {% endif %}><i class="fas fa-plus-square fa-black fa-2x"></i></a>
                       </p>
                   </div>
               </div>
