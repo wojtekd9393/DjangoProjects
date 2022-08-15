@@ -5,30 +5,26 @@ from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.forms.models import model_to_dict
 
 
 @login_required
 def home(request, retro_id):
+    retro = Retro.objects.get(pk=retro_id)
     if request.method == 'POST':
-        form = CardForm(request.POST or None)
+        form = CardForm(request.POST)
         if form.is_valid():
             new_card = form.save(commit=False)
-            retro = Retro.objects.get(pk=retro_id)
             new_card.retro = retro
             new_card.author = request.user
             new_card.save()
             return JsonResponse({'card': model_to_dict(new_card)}, status=200)
     else:
         q = request.GET.get("q") if request.GET.get('q') is not None else ""
-        retro = Retro.objects.get(pk=retro_id)
         cards = Card.objects.filter(retro=retro, body__icontains=q)
         my_votes_number = cards.filter(votes=request.user).count()
-        if my_votes_number == retro.votes:
-            limit = True
-        else:
-            limit = False
+        limit = True if my_votes_number == retro.votes else False
 
         green_cards = cards.filter(category=1)
         red_cards = cards.filter(category=2)
@@ -46,16 +42,19 @@ def home(request, retro_id):
 
 @login_required
 def delete(request, card_id):
-    card = Card.objects.get(pk=card_id)
-    card.delete()
-    return JsonResponse({'result': 'ok'}, status=200)
+    try:
+        card = Card.objects.get(pk=card_id)
+        card.delete()
+        return JsonResponse({}, status=200)
+    except Card.DoesNotExist:
+        return HttpResponse(f"Card with ID {card_id} does not exist.")
 
 
 @login_required
 def edit(request, card_id):
     card = get_object_or_404(Card, id=card_id)
     if request.method == 'POST':
-        form = CardForm(request.POST or None, instance=card)
+        form = CardForm(request.POST, instance=card)
         if form.is_valid():
             form.save()
         return JsonResponse({'card': model_to_dict(card)}, status=200)
@@ -66,7 +65,7 @@ def edit(request, card_id):
 @login_required
 def main(request):
     if request.method == 'POST':
-        form = RetroForm(request.POST or None)
+        form = RetroForm(request.POST)
         if form.is_valid():
             form.save()
             all_retros = Retro.objects.filter(author=request.user.id, archived=False)
@@ -173,7 +172,6 @@ def reset_user_votes(request, retro_id):
     for card in cards_with_user_votes:
         card.votes.remove(user)
     return redirect('home', retro_id=retro_id)
-    #return JsonResponse({}, status=200)
 
 
 @login_required
@@ -197,9 +195,7 @@ def change_retro_name(request, retro_id, new_retro_name):
 @login_required
 def clear_board(request, retro_id):
     retro = Retro.objects.get(pk=retro_id)
-    cards = retro.cards.all()
-    for card in cards:
-        card.delete()
+    retro.cards.all().delete()
     return redirect('home', retro_id=retro_id)
 
 
