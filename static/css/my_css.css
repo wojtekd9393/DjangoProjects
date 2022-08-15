@@ -71,7 +71,22 @@ span > .fa-thumbs-up:hover {
 
 .toolbar {
     padding: 10px;
+}
+
+.toolbar .search-bar {
+    display: block;
+    float: right;
+}
+
+.toolbar .search-bar form input {
+    width: 250px;
+}
+
+.toolbar .retro-info {
+    display: block;
+    float: left;
     text-align: center;
+    margin-left: 20px;
 }
 
 span.retro-name, i.retro-name, span.retro-name-not-author {

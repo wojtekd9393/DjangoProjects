@@ -17,14 +17,21 @@
 {% endblock %}
 
 {% block content %}
-    <div class="toolbar">
-        {% if retro.author.id == user.id %}
-            <div><span class="retro-name" >{{ retro.name }}</span><i class="fas fa-edit retro-name"></i></div>
-        {% else %}
-            <div><span class="retro-name-not-author" >{{ retro.name }}</span></div>
-        {% endif %}
-        <input type="text" class="input-retro-name hidden" value="{{ retro.name }}" onfocus="this.setSelectionRange(this.value.length,this.value.length);">
-        <button class="reject hidden"><i class="fas fa-times"></i></button> <button class="accept hidden" data-retro-id="{{ retro.id }}"><i class="fas fa-check"></i></button>
+    <div class="toolbar clearfix">
+        <div class="retro-info">
+            {% if retro.author.id == user.id %}
+                <div><span class="retro-name" >{{ retro.name }}</span><i class="fas fa-edit retro-name"></i></div>
+            {% else %}
+                <div><span class="retro-name-not-author" >{{ retro.name }}</span></div>
+            {% endif %}
+            <input type="text" class="input-retro-name hidden" value="{{ retro.name }}" onfocus="this.setSelectionRange(this.value.length,this.value.length);">
+            <button class="reject hidden"><i class="fas fa-times"></i></button> <button class="accept hidden" data-retro-id="{{ retro.id }}"><i class="fas fa-check"></i></button>
+        </div>
+        <div class="search-bar">
+            <form method="GET" action="{% url 'home' retro.id %}">
+                <input type="text" name="q" placeholder="Search something...">
+            </form>
+        </div>
     </div>
 
     {% csrf_token %}

@@ -21,8 +21,9 @@ def home(request, retro_id):
             new_card.save()
             return JsonResponse({'card': model_to_dict(new_card)}, status=200)
     else:
+        q = request.GET.get("q") if request.GET.get('q') is not None else ""
         retro = Retro.objects.get(pk=retro_id)
-        cards = Card.objects.filter(retro=retro)
+        cards = Card.objects.filter(retro=retro, body__icontains=q)
         my_votes_number = cards.filter(votes=request.user).count()
         if my_votes_number == retro.votes:
             limit = True
