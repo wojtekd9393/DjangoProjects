@@ -128,6 +128,7 @@ def settings(request, retro_id):
 def archive(request, retro_id):
     retro = Retro.objects.get(pk=retro_id)
     retro.archived = True
+    retro.voting = False
     retro.save()
     return redirect('main')
 

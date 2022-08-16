@@ -1,14 +1,20 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block navbar %}
+        <div id="rinfo" class="retro-info">
+            {% if retro.author.id == user.id %}
+                <div><span class="retro-name" >{{ retro.name }}</span><i class="fas fa-edit retro-name"></i></div>
+            {% else %}
+                <div><span class="retro-name-not-author" >{{ retro.name }}</span></div>
+            {% endif %}
+            <input type="text" class="input-retro-name hidden" value="{{ retro.name }}" onfocus="this.setSelectionRange(this.value.length,this.value.length);">
+            <button class="reject hidden"><i class="fas fa-times"></i></button> <button class="accept hidden" data-retro-id="{{ retro.id }}"><i class="fas fa-check"></i></button>
+        </div>
+{% endblock %}
+
 {% block settings %}
     {% if retro.author.id == user.id %}
-        <a class=".dropdown-content" href="{% url 'settings' retro.id %}"><i class="fas fa-sliders-h"></i> Board settings</a>
-        {% if not retro.archived %}
-            <a class=".dropdown-content" href="{% url 'archive' retro.id %}"><i class="fas fa-archive"></i> Archive board</a>
-        {% else %}
-            <a class=".dropdown-content" href="{% url 'restore_retro' retro.id %}"><i class="fas fa-undo fa-white"></i> Restore board</a>
-        {% endif %}
         <a class=".dropdown-content" href="{% url 'clear_board' retro.id %}"><i class="fas fa-minus-square"></i> Clear board</a>
     {% endif %}
     {% if retro.voting %}
@@ -18,14 +24,8 @@
 
 {% block content %}
     <div class="toolbar clearfix">
-        <div class="retro-info">
-            {% if retro.author.id == user.id %}
-                <div><span class="retro-name" >{{ retro.name }}</span><i class="fas fa-edit retro-name"></i></div>
-            {% else %}
-                <div><span class="retro-name-not-author" >{{ retro.name }}</span></div>
-            {% endif %}
-            <input type="text" class="input-retro-name hidden" value="{{ retro.name }}" onfocus="this.setSelectionRange(this.value.length,this.value.length);">
-            <button class="reject hidden"><i class="fas fa-times"></i></button> <button class="accept hidden" data-retro-id="{{ retro.id }}"><i class="fas fa-check"></i></button>
+        <div class="btn-settings">
+            <a href="{% url 'settings' retro.id %}"><i class="fas fa-cog"></i>Settings</a>
         </div>
         <div class="search-bar">
             <form method="GET" action="{% url 'home' retro.id %}">

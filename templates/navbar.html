@@ -1,0 +1,9 @@
+<nav class="new_nav clearfix">
+  <ul>
+      {% if user.is_authenticated %}
+          <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+          <li><a href="{% url 'main' %}"><i class="fas fa-chalkboard"></i> My boards</a></li>
+          <li><a href="{% url 'archived' %}"><i class="fas fa-archive"></i> Archives</a></li>
+      {% endif %}
+  </ul>
+</nav>

@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
 {% block content %}
     <p class="main-header">{{ all_retros|length }} Board{{ all_retros|length|pluralize:"s" }}</p>
     {% if all_retros %}
