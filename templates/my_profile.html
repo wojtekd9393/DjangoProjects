@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h3>My account</h3>
+    <hr>
+    <section>
+        <h5>My profile</h5>
+        <p>Name: {{ user.username }}</p>
+        <p>E-mail: {{ user.email }}</p>
+        <p>Joined: {{ user.date_joined }}</p>
+    </section>
+    <hr>
+    <section>
+        <h5>Boards</h5>
+        <ul>
+            <li><a href="{% url 'main' %}"><i class="fas fa-chalkboard"></i> My boards</a></li>
+            <li><a href="{% url 'archived' %}"><i class="fas fa-archive"></i> Archives</a></li>
+        </ul>
+    </section>
+    <hr>
+    <section>
+        <h5>Account settings</h5>
+        <ul>
+            <li><a href="{% url 'password_change' %}"><i class="fas fa-unlock-alt"></i> Change password</a></li>
+            <li><a href="#"><i class="fa fa-key"></i> Reset password</a></li>
+            <li><a href="#"><i class="fas fa-trash"></i> Delete account</a></li>
+        </ul>
+    </section>
+{% endblock %}

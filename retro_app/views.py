@@ -214,6 +214,12 @@ def clear_board(request, retro_id):
     return redirect('home', retro_id=retro_id)
 
 
+@login_required
+def profile(request):
+    context = {}
+    return render(request, 'my_profile.html', context)
+
+
 # helper functions
 def get_num_of_authors(retro):
     authors = []
