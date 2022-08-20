@@ -74,9 +74,13 @@ span > .fa-thumbs-up:hover {
     position: relative;
 }
 
-.toolbar .search-bar {
-    display: block;
+.toolbar .sort-by-dropdown {
     float: right;
+}
+
+.toolbar .search-bar {
+    float: right;
+    margin-left: 4px;
 }
 
 .toolbar .btn-settings {
@@ -697,3 +701,47 @@ div#logged-user-info {
 div#logged-user-info > p {
     text-align: center;
 }
+
+.dropbtn {
+  background-color: #3498DB;
+  color: white;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+  padding-left: 10px;
+  padding-right: 10px;
+  min-width: 150px;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+  background-color: #2980B9;
+}
+
+.sort-by-dropdown {
+  position: relative;
+  display: inline-block;
+  padding: 1px 2px;
+}
+
+.dropdown-content-sort {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 150px;
+  overflow: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  top: 36px;
+  text-align: center;
+}
+
+.dropdown-content-sort a {
+  color: black;
+  padding: 6px 8px;
+  text-decoration: none;
+  display: block;
+}
+
+.sort-by-dropdown .dropdown-content-sort a:hover {background-color: #ddd;}
+
+.show {display: block;}

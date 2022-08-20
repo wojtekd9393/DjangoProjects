@@ -7,6 +7,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
 from django.forms.models import model_to_dict
+from django.db.models import Count
 
 
 @login_required
@@ -21,8 +22,14 @@ def home(request, retro_id):
             new_card.save()
             return JsonResponse({'card': model_to_dict(new_card)}, status=200)
     else:
-        q = request.GET.get("q") if request.GET.get('q') is not None else ""
-        cards = Card.objects.filter(retro=retro, body__icontains=q)
+        q = request.GET.get('q') if request.GET.get('q') is not None else ""
+        order = request.GET.get('order')
+        if order == "votes":
+            cards = Card.objects.filter(retro=retro, body__icontains=q) \
+                        .annotate(num_votes=Count('votes')) \
+                        .order_by('-num_votes', 'id')
+        else:
+            cards = Card.objects.filter(retro=retro, body__icontains=q)
         my_votes_number = cards.filter(votes=request.user).count()
         limit = True if my_votes_number == retro.votes else False
 

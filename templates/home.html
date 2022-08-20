@@ -32,6 +32,13 @@
                 <input type="text" name="q" placeholder="Search...">
             </form>
         </div>
+        <div class="sort-by-dropdown">
+            <button onclick="myFunction()" class="dropbtn">Sort cards</button>
+            <div id="myDropdown" class="dropdown-content-sort">
+                <a href="{% url 'home' retro.id %}?order=votes">Sort by votes</a>
+                <a href="{% url 'home' retro.id %}?order=date">Sort by date</a>
+            </div>
+        </div>
     </div>
 
     {% csrf_token %}
@@ -222,6 +229,25 @@
                 method: 'POST'
             })
         });
+    </script>
+    <script>
+        /* cards sorting - opening and closing the dropdown menu for Sort button */
+        function myFunction() {
+          document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+        window.onclick = function(event) {
+          if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content-sort");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+              var openDropdown = dropdowns[i];
+              if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+              }
+            }
+          }
+        }
     </script>
     <script type="text/javascript" src="{% static 'js/cards_handling.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/votes_handling.js' %}"></script>
