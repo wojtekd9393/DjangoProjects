@@ -52,14 +52,18 @@ def delete(request, card_id):
 
 @login_required
 def edit(request, card_id):
+    # can't pass the whole card object using model_to_dict() because User object in votes
+    # cannot be serialized - need to think of how to serialize nested objects
     card = get_object_or_404(Card, id=card_id)
     if request.method == 'POST':
         form = CardForm(request.POST, instance=card)
         if form.is_valid():
             form.save()
-        return JsonResponse({'card': model_to_dict(card)}, status=200)
+        card_edit_info = {"category": card.category, "body": card.body}
+        return JsonResponse({'card': card_edit_info}, status=200)
     else:
-        return JsonResponse({'card': model_to_dict(card)}, status=200)
+        card_edit_info = {"category": card.category, "body": card.body}
+        return JsonResponse({'card': card_edit_info}, status=200)
 
 
 @login_required
@@ -141,6 +145,7 @@ def restore_retro(request, retro_id):
     return redirect('archived')
 
 
+@login_required
 def card_vote(request, card_id):
     card = get_object_or_404(Card, id=card_id)
     active = True
@@ -156,6 +161,7 @@ def card_vote(request, card_id):
         return JsonResponse({'active': active, 'cards': list(cards.values())}, status=200)
 
 
+@login_required
 def card_vote_down(request, card_id):
     card = get_object_or_404(Card, id=card_id)
     if request.user in card.votes.all():
@@ -185,6 +191,7 @@ def archived(request):
     return render(request, 'archived.html', context)
 
 
+@login_required
 def change_retro_name(request, retro_id, new_retro_name):
     retro = Retro.objects.get(pk=retro_id)
     if new_retro_name != "" and retro.name != new_retro_name:
@@ -203,7 +210,8 @@ def clear_board(request, retro_id):
 # helper functions
 def get_num_of_authors(retro):
     authors = []
-    for card in retro.cards.all():
+    cards = retro.cards.select_related("author").all()
+    for card in cards:
         if card.author not in authors:
             authors.append(card.author)
     return len(authors)
