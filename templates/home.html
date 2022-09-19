@@ -55,9 +55,9 @@
               </div>
               <div id="greenList">
                   {% for card in green_cards %}
-                    <div class="card text-white bg-success mb-3" data-id="{{ card.id }}">
+                    <div class="card text-white bg-success mb-3" data-id="{{ card.id }}" data-dropped="false" draggable="true">
                         <div class="card-body">
-                            <p class="pre-line">{{ card.body }}</p>
+                            <p class="pre-line" data-id="{{ card.id }}">{{ card.body }}</p>
                             <div class="actions">
                                 {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
                                     <i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i>
@@ -87,9 +87,9 @@
               </div>
               <div id="redList">
                   {% for card in red_cards %}
-                    <div class="card text-white bg-danger mb-3" data-id="{{ card.id }}">
+                    <div class="card text-white bg-danger mb-3" data-id="{{ card.id }}" data-dropped="false" draggable="true">
                         <div class="card-body">
-                            <p class="pre-line">{{ card.body }}</p>
+                            <p class="pre-line" data-id="{{ card.id }}">{{ card.body }}</p>
                             <div class="actions">
                                 {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
                                     <i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i>
@@ -119,9 +119,9 @@
               </div>
               <div id="blueList">
                   {% for card in blue_cards %}
-                    <div class="card text-white bg-primary mb-3" data-id="{{ card.id }}">
+                    <div class="card text-white bg-primary mb-3" data-id="{{ card.id }}" data-dropped="false" draggable="true">
                         <div class="card-body">
-                            <p class="pre-line">{{ card.body }}</p>
+                            <p class="pre-line" data-id="{{ card.id }}">{{ card.body }}</p>
                             <div class="actions">
                                 {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
                                     <i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i>
@@ -251,4 +251,5 @@
     </script>
     <script type="text/javascript" src="{% static 'js/cards_handling.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/votes_handling.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/cards_merging.js' %}"></script>
 {% endblock %}

@@ -745,3 +745,12 @@ div#logged-user-info > p {
 .sort-by-dropdown .dropdown-content-sort a:hover {background-color: #ddd;}
 
 .show {display: block;}
+
+div[draggable="true"]:hover {
+    cursor: grab;
+}
+
+.drag-over {
+    /* TODO: change bootstrap border style of card - increase border width */
+    border: 1px dotted black;
+}

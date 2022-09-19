@@ -220,6 +220,17 @@ def profile(request):
     return render(request, 'my_profile.html', context)
 
 
+@login_required
+def merge(request, dragged_id, dest_id):
+    if request.method == 'POST':
+        dragged_card = Card.objects.get(pk=dragged_id)
+        dest_card = Card.objects.get(pk=dest_id)
+        dest_card.body = dest_card.body + "\n" + "-" * 30 + "\n" + dragged_card.body
+        dest_card.save()
+        dragged_card.delete()
+    return JsonResponse({'new_body': dest_card.body}, status=200)
+
+
 # helper functions
 def get_num_of_authors(retro):
     authors = []

@@ -65,19 +65,19 @@ $(document).ready(function() {
                         switch(category) {
                             case 1:
                                 let greenCard = `
-                                    <div class="card text-white bg-success mb-3" id="greenCard" data-id=${id}><div class="card-body"><p class="pre-line">${body}</p><div class="actions"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
+                                    <div class="card text-white bg-success mb-3" data-id=${id} data-dropped="false" draggable="true"><div class="card-body"><p class="pre-line" data-id=${id}>${body}</p><div class="actions"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
                                 `;
                                 $("#greenList").append(greenCard);
                                 break;
                             case 2:
                                 let redCard = `
-                                    <div class="card text-white bg-danger mb-3" id="redCard" data-id=${id}><div class="card-body"><p class="pre-line">${body}</p><div class="actions"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
+                                    <div class="card text-white bg-danger mb-3" data-id=${id} data-dropped="false" draggable="true"><div class="card-body"><p class="pre-line" data-id=${id}>${body}</p><div class="actions"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
                                 `;
                                 $("#redList").append(redCard);
                                 break;
                             case 3:
                                 let blueCard = `
-                                    <div class="card text-white bg-primary mb-3" id="blueCard" data-id=${id}><div class="card-body"><p class="pre-line">${body}</p><div class="actions"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
+                                    <div class="card text-white bg-primary mb-3" data-id=${id} data-dropped="false" draggable="true"><div class="card-body"><p class="pre-line" data-id=${id}>${body}</p><div class="actions"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
                                 `;
                                 $("#blueList").append(blueCard);
                                 break;
@@ -86,6 +86,9 @@ $(document).ready(function() {
                         }
                         // add delete modal dialog events
                         addModalDialogListeners(id);
+
+                        // add draggable listeners
+                        addDraggableListeners(id);
 
                         // remove temp card
                         $(temp_card_div).remove();
@@ -99,7 +102,7 @@ $(document).ready(function() {
 
         // REJECT CARD BUTTON
         let rejectButton = document.querySelector('div#' + temp_card_id + ' a.reject-card');
-        rejectButton.addEventListener("click", (event) => {
+        rejectButton.addEventListener("click", () => {
             let temp_card_div = rejectButton.parentElement.parentElement.parentElement;
             // remove temp card
             $(temp_card_div).remove();
@@ -206,5 +209,16 @@ $(document).ready(function() {
         modal_btn_secondary.addEventListener("click", () => {
             modal.close();
         });
+    }
+
+    function addDraggableListeners(id) {
+        const item = document.querySelector('div.card[data-id="' + id + '"]');
+
+        item.addEventListener('dragstart', dragStart);
+        item.addEventListener('dragenter', dragEnter)
+        item.addEventListener('dragover', dragOver);
+        item.addEventListener('dragleave', dragLeave);
+        item.addEventListener('drop', drop);
+        item.addEventListener('dragend', dragEnd);
     }
 });

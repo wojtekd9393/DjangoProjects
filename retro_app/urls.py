@@ -19,7 +19,8 @@ urlpatterns = [
     path('restore_retro/<retro_id>', restore_retro, name="restore_retro"),
     path('change_retro_name/<retro_id>/<new_retro_name>', change_retro_name, name="change_retro_name"),
     path('clear-board/<retro_id>', clear_board, name='clear_board'),
-    path('my-profile/', profile, name='profile')
+    path('my-profile/', profile, name='profile'),
+    path('merge/<dragged_id>/<dest_id>', merge, name='merge')
 ]
 
 """
