@@ -51,8 +51,11 @@ def home(request, retro_id):
 def delete(request, card_id):
     try:
         card = Card.objects.get(pk=card_id)
-        card.delete()
-        return JsonResponse({}, status=200)
+        if card.author == request.user:
+            card.delete()
+            return JsonResponse({}, status=200)
+        else:
+            return HttpResponse(f"You cannot delete this card. No permissions!")
     except Card.DoesNotExist:
         return HttpResponse(f"Card with ID {card_id} does not exist.")
 
@@ -121,6 +124,8 @@ def register(request):
         return render(request, "register.html", {"form": form})
 
 
+# TODO: block voting when decreasing number of votes in board settings
+# example: limit is 4 votes, user voted 4 times, changed to 3 votes in settings but user can still votes
 @login_required
 def settings(request, retro_id):
     if request.method == "POST":
@@ -228,7 +233,7 @@ def merge(request, dragged_id, dest_id):
         dest_card.body = dest_card.body + "\n" + "-" * 30 + "\n" + dragged_card.body
         dest_card.save()
         dragged_card.delete()
-    return JsonResponse({'new_body': dest_card.body}, status=200)
+        return JsonResponse({'new_body': dest_card.body}, status=200)
 
 
 # helper functions

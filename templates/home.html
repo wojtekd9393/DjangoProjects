@@ -153,6 +153,19 @@
         </div>
     </div>
 </dialog>
+
+<dialog id="modal-merge">
+    <div class="modal-delete-content">
+        <div class="modal-delete-icon">
+            <i class="fas fa-exclamation-circle"></i>
+        </div>
+        <h5 id="info">Merge the cards?</h5>
+        <div class="modal-buttons">
+            <button class="btn btn-primary" data-dragged-id="" data-dest-id="">Merge</button>
+            <button class="btn btn-secondary" data-dragged-id="">Cancel</button>
+        </div>
+    </div>
+</dialog>
 {% endblock %}
 
 {% block javascript %}
@@ -165,6 +178,7 @@
             });
         })
 
+        // delete modal handling
         const modal = document.getElementById("modal-delete");
         const modal_btn_primary = document.querySelector("#modal-delete button.btn-primary");
         const modal_btn_secondary = document.querySelector("#modal-delete button.btn-secondary");

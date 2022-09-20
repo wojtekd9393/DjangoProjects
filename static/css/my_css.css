@@ -583,7 +583,8 @@ p.form-errors {
 }
 
 /* Delete Modal Dialog properties*/
-#modal-delete {
+/* TODO: distinguish with modal merge properties */
+#modal-delete, #modal-merge {
     position: fixed;
     z-index: 1;
     left: 0;
@@ -597,7 +598,7 @@ p.form-errors {
     animation-duration: 0.3s
 }
 
-#modal-delete .modal-delete-content {
+#modal-delete, #modal-merge .modal-delete-content {
     position: relative;
     background-color: #fefefe;
     margin: auto;
