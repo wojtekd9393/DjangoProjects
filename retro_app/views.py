@@ -69,11 +69,12 @@ def edit(request, card_id):
         form = CardForm(request.POST, instance=card)
         if form.is_valid():
             form.save()
-        card_edit_info = {"category": card.category, "body": card.body}
-        return JsonResponse({'card': card_edit_info}, status=200)
-    else:
-        card_edit_info = {"category": card.category, "body": card.body}
-        return JsonResponse({'card': card_edit_info}, status=200)
+        else:
+            # TODO: need to handle this case properly, maybe show alert message?
+            print("Form errors: ", form.errors)
+            
+    card_edit_info = {"category": card.category, "body": card.body}
+    return JsonResponse({'card': card_edit_info}, status=200)
 
 
 @login_required

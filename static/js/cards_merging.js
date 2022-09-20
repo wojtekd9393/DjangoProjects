@@ -79,10 +79,11 @@ merge_modal_btn_secondary.addEventListener("click", (e) => {
     merge_modal.close();
     let dragged_id = e.target.getAttribute('data-dragged-id');
     const item = document.querySelector('div > div.card[data-id="' + dragged_id + '"]');
+    item.setAttribute('data-dropped', "false");
     item.classList.remove('hidden');
 });
 
-$("#modal-merge button.btn-primary").on('click', function(event) {
+$("#modal-merge button.btn-primary").on('click', function (event) {
     event.stopPropagation();
     let dragged_id = $(this).attr('data-dragged-id');
     let dest_id = $(this).attr('data-dest-id');
@@ -93,7 +94,7 @@ $("#modal-merge button.btn-primary").on('click', function(event) {
             csrfmiddlewaretoken: csrfToken
         },
         method: 'POST',
-        success: function(response) {
+        success: function (response) {
             let dest_card = document.querySelector('div.card p.pre-line[data-id="' + dest_id + '"]');
             dest_card.innerHTML = response.new_body;
 

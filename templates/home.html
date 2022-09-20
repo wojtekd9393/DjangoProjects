@@ -170,32 +170,6 @@
 
 {% block javascript %}
     <script>
-        let icons = document.querySelectorAll(".modal_button > i");
-        icons.forEach(icon => {
-            icon.addEventListener("click", (e) => {
-                let category = icon.parentElement.getAttribute("data-category");
-                document.getElementsByName("category")[0].value = category;
-            });
-        })
-
-        // delete modal handling
-        const modal = document.getElementById("modal-delete");
-        const modal_btn_primary = document.querySelector("#modal-delete button.btn-primary");
-        const modal_btn_secondary = document.querySelector("#modal-delete button.btn-secondary");
-
-        let delete_btns = document.querySelectorAll("i.fa-trash-alt");
-        delete_btns.forEach(btn => {
-            btn.addEventListener("click", (e) => {
-                let cardId = btn.getAttribute("data-id");
-                modal_btn_primary.setAttribute("data-id", cardId);
-                modal.showModal();
-            });
-        })
-
-        modal_btn_secondary.addEventListener("click", () => {
-            modal.close();
-        });
-
         let spanRetroName = document.querySelector("span.retro-name");
         let iconRetroName = document.querySelector("i.retro-name");
         let inputRetroName = document.querySelector("input.input-retro-name");

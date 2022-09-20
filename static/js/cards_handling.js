@@ -1,10 +1,14 @@
-$(document).ready(function() {
+$(document).ready(function () {
+
+    const card_delete_modal = document.getElementById("modal-delete");
+    const card_delete_confirm_btn = document.querySelector("#modal-delete button.btn-primary");
+    const card_delete_reject_btn = document.querySelector("#modal-delete button.btn-secondary");
 
     var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
     var add_counter = 0;
     var edit_counter = 0;
 
-    $("a.add-temp-card").on("click", function(event) {
+    $("a.add-temp-card").on("click", function () {
         let category = parseInt($(this).attr("data-category"));
         add_counter += 1;
 
@@ -24,7 +28,7 @@ $(document).ready(function() {
             </div>
         `;
 
-        switch(category) {
+        switch (category) {
             case 1:
                 $("#greenList").prepend(form);
                 break;
@@ -43,12 +47,12 @@ $(document).ready(function() {
 
         // ADD CARD BUTTON
         let createButton = document.querySelector('div#' + temp_card_id + ' button.add-card');
-        createButton.addEventListener("click", (event) => {
+        createButton.addEventListener("click", () => {
             let temp_card_div = createButton.parentElement.parentElement.parentElement;
             let ta_value = $('div#' + temp_card_id + ' form > textarea')[0].value.trim();
 
             // add new card only if the card's content is not an empty string
-            if(ta_value !== "") {
+            if (ta_value !== "") {
                 let serializedData = $('div#' + temp_card_id + ' form').serialize();
                 serializedData += "&csrfmiddlewaretoken=";
                 serializedData += csrfToken;
@@ -57,12 +61,12 @@ $(document).ready(function() {
                     url: window.location.href,
                     data: serializedData,
                     method: 'POST',
-                    success: function(response) {
+                    success: function (response) {
                         let category = response.card.category;
                         let id = response.card.id;
                         let body = response.card.body;
 
-                        switch(category) {
+                        switch (category) {
                             case 1:
                                 let greenCard = `
                                     <div class="card text-white bg-success mb-3" data-id=${id} data-dropped="false" draggable="true"><div class="card-body"><p class="pre-line" data-id=${id}>${body}</p><div class="actions"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
@@ -109,7 +113,7 @@ $(document).ready(function() {
         });
     })
 
-    $("#main-div").on("click", "div.actions > i.fa-edit", function(event) {
+    $("#main-div").on("click", "div.actions > i.fa-edit", function (event) {
         edit_counter++;
         let temp_edit_id = "temp-edit-" + edit_counter;
         let card_div = event.target.parentElement.parentElement.parentElement;
@@ -121,7 +125,7 @@ $(document).ready(function() {
                 csrfmiddlewaretoken: csrfToken
             },
             method: 'GET',
-            success: function(response) {
+            success: function (response) {
                 let card = response.card;
                 let form = `
                     <div id="${temp_edit_id}" class="temp-card clearfix">
@@ -147,7 +151,7 @@ $(document).ready(function() {
 
                 // EDIT CARD BUTTON
                 let editButton = document.querySelector('div#' + temp_edit_id + ' button.add-card');
-                editButton.addEventListener("click", (event) => {
+                editButton.addEventListener("click", () => {
                     let serializedData = $('div#' + temp_edit_id + ' form').serialize();
                     serializedData += "&csrfmiddlewaretoken=";
                     serializedData += csrfToken;
@@ -156,7 +160,7 @@ $(document).ready(function() {
                         url: '/edit/' + id,
                         data: serializedData,
                         method: 'POST',
-                        success: function(response) {
+                        success: function (response) {
                             // update the card body (paragraph element)
                             card_div.children[0].children[0].innerHTML = response.card.body;
                             let edit_form = editButton.parentElement.parentElement.parentElement;
@@ -168,7 +172,7 @@ $(document).ready(function() {
 
                 // REJECT CARD BUTTON
                 let rejectButton = document.querySelector('div#' + temp_edit_id + ' a.reject-card');
-                rejectButton.addEventListener("click", (event) => {
+                rejectButton.addEventListener("click", () => {
                     let edit_form = rejectButton.parentElement.parentElement.parentElement;
                     // restore original card by replacing the form
                     $(edit_form).replaceWith(card_div);
@@ -177,7 +181,7 @@ $(document).ready(function() {
         })
     });
 
-    $("#modal-delete button.btn-primary").on('click', function(event) {
+    $("#modal-delete button.btn-primary").on('click', function (event) {
         event.stopPropagation();
         let dataId = $(this).attr('data-id');
 
@@ -187,29 +191,31 @@ $(document).ready(function() {
                 csrfmiddlewaretoken: csrfToken
             },
             method: 'POST',
-            success: function() {
-                const modal = document.getElementById("modal-delete");
-                modal.close();
+            success: function () {
+                card_delete_modal.close();
                 $('div.card[data-id="' + dataId + '"]').remove();
             }
         });
     });
 
     function addModalDialogListeners(id) {
-        const modal = document.getElementById("modal-delete");
-        const modal_btn_primary = document.querySelector("#modal-delete button.btn-primary");
-        const modal_btn_secondary = document.querySelector("#modal-delete button.btn-secondary");
-
-        let btn = $("i.fa-trash-alt[data-id="+id+"]")[0];
+        let btn = $("i.fa-trash-alt[data-id=" + id + "]")[0];
         btn.addEventListener("click", () => {
-            modal_btn_primary.setAttribute("data-id", id);
-            modal.showModal();
+            card_delete_confirm_btn.setAttribute("data-id", id);
+            card_delete_modal.showModal();
         });
 
-        modal_btn_secondary.addEventListener("click", () => {
-            modal.close();
+        card_delete_reject_btn.addEventListener("click", () => {
+            card_delete_modal.close();
         });
     }
+
+    let delete_btns = document.querySelectorAll("i.fa-trash-alt");
+
+    delete_btns.forEach(btn => {
+        let id = btn.getAttribute("data-id");
+        addModalDialogListeners(id);
+    })
 
     function addDraggableListeners(id) {
         const item = document.querySelector('div.card[data-id="' + id + '"]');
