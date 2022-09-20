@@ -1,22 +1,61 @@
 $(document).ready(function () {
-
-    const card_delete_modal = document.getElementById("modal-delete");
-    const card_delete_confirm_btn = document.querySelector("#modal-delete button.btn-primary");
-    const card_delete_reject_btn = document.querySelector("#modal-delete button.btn-secondary");
-
+    // csrf token
     var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
-    var add_counter = 0;
-    var edit_counter = 0;
 
+    // card delete modal dialog's handlers
+    const cardDeleteModal = document.getElementById("modal-delete");
+    const cardDeleteConfirmBtn = document.querySelector("#modal-delete button.btn-primary");
+    const cardDeleteRejectBtn = document.querySelector("#modal-delete button.btn-secondary");
+
+    // cards delete buttons
+    let deleteBtns = document.querySelectorAll("i.fa-trash-alt");
+
+    deleteBtns.forEach(btn => {
+        let id = btn.getAttribute("data-id");
+        addModalDialogListeners(id);
+    })
+
+    // cards merge modal dialog's handlers
+    const cardsMergeModal = document.getElementById("modal-merge");
+    const cardsMergeConfirmBtn = document.querySelector("#modal-merge button.btn-primary");
+    const cardsMergeRejectBtn = document.querySelector("#modal-merge button.btn-secondary");
+
+    // draggable items (cards)
+    const items = document.querySelectorAll('div[draggable="true"]');
+    // element which is being currently dragged
+    let dragItem = null;
+
+    items.forEach(item => {
+        let id = item.getAttribute("data-id");
+        addDraggableListeners(id);
+    });
+
+    cardsMergeRejectBtn.addEventListener("click", (e) => {
+        cardsMergeModal.close();
+        let draggedId = e.target.getAttribute('data-dragged-id');
+        const item = document.querySelector('div > div.card[data-id="' + draggedId + '"]');
+        item.setAttribute('data-dropped', "false");
+        item.classList.remove('hidden');
+    });
+
+    // cards sorting - opening and closing the dropdown menu for Sort button
+    let sortBtn = document.getElementsByClassName('sort-cards-btn')[0];
+    sortBtn.addEventListener('click', toggleSortDropdownMenu);
+
+    // counters
+    var cardAddCounter = 0;
+    var cardEditCounter = 0;
+
+    // adding new cards
     $("a.add-temp-card").on("click", function () {
         let category = parseInt($(this).attr("data-category"));
-        add_counter += 1;
+        cardAddCounter += 1;
 
         // assign id to each newly created div containing the form
-        let temp_card_id = "temp-card-" + add_counter;
+        let tempCardId = "temp-card-" + cardAddCounter;
 
         let form = `
-            <div id="${temp_card_id}" class="temp-card clearfix">
+            <div id="${tempCardId}" class="temp-card clearfix">
               <form method="post">
                   <textarea class="form-control" rows=1 placeholder="Type something..." name="body" required oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
                   <input class="form-control mr-sm-2 add_card" type="hidden" aria-label="Search", size="30" name="category" value=${category}>
@@ -28,6 +67,7 @@ $(document).ready(function () {
             </div>
         `;
 
+        // adding new card to correct column based on its category
         switch (category) {
             case 1:
                 $("#greenList").prepend(form);
@@ -43,17 +83,17 @@ $(document).ready(function () {
         }
 
         // focus on the textarea belonging to the lately added card
-        $('div#' + temp_card_id + ' form > textarea').focus();
+        $('div#' + tempCardId + ' form > textarea').focus();
 
         // ADD CARD BUTTON
-        let createButton = document.querySelector('div#' + temp_card_id + ' button.add-card');
+        let createButton = document.querySelector('div#' + tempCardId + ' button.add-card');
         createButton.addEventListener("click", () => {
-            let temp_card_div = createButton.parentElement.parentElement.parentElement;
-            let ta_value = $('div#' + temp_card_id + ' form > textarea')[0].value.trim();
+            let tempCardDiv = createButton.parentElement.parentElement.parentElement;
+            let taValue = $('div#' + tempCardId + ' form > textarea')[0].value.trim();
 
             // add new card only if the card's content is not an empty string
-            if (ta_value !== "") {
-                let serializedData = $('div#' + temp_card_id + ' form').serialize();
+            if (taValue !== "") {
+                let serializedData = $('div#' + tempCardId + ' form').serialize();
                 serializedData += "&csrfmiddlewaretoken=";
                 serializedData += csrfToken;
 
@@ -95,29 +135,30 @@ $(document).ready(function () {
                         addDraggableListeners(id);
 
                         // remove temp card
-                        $(temp_card_div).remove();
+                        $(tempCardDiv).remove();
                     }
                 })
             } else {
                 // remove empty card
-                $(temp_card_div).remove();
+                $(tempCardDiv).remove();
             }
         });
 
         // REJECT CARD BUTTON
-        let rejectButton = document.querySelector('div#' + temp_card_id + ' a.reject-card');
+        let rejectButton = document.querySelector('div#' + tempCardId + ' a.reject-card');
         rejectButton.addEventListener("click", () => {
-            let temp_card_div = rejectButton.parentElement.parentElement.parentElement;
+            let tempCardDiv = rejectButton.parentElement.parentElement.parentElement;
             // remove temp card
-            $(temp_card_div).remove();
+            $(tempCardDiv).remove();
         });
     })
 
+    // editing cards
     $("#main-div").on("click", "div.actions > i.fa-edit", function (event) {
-        edit_counter++;
-        let temp_edit_id = "temp-edit-" + edit_counter;
-        let card_div = event.target.parentElement.parentElement.parentElement;
-        let id = card_div.getAttribute("data-id");
+        cardEditCounter++;
+        let tempEditId = "temp-edit-" + cardEditCounter;
+        let cardDiv = event.target.parentElement.parentElement.parentElement;
+        let id = cardDiv.getAttribute("data-id");
 
         $.ajax({
             url: '/edit/' + id,
@@ -128,7 +169,7 @@ $(document).ready(function () {
             success: function (response) {
                 let card = response.card;
                 let form = `
-                    <div id="${temp_edit_id}" class="temp-card clearfix">
+                    <div id="${tempEditId}" class="temp-card clearfix">
                       <form method="post">
                           <textarea class="form-control" placeholder="Type something..." name="body" required oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" onfocus="this.setSelectionRange(this.value.length,this.value.length);">${card.body}</textarea>
                           <input class="form-control mr-sm-2 add_card" type="hidden" aria-label="Search", size="30" name="category" value=${card.category}>
@@ -141,18 +182,18 @@ $(document).ready(function () {
                 `;
 
                 // replace card with form
-                $(card_div).replaceWith(form);
+                $(cardDiv).replaceWith(form);
 
                 // set the initial height of text area depending on its scroll height
-                let ta = document.querySelector('div#' + temp_edit_id + ' textarea');
+                let ta = document.querySelector('div#' + tempEditId + ' textarea');
                 ta.style.height = ta.scrollHeight + 'px';
 
                 $(ta).focus();
 
                 // EDIT CARD BUTTON
-                let editButton = document.querySelector('div#' + temp_edit_id + ' button.add-card');
+                let editButton = document.querySelector('div#' + tempEditId + ' button.add-card');
                 editButton.addEventListener("click", () => {
-                    let serializedData = $('div#' + temp_edit_id + ' form').serialize();
+                    let serializedData = $('div#' + tempEditId + ' form').serialize();
                     serializedData += "&csrfmiddlewaretoken=";
                     serializedData += csrfToken;
 
@@ -162,25 +203,26 @@ $(document).ready(function () {
                         method: 'POST',
                         success: function (response) {
                             // update the card body (paragraph element)
-                            card_div.children[0].children[0].innerHTML = response.card.body;
-                            let edit_form = editButton.parentElement.parentElement.parentElement;
+                            cardDiv.children[0].children[0].innerHTML = response.card.body;
+                            let editForm = editButton.parentElement.parentElement.parentElement;
                             // replace form with card containing edited content
-                            $(edit_form).replaceWith(card_div);
+                            $(editForm).replaceWith(cardDiv);
                         }
                     })
                 })
 
                 // REJECT CARD BUTTON
-                let rejectButton = document.querySelector('div#' + temp_edit_id + ' a.reject-card');
+                let rejectButton = document.querySelector('div#' + tempEditId + ' a.reject-card');
                 rejectButton.addEventListener("click", () => {
-                    let edit_form = rejectButton.parentElement.parentElement.parentElement;
+                    let editForm = rejectButton.parentElement.parentElement.parentElement;
                     // restore original card by replacing the form
-                    $(edit_form).replaceWith(card_div);
+                    $(editForm).replaceWith(cardDiv);
                 });
             }
         })
     });
 
+    // deleting card
     $("#modal-delete button.btn-primary").on('click', function (event) {
         event.stopPropagation();
         let dataId = $(this).attr('data-id');
@@ -192,7 +234,7 @@ $(document).ready(function () {
             },
             method: 'POST',
             success: function () {
-                card_delete_modal.close();
+                cardDeleteModal.close();
                 $('div.card[data-id="' + dataId + '"]').remove();
             }
         });
@@ -201,21 +243,14 @@ $(document).ready(function () {
     function addModalDialogListeners(id) {
         let btn = $("i.fa-trash-alt[data-id=" + id + "]")[0];
         btn.addEventListener("click", () => {
-            card_delete_confirm_btn.setAttribute("data-id", id);
-            card_delete_modal.showModal();
+            cardDeleteConfirmBtn.setAttribute("data-id", id);
+            cardDeleteModal.showModal();
         });
 
-        card_delete_reject_btn.addEventListener("click", () => {
-            card_delete_modal.close();
+        cardDeleteRejectBtn.addEventListener("click", () => {
+            cardDeleteModal.close();
         });
     }
-
-    let delete_btns = document.querySelectorAll("i.fa-trash-alt");
-
-    delete_btns.forEach(btn => {
-        let id = btn.getAttribute("data-id");
-        addModalDialogListeners(id);
-    })
 
     function addDraggableListeners(id) {
         const item = document.querySelector('div.card[data-id="' + id + '"]');
@@ -226,5 +261,104 @@ $(document).ready(function () {
         item.addEventListener('dragleave', dragLeave);
         item.addEventListener('drop', drop);
         item.addEventListener('dragend', dragEnd);
+    }
+
+    // drag & drop functions
+    function dragStart(e) {
+        const id = e.target.getAttribute("data-id");
+        dragItem = this;
+        e.dataTransfer.setData('text/plain', id);
+        setTimeout(() => {
+            e.target.classList.add('hidden');
+        }, 0);
+    }
+
+    function dragEnter(e) {
+        e.preventDefault();
+        let item = e.target.closest('div.card[draggable="true"]');
+        item.classList.add('drag-over');
+    }
+
+    function dragOver(e) {
+        e.preventDefault();
+        let item = e.target.closest('div.card[draggable="true"]');
+        item.classList.add('drag-over');
+    }
+
+    function dragLeave(e) {
+        let item = e.target.closest('div.card[draggable="true"]');
+        item.classList.remove('drag-over');
+    }
+
+    function drop(e) {
+        e.preventDefault();
+        const draggedId = e.dataTransfer.getData('text/plain');
+        const item = document.querySelector('div > div.card[data-id="' + draggedId + '"]');
+
+        item.classList.remove('drag-over');
+        item.setAttribute('data-dropped', "true");
+
+        let el = e.target.closest('p.pre-line');
+        if (el == null) {
+            el = e.target.querySelector('p.pre-line');
+        }
+
+        let destId = el.getAttribute("data-id");
+
+        // show merge confirmation modal
+        cardsMergeConfirmBtn.setAttribute("data-dragged-id", draggedId);
+        cardsMergeConfirmBtn.setAttribute("data-dest-id", destId);
+        cardsMergeRejectBtn.setAttribute("data-dragged-id", draggedId);
+        cardsMergeModal.showModal();
+    }
+
+    function dragEnd() {
+        let dropped = dragItem.getAttribute("data-dropped");
+
+        if (dropped == "false") {
+            dragItem.classList.remove('hidden');
+        }
+        dragItem = null;
+    }
+
+    // merging cards
+    $("#modal-merge button.btn-primary").on('click', function (event) {
+        event.stopPropagation();
+        let draggedId = $(this).attr('data-dragged-id');
+        let destId = $(this).attr('data-dest-id');
+
+        $.ajax({
+            url: '/merge/' + draggedId + '/' + destId,
+            data: {
+                csrfmiddlewaretoken: csrfToken
+            },
+            method: 'POST',
+            success: function (response) {
+                let destCard = document.querySelector('div.card p.pre-line[data-id="' + destId + '"]');
+                destCard.innerHTML = response.new_body;
+
+                const item = document.querySelector('div > div.card[data-id="' + draggedId + '"]');
+                cardsMergeModal.close();
+                $(item).remove();
+            }
+        });
+    });
+
+    // cards sorting
+    function toggleSortDropdownMenu() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    window.onclick = function (event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content-sort");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
     }
 });

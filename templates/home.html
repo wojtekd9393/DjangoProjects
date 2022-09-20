@@ -33,7 +33,7 @@
             </form>
         </div>
         <div class="sort-by-dropdown">
-            <button onclick="myFunction()" class="dropbtn">Sort cards</button>
+            <button class="dropbtn sort-cards-btn">Sort cards</button>
             <div id="myDropdown" class="dropdown-content-sort">
                 <a href="{% url 'home' retro.id %}?order=votes">Sort by votes</a>
                 <a href="{% url 'home' retro.id %}?order=date">Sort by date</a>
@@ -169,75 +169,7 @@
 {% endblock %}
 
 {% block javascript %}
-    <script>
-        let spanRetroName = document.querySelector("span.retro-name");
-        let iconRetroName = document.querySelector("i.retro-name");
-        let inputRetroName = document.querySelector("input.input-retro-name");
-        let rejectButton = document.querySelector("button.reject");
-        let acceptButton = document.querySelector("button.accept");
-
-        [spanRetroName, iconRetroName].forEach(item => {
-            item.addEventListener("click", () => {
-                spanRetroName.classList.add("hidden");
-                iconRetroName.style.display = "none";
-                inputRetroName.classList.remove("hidden");
-                inputRetroName.value = spanRetroName.innerHTML;
-                $(inputRetroName).focus();
-                rejectButton.classList.remove("hidden");
-                acceptButton.classList.remove("hidden");
-            })
-        })
-
-        rejectButton.addEventListener("click", () => {
-            inputRetroName.classList.add("hidden");
-            rejectButton.classList.add("hidden");
-            acceptButton.classList.add("hidden");
-            spanRetroName.classList.remove("hidden");
-            iconRetroName.style.display = "inline-block";
-        });
-
-        acceptButton.addEventListener("click", () => {
-            inputRetroName.classList.add("hidden");
-            rejectButton.classList.add("hidden");
-            acceptButton.classList.add("hidden");
-            spanRetroName.classList.remove("hidden");
-            iconRetroName.style.display = "inline-block";
-
-            let newRetroName = inputRetroName.value != "" ? inputRetroName.value : spanRetroName.innerHTML;
-            let retroId = acceptButton.getAttribute("data-retro-id");
-            spanRetroName.innerHTML = newRetroName;
-
-            var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
-
-            $.ajax({
-                url: '/change_retro_name/' + retroId + '/' + newRetroName,
-                data: {
-                    csrfmiddlewaretoken: csrfToken
-                },
-                method: 'POST'
-            })
-        });
-    </script>
-    <script>
-        /* cards sorting - opening and closing the dropdown menu for Sort button */
-        function myFunction() {
-          document.getElementById("myDropdown").classList.toggle("show");
-        }
-
-        window.onclick = function(event) {
-          if (!event.target.matches('.dropbtn')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content-sort");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-              var openDropdown = dropdowns[i];
-              if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-              }
-            }
-          }
-        }
-    </script>
     <script type="text/javascript" src="{% static 'js/cards_handling.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/votes_handling.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/cards_merging.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/board_renaming.js' %}"></script>
 {% endblock %}

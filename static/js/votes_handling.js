@@ -1,7 +1,7 @@
-$(document).ready(function() {
+$(document).ready(function () {
     var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
 
-    $("#greenList, #redList, #blueList").on("click", ".fa-thumbs-up", function(event) {
+    $("#greenList, #redList, #blueList").on("click", ".fa-thumbs-up", function (event) {
         event.stopPropagation();
         var cardId = $(this).data('id');
 
@@ -11,7 +11,7 @@ $(document).ready(function() {
                 csrfmiddlewaretoken: csrfToken
             },
             method: 'POST',
-            success: function(response) {
+            success: function (response) {
                 let p = document.querySelectorAll('div.vote[data-id="' + cardId + '"] > p')[0];
                 let currentNumberOfVotes = p.innerHTML;
                 p.innerHTML = parseInt(currentNumberOfVotes, 10) + 1;
@@ -29,7 +29,7 @@ $(document).ready(function() {
                 eraser.setAttribute("data-id", cardId);
                 d.insertBefore(eraser, thumbUp.parentElement); // before span
 
-                if(!response.active) {
+                if (!response.active) {
                     let cards = response.cards;
                     cards.forEach((card) => {
                         let id = card.id;
@@ -44,7 +44,7 @@ $(document).ready(function() {
         });
     });
 
-    $("#greenList, #redList, #blueList").on("click", ".fa-eraser", function(event) {
+    $("#greenList, #redList, #blueList").on("click", ".fa-eraser", function (event) {
         event.stopPropagation();
         var cardId = $(this).data('id');
 
@@ -54,7 +54,7 @@ $(document).ready(function() {
                 csrfmiddlewaretoken: csrfToken
             },
             method: 'POST',
-            success: function(response) {
+            success: function (response) {
                 let p = document.querySelectorAll('div.vote[data-id="' + cardId + '"] > p')[0];
                 let currentNumberOfVotes = p.innerHTML;
                 p.innerHTML = parseInt(currentNumberOfVotes, 10) - 1;
