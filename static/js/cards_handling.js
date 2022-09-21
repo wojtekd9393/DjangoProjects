@@ -22,13 +22,15 @@ $(document).ready(function () {
 
     // draggable items (cards)
     const items = document.querySelectorAll('div[draggable="true"]');
-    // element which is being currently dragged
-    let dragItem = null;
 
     items.forEach(item => {
         let id = item.getAttribute("data-id");
         addDraggableListeners(id);
     });
+
+    // element which is being currently dragged
+    let dragItem = null;
+    let ghostElem = null;
 
     cardsMergeRejectBtn.addEventListener("click", (e) => {
         cardsMergeModal.close();
@@ -267,7 +269,11 @@ $(document).ready(function () {
     function dragStart(e) {
         const id = e.target.getAttribute("data-id");
         dragItem = this;
+        ghostElem = this;
         e.dataTransfer.setData('text/plain', id);
+        // setting the properties of "ghost" element when dragging
+        // TODO: change the style of that ghost element because now it is bad visible
+        e.dataTransfer.setDragImage(ghostElem, 150, 50);
         setTimeout(() => {
             e.target.classList.add('hidden');
         }, 0);
@@ -280,6 +286,7 @@ $(document).ready(function () {
     }
 
     function dragOver(e) {
+        // TODO: dragging over the form input is allowed but it shouldn't be
         e.preventDefault();
         let item = e.target.closest('div.card[draggable="true"]');
         item.classList.add('drag-over');
@@ -298,8 +305,10 @@ $(document).ready(function () {
         item.classList.remove('drag-over');
         item.setAttribute('data-dropped', "true");
 
+        // searching "p" going up the DOM tree
         let el = e.target.closest('p.pre-line');
         if (el == null) {
+            // searching "p" going down the DOM tree
             el = e.target.querySelector('p.pre-line');
         }
 

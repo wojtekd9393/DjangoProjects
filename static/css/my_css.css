@@ -590,7 +590,7 @@ p.form-errors {
     left: 0;
     top: -220px;
     padding: 0;
-    border: none;
+    border: 2px solid black;
     overflow: hidden;
     -webkit-animation-name: animatesqueeze;
     -webkit-animation-duration: 0.3s;
