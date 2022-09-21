@@ -31,7 +31,7 @@ def home(request, retro_id):
         else:
             cards = Card.objects.filter(retro=retro, body__icontains=q)
         my_votes_number = cards.filter(votes=request.user).count()
-        limit = True if my_votes_number == retro.votes else False
+        limit = True if my_votes_number >= retro.votes else False
 
         green_cards = cards.filter(category=1)
         red_cards = cards.filter(category=2)
@@ -49,6 +49,7 @@ def home(request, retro_id):
 
 @login_required
 def delete(request, card_id):
+    # TODO: it can be replaced with get_object_or_404 probably
     try:
         card = Card.objects.get(pk=card_id)
         if card.author == request.user:
