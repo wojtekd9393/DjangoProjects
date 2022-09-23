@@ -2,8 +2,11 @@ var timerId = null;
 
 $(document).ready(function () {
     let startTimerBtn = document.querySelector('div.timer > button#start-timer');
-    var timerInitialValue = document.querySelector('div.timer > span');
-    let duration = parseTimerInput(timerInitialValue.innerHTML);
+    var timerValue = document.querySelector('div.timer > span');
+    var duration = parseTimerInput(timerValue.innerHTML);
+
+    let up = document.getElementById('timer-up');
+    let down = document.getElementById('timer-down');
 
     startTimerBtn.addEventListener('click', () => {
         if (timerId !== null) {
@@ -20,50 +23,49 @@ $(document).ready(function () {
 
             mins = mins < 10 ? "0" + mins : mins;
             secs = secs < 10 ? "0" + secs : secs;
-            timerInitialValue.innerHTML = mins + ":" + secs;
+            timerValue.innerHTML = mins + ":" + secs;
 
             if (--timer < 0) {
-                console.log("Time expired!");
                 clearInterval(timerId);
             }
         }, 1000);
     }
 
-    function parseTimerInput(initialTimeValue) {
-        let parts = initialTimeValue.split(":");
-
-        let mins = parseInt(parts[0], 10);
-        let secs = parseInt(parts[1], 10);
-
-        return mins * 60 + secs;
+    function parseTimerInput(timerInput) {
+        return getMinutes(timerInput) * 60 + getSeconds(timerInput);
     }
 
-    let up = document.getElementById('timer-up');
-    let down = document.getElementById('timer-down');
-
     up.addEventListener('click', () => {
-        let currTimerValue = document.querySelector('div.timer > span').innerHTML;
-        let newMinsValue = parseInt(currTimerValue.split(":")[0], 10) + 1;
+        let currTimerValue = timerValue.innerHTML;
+        let newMinsValue = getMinutes(currTimerValue) + 1;
+        let currSecsValue = getSeconds(currTimerValue);
         if (newMinsValue > 10) {
             newMinsValue = 10;
         }
-        let currSecsValue = parseInt(currTimerValue.split(":")[1], 10);
-        document.querySelector('div.timer > span').innerHTML = 
-        (newMinsValue < 10 ? "0" + newMinsValue : newMinsValue) + ":" + (currSecsValue < 10 ? "0" + currSecsValue : currSecsValue);
-        duration = parseTimerInput(document.querySelector('div.timer > span').innerHTML);
-        clearInterval(timerId);
+        updateTimer(newMinsValue, currSecsValue);
     })
 
     down.addEventListener('click', () => {
-        let currTimerValue = document.querySelector('div.timer > span').innerHTML;
-        let newMinsValue = parseInt(currTimerValue.split(":")[0], 10) - 1;
+        let currTimerValue = timerValue.innerHTML;
+        let newMinsValue = getMinutes(currTimerValue) - 1;
+        let currSecsValue = getSeconds(currTimerValue);
         if (newMinsValue < 1) {
             newMinsValue = 1;
         }
-        let currSecsValue = parseInt(currTimerValue.split(":")[1], 10);
-        document.querySelector('div.timer > span').innerHTML = 
-        (newMinsValue < 10 ? "0" + newMinsValue : newMinsValue) + ":" + (currSecsValue < 10 ? "0" + currSecsValue : currSecsValue);
-        duration = parseTimerInput(document.querySelector('div.timer > span').innerHTML);
-        clearInterval(timerId);
+        updateTimer(newMinsValue, currSecsValue);
     })
+
+    function updateTimer(mins, secs) {
+        timerValue.innerHTML = (mins < 10 ? "0" + mins : mins) + ":" + (secs < 10 ? "0" + secs : secs);
+        duration = parseTimerInput(timerValue.innerHTML);
+        clearInterval(timerId);
+    }
+
+    function getMinutes(timerValue) {
+        return parseInt(timerValue.split(":")[0], 10);
+    }
+
+    function getSeconds(timerValue) {
+        return parseInt(timerValue.split(":")[1], 10);
+    }
 });
