@@ -39,6 +39,12 @@
                 <a href="{% url 'home' retro.id %}?order=date">Sort by date</a>
             </div>
         </div>
+        <div class="timer">
+            <span>02:00</span>
+            <button id="timer-up"><i class="fas fa-arrow-up"></i></button>
+            <button id="timer-down"><i class="fas fa-arrow-down"></i></button>
+            <button id="start-timer">Start</button>
+        </div>
     </div>
 
     {% csrf_token %}
@@ -172,4 +178,5 @@
     <script type="text/javascript" src="{% static 'js/cards_handling.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/votes_handling.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/board_renaming.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/timer_handler.js' %}"></script>
 {% endblock %}

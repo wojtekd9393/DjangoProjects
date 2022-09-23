@@ -74,8 +74,13 @@ span > .fa-thumbs-up:hover {
     position: relative;
 }
 
+.toolbar .timer {
+    float: right;
+}
+
 .toolbar .sort-by-dropdown {
     float: right;
+    margin-left: 4px;
 }
 
 .toolbar .search-bar {
