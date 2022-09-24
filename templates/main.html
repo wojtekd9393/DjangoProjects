@@ -20,7 +20,6 @@
             {% csrf_token %}
           <label for="name">Name</label>
           <input class="form-control mr-sm-2 add_card" type="search" placeholder="" aria-label="Search", size="30" id="name" name="name"> </br>
-          <input class="form-control mr-sm-2 add_card" type="hidden" placeholder="" aria-label="Search", size="30" name="author" value="{{ user.id }}">
           <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit" name="retro">Create Retro</button>
       </form>
       </div>

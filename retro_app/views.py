@@ -12,7 +12,7 @@ from django.db.models import Count
 
 @login_required
 def home(request, retro_id):
-    retro = Retro.objects.get(pk=retro_id)
+    retro = get_object_or_404(Retro, pk=retro_id)
     if request.method == 'POST':
         form = CardForm(request.POST)
         if form.is_valid():
@@ -49,21 +49,17 @@ def home(request, retro_id):
 
 @login_required
 def delete(request, card_id):
-    # TODO: it can be replaced with get_object_or_404 probably
-    try:
-        card = Card.objects.get(pk=card_id)
-        if card.author == request.user:
-            card.delete()
-            return JsonResponse({}, status=200)
-        else:
-            return HttpResponse(f"You cannot delete this card. No permissions!")
-    except Card.DoesNotExist:
-        return HttpResponse(f"Card with ID {card_id} does not exist.")
+    card = get_object_or_404(Card, pk=card_id)
+    if card.author == request.user:
+        card.delete()
+        return JsonResponse({}, status=200)
+    else:
+        return HttpResponse(f"You cannot delete this card. No permissions!")
 
 
 @login_required
 def edit(request, card_id):
-    # can't pass the whole card object using model_to_dict() because User object in votes
+    # TODO: can't pass the whole card object using model_to_dict() because User object in votes
     # cannot be serialized - need to think of how to serialize nested objects
     card = get_object_or_404(Card, id=card_id)
     if request.method == 'POST':
@@ -83,7 +79,9 @@ def main(request):
     if request.method == 'POST':
         form = RetroForm(request.POST)
         if form.is_valid():
-            form.save()
+            new_retro = form.save(commit=False)
+            new_retro.author = request.user
+            new_retro.save()
             all_retros = Retro.objects.filter(author=request.user.id, archived=False)
             retros_with_authors = []
             for retro in all_retros:
@@ -104,8 +102,11 @@ def main(request):
 @login_required
 def remove_retro(request, retro_id):
     item = Retro.objects.get(pk=retro_id)
-    item.delete()
-    return redirect('main')
+    if item.author == request.user:
+        item.delete()
+        return redirect('main')
+    else:
+        return HttpResponse(f"You cannot delete this board because you are not its author.")
 
 
 def dashboard(request):

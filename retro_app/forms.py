@@ -11,4 +11,4 @@ class CardForm(forms.ModelForm):
 class RetroForm(forms.ModelForm):
     class Meta:
         model = Retro
-        fields = ['name', 'author']
+        fields = ['name']
