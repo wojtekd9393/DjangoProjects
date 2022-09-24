@@ -15,11 +15,11 @@ class Retro(models.Model):
 
 
 class Card(models.Model):
-    body = models.CharField(max_length=200)
+    body = models.TextField(blank=False)
     category = models.PositiveSmallIntegerField(default=1)
     retro = models.ForeignKey(Retro, on_delete=models.CASCADE, related_name='cards')
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    votes = models.ManyToManyField(get_user_model(), related_name='card_votes')
+    votes = models.ManyToManyField(get_user_model(), blank=True, related_name='card_votes')
 
     class Meta:
         ordering = ['id']
