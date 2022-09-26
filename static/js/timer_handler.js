@@ -1,71 +1,50 @@
 var timerId = null;
 
 $(document).ready(function () {
-    let startTimerBtn = document.querySelector('div.timer > button#start-timer');
-    var timerValue = document.querySelector('div.timer > span');
-    var duration = parseTimerInput(timerValue.innerHTML);
+    var timerDisplay = document.querySelector('div.timer span.timer-span');
+    timerDisplay.addEventListener('click', () => {
+        clearInterval(timerId);
+        timerDisplay.classList.add('hidden');
+    });
 
-    let up = document.getElementById('timer-up');
-    let down = document.getElementById('timer-down');
+    let setTimerDialog = document.getElementById('modal-set-timer');
+    let addTimerBtn = document.querySelector('div.add-timer-group > ul > li');
+    addTimerBtn.addEventListener('click', () => {
+        setTimerDialog.showModal();
+    });
 
-    startTimerBtn.addEventListener('click', () => {
+    let timerDialogCancelBtn = document.querySelector('#modal-set-timer button.timer-cancel');
+    timerDialogCancelBtn.addEventListener('click', () => {
+        setTimerDialog.close();
+    });
+
+    let timerDialogSetBtn = document.querySelector('#modal-set-timer button.timer-set');
+    timerDialogSetBtn.addEventListener('click', () => {
         if (timerId !== null) {
             clearInterval(timerId);
         }
+        let timerValue = document.querySelector('input#timer-input').value;
+        timerDisplay.innerHTML = (timerValue < 10 ? "0" + timerValue : timerValue) + ":00";
+        timerDisplay.classList.remove('hidden');
+        let duration = timerValue * 60;
         startTimer(duration);
+        setTimerDialog.close();
     });
 
     function startTimer(duration) {
-        var timer = duration;
+        var timer = duration - 1;
         timerId = setInterval(function () {
             let mins = parseInt(timer / 60, 10);
             let secs = parseInt(timer % 60, 10);
 
             mins = mins < 10 ? "0" + mins : mins;
             secs = secs < 10 ? "0" + secs : secs;
-            timerValue.innerHTML = mins + ":" + secs;
+            timerDisplay.innerHTML = mins + ":" + secs;
 
             if (--timer < 0) {
                 clearInterval(timerId);
+                timerDisplay.classList.add('hidden');
             }
         }, 1000);
-    }
-
-    function parseTimerInput(timerInput) {
-        return getMinutes(timerInput) * 60 + getSeconds(timerInput);
-    }
-
-    up.addEventListener('click', () => {
-        let currTimerValue = timerValue.innerHTML;
-        let newMinsValue = getMinutes(currTimerValue) + 1;
-        let currSecsValue = getSeconds(currTimerValue);
-        if (newMinsValue > 10) {
-            newMinsValue = 10;
-        }
-        updateTimer(newMinsValue, currSecsValue);
-    })
-
-    down.addEventListener('click', () => {
-        let currTimerValue = timerValue.innerHTML;
-        let newMinsValue = getMinutes(currTimerValue) - 1;
-        let currSecsValue = getSeconds(currTimerValue);
-        if (newMinsValue < 1) {
-            newMinsValue = 1;
-        }
-        updateTimer(newMinsValue, currSecsValue);
-    })
-
-    function updateTimer(mins, secs) {
-        timerValue.innerHTML = (mins < 10 ? "0" + mins : mins) + ":" + (secs < 10 ? "0" + secs : secs);
-        duration = parseTimerInput(timerValue.innerHTML);
-        clearInterval(timerId);
-    }
-
-    function getMinutes(timerValue) {
-        return parseInt(timerValue.split(":")[0], 10);
-    }
-
-    function getSeconds(timerValue) {
-        return parseInt(timerValue.split(":")[1], 10);
     }
 });

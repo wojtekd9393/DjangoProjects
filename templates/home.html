@@ -39,11 +39,16 @@
                 <a href="{% url 'home' retro.id %}?order=date">Sort by date</a>
             </div>
         </div>
+        <div class="btn-group add-timer-group">
+            <button class="btn btn-primary btn-sm dropdown-toggle shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Add
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#"><i class="fas fa-clock"></i> Timer</a></li>
+            </ul>
+        </div>
         <div class="timer">
-            <span class="timer-span">02:00</span>
-            <button id="timer-up" class="btn btn-primary btn-sm"><i class="fas fa-arrow-up"></i></button>
-            <button id="timer-down" class="btn btn-primary btn-sm"><i class="fas fa-arrow-down"></i></button>
-            <button id="start-timer" class="btn btn-primary btn-sm">Start <i class="fas fa-play"></i></button>
+            <span class="timer-span hidden"></span>
         </div>
     </div>
 
@@ -169,6 +174,17 @@
         <div class="modal-buttons">
             <button class="btn btn-primary" data-dragged-id="" data-dest-id="">Merge</button>
             <button class="btn btn-secondary" data-dragged-id="">Cancel</button>
+        </div>
+    </div>
+</dialog>
+
+<dialog id="modal-set-timer">
+    <div class="modal-set-timer-content">
+        <h5 id="info">Set timer [1-10] mins</h5>
+        <input id="timer-input" type="number" min="1" max="10" value="2">
+        <div class="modal-buttons">
+            <button class="btn btn-primary timer-set" data-id="">Start timer</button>
+            <button class="btn btn-secondary timer-cancel">Cancel</button>
         </div>
     </div>
 </dialog>
