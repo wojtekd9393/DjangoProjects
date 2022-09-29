@@ -31,6 +31,8 @@ $(document).ready(function () {
     // element which is being currently dragged
     let dragItem = null;
     let ghostElem = null;
+    // the element on which dragged element is dropped
+    let droppedArea = null;
 
     cardsMergeRejectBtn.addEventListener("click", (e) => {
         cardsMergeModal.close();
@@ -38,6 +40,8 @@ $(document).ready(function () {
         const item = document.querySelector('div > div.card[data-id="' + draggedId + '"]');
         item.setAttribute('data-dropped', "false");
         item.classList.remove('hidden');
+        droppedArea.classList.remove('drag-over');
+        droppedArea = null;
     });
 
     // cards sorting - opening and closing the dropdown menu for Sort button
@@ -302,17 +306,10 @@ $(document).ready(function () {
         const draggedId = e.dataTransfer.getData('text/plain');
         const item = document.querySelector('div > div.card[data-id="' + draggedId + '"]');
 
-        item.classList.remove('drag-over');
         item.setAttribute('data-dropped', "true");
+        droppedArea = e.target.closest('div.card[draggable="true"]');
 
-        // searching "p" going up the DOM tree
-        let el = e.target.closest('p.pre-line');
-        if (el == null) {
-            // searching "p" going down the DOM tree
-            el = e.target.querySelector('p.pre-line');
-        }
-
-        let destId = el.getAttribute("data-id");
+        let destId = droppedArea.getAttribute("data-id");
 
         // show merge confirmation modal
         cardsMergeConfirmBtn.setAttribute("data-dragged-id", draggedId);
@@ -349,6 +346,8 @@ $(document).ready(function () {
                 const item = document.querySelector('div > div.card[data-id="' + draggedId + '"]');
                 cardsMergeModal.close();
                 $(item).remove();
+                droppedArea.classList.remove('drag-over');
+                droppedArea = null;
             }
         });
     });

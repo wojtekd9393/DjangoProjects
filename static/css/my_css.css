@@ -782,8 +782,7 @@
  }
 
  .drag-over {
-     /* TODO: change bootstrap border style of card - increase border width */
-     border: 1px dotted black;
+     box-shadow: 0 0 0 2px purple;
  }
 
  .timer-span {
