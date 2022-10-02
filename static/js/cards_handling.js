@@ -2,6 +2,13 @@ $(document).ready(function () {
     // csrf token
     var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
 
+    // enum with cards colors (Bootstrap classes)
+    const cardColor = {
+        green: 'bg-success',
+        red: 'bg-danger',
+        blue: 'bg-primary'
+    };
+
     // card delete modal dialog's handlers
     const cardDeleteModal = document.getElementById("modal-delete");
     const cardDeleteConfirmBtn = document.querySelector("#modal-delete button.btn-primary");
@@ -13,7 +20,7 @@ $(document).ready(function () {
     deleteBtns.forEach(btn => {
         let id = btn.getAttribute("data-id");
         addModalDialogListeners(id);
-    })
+    });
 
     // cards merge modal dialog's handlers
     const cardsMergeModal = document.getElementById("modal-merge");
@@ -114,21 +121,15 @@ $(document).ready(function () {
 
                         switch (category) {
                             case 1:
-                                let greenCard = `
-                                    <div class="card text-white bg-success mb-3" data-id=${id} data-dropped="false" draggable="true"><div class="card-body"><p class="pre-line" data-id=${id}>${body}</p><div class="actions"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
-                                `;
+                                let greenCard = createCard(id, body, cardColor.green);
                                 $("#greenList").append(greenCard);
                                 break;
                             case 2:
-                                let redCard = `
-                                    <div class="card text-white bg-danger mb-3" data-id=${id} data-dropped="false" draggable="true"><div class="card-body"><p class="pre-line" data-id=${id}>${body}</p><div class="actions"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
-                                `;
+                                let redCard = createCard(id, body, cardColor.red);
                                 $("#redList").append(redCard);
                                 break;
                             case 3:
-                                let blueCard = `
-                                    <div class="card text-white bg-primary mb-3" data-id=${id} data-dropped="false" draggable="true"><div class="card-body"><p class="pre-line" data-id=${id}>${body}</p><div class="actions"><i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i> <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i></div></div></div>
-                                `;
+                                let blueCard = createCard(id, body, cardColor.blue);
                                 $("#blueList").append(blueCard);
                                 break;
                             default:
@@ -158,6 +159,59 @@ $(document).ready(function () {
             $(tempCardDiv).remove();
         });
     })
+
+    // building new card
+    function createCard(id, body, color) {
+        // main card div
+        let card = document.createElement('div');
+        card.classList.add('card', 'text-white', color, 'mb-3');
+        card.setAttribute('data-id', id);
+        card.setAttribute('data-dropped', 'false');
+        card.setAttribute('draggable', 'true');
+
+        // row 1
+        let row1 = document.createElement('div');
+        row1.classList.add('row', 'm-0');
+        // card body
+        let cardBody = document.createElement('div');
+        cardBody.classList.add('card-body', 'col-card-content', 'ps-3', 'pe-1');
+        // paragraph with card text
+        let cardText = `<p class="pre-line" data-id=${id}>${body}</p>`;
+        $(cardBody).append(cardText);
+        // settings
+        let settings = document.createElement('div');
+        settings.classList.add('col-settings', 'text-center', 'p-1');
+        // icon
+        let settingsIcon = `<i class="fas fa-ellipsis-v" data-bs-toggle="dropdown" aria-expanded="false"></i>`;
+        $(settings).append(settingsIcon);
+        // dropdown menu
+        let dropdownMenu = document.createElement('ul');
+        dropdownMenu.classList.add('dropdown-menu', 'py-1');
+        let item1 = `<li><a draggable="false" class="dropdown-item" href="#"><i class="far fa-object-ungroup"></i> Unmerge card</a></li>`;
+        let item2 = `<li><a draggable="false" class="dropdown-item" href="#"><i class="far fa-file-alt"></i> Copy card text</a></li>`;
+        $(dropdownMenu).append(item1);
+        $(dropdownMenu).append(item2);
+        settings.appendChild(dropdownMenu);
+        row1.appendChild(cardBody);
+        row1.appendChild(settings);
+
+        // row2
+        let row2 = document.createElement('div');
+        row2.classList.add('row', 'm-0', 'px-1', 'pb-2');
+        let actions = document.createElement('div');
+        actions.classList.add('actions', 'text-end', 'px-1', 'mt-1');
+        let edit = `<i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i>`;
+        let trash = `<i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>`;
+        $(actions).append(edit);
+        $(actions).append(trash);
+        row2.appendChild(actions);
+
+        // main card consisting of 2 rows
+        card.appendChild(row1);
+        card.appendChild(row2);
+
+        return card;
+    }
 
     // editing cards
     $("#main-div").on("click", "div.actions > i.fa-edit", function (event) {
@@ -209,7 +263,7 @@ $(document).ready(function () {
                         method: 'POST',
                         success: function (response) {
                             // update the card body (paragraph element)
-                            cardDiv.children[0].children[0].innerHTML = response.card.body;
+                            cardDiv.children[0].children[0].children[0].innerHTML = response.card.body;
                             let editForm = editButton.parentElement.parentElement.parentElement;
                             // replace form with card containing edited content
                             $(editForm).replaceWith(cardDiv);
@@ -271,6 +325,9 @@ $(document).ready(function () {
 
     // drag & drop functions
     function dragStart(e) {
+        // if(e.target.classList.contains("dropdown-menu")) e.preventDefault();
+        if(e.target.nodeName == "a") e.preventDefault();
+        console.log(e.target.nodeName);
         const id = e.target.getAttribute("data-id");
         dragItem = this;
         ghostElem = this;

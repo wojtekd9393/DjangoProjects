@@ -40,9 +40,7 @@
             </div>
         </div>
         <div class="btn-group add-timer-group">
-            <button class="btn btn-primary btn-sm dropdown-toggle shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Add
-            </button>
+            <button class="btn btn-primary btn-sm dropdown-toggle shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">Add</button>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#"><i class="fas fa-clock"></i> Timer</a></li>
             </ul>
@@ -56,7 +54,7 @@
 
     <div id="main-div" class="row">
           <div class="col-sm-4">
-              <h4><i class="fas fa-square fa-green"></i> Went Well</h4>
+              <h5><i class="fas fa-square fa-green"></i> Went Well</h5>
               <div class="card">
                   <div>
                       <p class="card-text">
@@ -67,28 +65,14 @@
               <div id="greenList">
                   {% for card in green_cards %}
                     <div class="card text-white bg-success mb-3" data-id="{{ card.id }}" data-dropped="false" draggable="true">
-                        <div class="card-body">
-                            <p class="pre-line" data-id="{{ card.id }}">{{ card.body }}</p>
-                            <div class="actions">
-                                {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
-                                    <i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i>
-                                    <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
-                                {% endif %}
-                            </div>
-                            {% if retro.voting and user.is_authenticated %}
-                                <div class="vote" data-id="{{ card.id }}">
-                                    {% if user in card.votes.all %}<i class="fas fa-eraser fa-white" data-id="{{ card.id }}"></i>{% endif %}
-                                    <span {% if user in card.votes.all or limit == True %} style="cursor: not-allowed; opacity: 0.5;" {% endif %}><i class="far fa-thumbs-up fa-white" data-id="{{ card.id }}" {% if user in card.votes.all or limit == True %} style="pointer-events: none;" {% endif %}></i></span><p class="bold" style="float: right;">{{ card.get_votes }}</p>
-                                </div>
-                            {% endif %}
-                        </div>
+                        {% include 'card_content.html' %}
                     </div>
                   {% endfor %}
               </div>
           </div>
 
           <div class="col-sm-4">
-              <h4><i class="fas fa-square fa-red"></i> To Improve</h4>
+              <h5><i class="fas fa-square fa-red"></i> To Improve</h5>
               <div class="card">
                   <div>
                       <p class="card-text">
@@ -99,28 +83,14 @@
               <div id="redList">
                   {% for card in red_cards %}
                     <div class="card text-white bg-danger mb-3" data-id="{{ card.id }}" data-dropped="false" draggable="true">
-                        <div class="card-body">
-                            <p class="pre-line" data-id="{{ card.id }}">{{ card.body }}</p>
-                            <div class="actions">
-                                {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
-                                    <i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i>
-                                    <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
-                                {% endif %}
-                            </div>
-                            {% if retro.voting and user.is_authenticated %}
-                                <div class="vote" data-id="{{ card.id }}">
-                                    {% if user in card.votes.all %}<i class="fas fa-eraser fa-white" data-id="{{ card.id }}"></i>{% endif %}
-                                    <span {% if user in card.votes.all or limit == True %} style="cursor: not-allowed; opacity: 0.5;" {% endif %}><i class="far fa-thumbs-up fa-white" data-id="{{ card.id }}" {% if user in card.votes.all or limit == True %} style="pointer-events: none;" {% endif %}></i></span><p class="bold" style="float: right;">{{ card.get_votes }}</p>
-                                </div>
-                            {% endif %}
-                        </div>
+                        {% include 'card_content.html' %}
                     </div>
                   {% endfor %}
               </div>
           </div>
 
           <div class="col-sm-4">
-              <h4><i class="fas fa-square fa-blue"></i> Action Points</h4>
+              <h5><i class="fas fa-square fa-blue"></i> Action Points</h5>
               <div class="card">
                   <div>
                       <p class="card-text">
@@ -131,21 +101,7 @@
               <div id="blueList">
                   {% for card in blue_cards %}
                     <div class="card text-white bg-primary mb-3" data-id="{{ card.id }}" data-dropped="false" draggable="true">
-                        <div class="card-body">
-                            <p class="pre-line" data-id="{{ card.id }}">{{ card.body }}</p>
-                            <div class="actions">
-                                {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
-                                    <i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i>
-                                    <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
-                                {% endif %}
-                            </div>
-                            {% if retro.voting and user.is_authenticated %}
-                                <div class="vote" data-id="{{ card.id }}">
-                                    {% if user in card.votes.all %}<i class="fas fa-eraser fa-white" data-id="{{ card.id }}"></i>{% endif %}
-                                    <span {% if user in card.votes.all or limit == True %} style="cursor: not-allowed; opacity: 0.5;" {% endif %}><i class="far fa-thumbs-up fa-white" data-id="{{ card.id }}" {% if user in card.votes.all or limit == True %} style="pointer-events: none;" {% endif %}></i></span><p class="bold" style="float: right;">{{ card.get_votes }}</p>
-                                </div>
-                            {% endif %}
-                        </div>
+                        {% include 'card_content.html' %}
                     </div>
                   {% endfor %}
               </div>
