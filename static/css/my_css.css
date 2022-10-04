@@ -404,7 +404,6 @@
 
  div.actions {
      float: right;
-     /* margin-top: 8px; */
      font-size: 0;
  }
 
@@ -455,8 +454,6 @@
  span {
      font-size: 16px;
      margin-left: 4px;
-     /* line-height: 1rem;
-     padding: 0; */
  }
 
  div.vote i {
@@ -619,18 +616,12 @@
  #modal-set-timer {
      position: fixed;
      z-index: 1;
-     left: 0;
-     top: -220px;
      padding: 0;
      border: 2px solid black;
      overflow: hidden;
-     -webkit-animation-name: animatesqueeze;
-     -webkit-animation-duration: 0.3s;
-     animation-name: animatesqueeze;
-     animation-duration: 0.3s
  }
 
- #modal-delete,
+ #modal-delete .modal-delete-content,
  #modal-merge .modal-delete-content,
  #modal-set-timer .modal-set-timer-content {
      position: relative;
@@ -638,6 +629,10 @@
      margin: auto;
      padding: 20px;
      text-align: center;
+     -webkit-animation-name: animatesqueeze;
+     -webkit-animation-duration: 0.3s;
+     animation-name: animatesqueeze;
+     animation-duration: 0.3s;
  }
 
  h5#info {

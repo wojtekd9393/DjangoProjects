@@ -161,54 +161,29 @@ $(document).ready(function () {
     })
 
     // building new card
-    function createCard(id, body, color) {
-        // main card div
-        let card = document.createElement('div');
-        card.classList.add('card', 'text-white', color, 'mb-3');
-        card.setAttribute('data-id', id);
-        card.setAttribute('data-dropped', 'false');
-        card.setAttribute('draggable', 'true');
-
-        // row 1
-        let row1 = document.createElement('div');
-        row1.classList.add('row', 'm-0');
-        // card body
-        let cardBody = document.createElement('div');
-        cardBody.classList.add('card-body', 'col-card-content', 'ps-3', 'pe-1');
-        // paragraph with card text
-        let cardText = `<p class="pre-line" data-id=${id}>${body}</p>`;
-        $(cardBody).append(cardText);
-        // settings
-        let settings = document.createElement('div');
-        settings.classList.add('col-settings', 'text-center', 'p-1');
-        // icon
-        let settingsIcon = `<i class="fas fa-ellipsis-v" data-bs-toggle="dropdown" aria-expanded="false"></i>`;
-        $(settings).append(settingsIcon);
-        // dropdown menu
-        let dropdownMenu = document.createElement('ul');
-        dropdownMenu.classList.add('dropdown-menu', 'py-1');
-        let item1 = `<li><a draggable="false" class="dropdown-item" href="#"><i class="far fa-object-ungroup"></i> Unmerge card</a></li>`;
-        let item2 = `<li><a draggable="false" class="dropdown-item" href="#"><i class="far fa-file-alt"></i> Copy card text</a></li>`;
-        $(dropdownMenu).append(item1);
-        $(dropdownMenu).append(item2);
-        settings.appendChild(dropdownMenu);
-        row1.appendChild(cardBody);
-        row1.appendChild(settings);
-
-        // row2
-        let row2 = document.createElement('div');
-        row2.classList.add('row', 'm-0', 'px-1', 'pb-2');
-        let actions = document.createElement('div');
-        actions.classList.add('actions', 'text-end', 'px-1', 'mt-1');
-        let edit = `<i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i>`;
-        let trash = `<i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>`;
-        $(actions).append(edit);
-        $(actions).append(trash);
-        row2.appendChild(actions);
-
-        // main card consisting of 2 rows
-        card.appendChild(row1);
-        card.appendChild(row2);
+    function createCard(id, body, backgroundColor) {
+        let card = `
+            <div class="card text-white ${backgroundColor} mb-3" data-id=${id} data-dropped="false" draggable="true">
+                <div class="row m-0">
+                    <div class="card-body col-card-content ps-3 pe-1">
+                        <p class="pre-line" data-id=${id}>${body}</p>
+                    </div>
+                    <div class="col-settings text-center p-1">
+                        <i class="fas fa-ellipsis-v" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                        <ul class="dropdown-menu py-1">
+                            <li><a draggable="false" class="dropdown-item" href="#"><i class="far fa-object-ungroup"></i> Unmerge card</a></li>
+                            <li><a draggable="false" class="dropdown-item" href="#"><i class="far fa-file-alt"></i> Copy card text</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row m-0 px-1 pb-2">
+                    <div class="actions text-end px-1 mt-1">
+                        <i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i>
+                        <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
+                    </div>
+                </div>
+            </div>
+        `;
 
         return card;
     }
