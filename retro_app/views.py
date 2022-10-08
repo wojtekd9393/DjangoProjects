@@ -1,3 +1,5 @@
+from multiprocessing import AuthenticationError
+from unicodedata import category
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Card, Retro
 from .forms import CardForm, RetroForm
@@ -19,6 +21,7 @@ def home(request, retro_id):
             new_card = form.save(commit=False)
             new_card.retro = retro
             new_card.author = request.user
+            new_card.is_merged = is_card_merged(new_card)
             new_card.save()
             return JsonResponse({'card': model_to_dict(new_card)}, status=200)
     else:
@@ -65,12 +68,14 @@ def edit(request, card_id):
     if request.method == 'POST':
         form = CardForm(request.POST, instance=card)
         if form.is_valid():
-            form.save()
+            updated_card = form.save(commit=False)
+            updated_card.is_merged = is_card_merged(updated_card)
+            updated_card.save()
         else:
             # TODO: need to handle this case properly, maybe show alert message?
             print("Form errors: ", form.errors)
             
-    card_edit_info = {"category": card.category, "body": card.body}
+    card_edit_info = {"category": card.category, "body": card.body, "is_merged": card.is_merged}
     return JsonResponse({'card': card_edit_info}, status=200)
 
 
@@ -234,10 +239,26 @@ def merge(request, dragged_id, dest_id):
         dragged_card = Card.objects.get(pk=dragged_id)
         dest_card = Card.objects.get(pk=dest_id)
         # separate merged cards' content with 3 dashes (---)
-        dest_card.body = dest_card.body + "\n" + "-" * 3 + "\n" + dragged_card.body
+        dest_card.body = dest_card.body + "\r\n" + "-" * 3 + "\r\n" + dragged_card.body
+        dest_card.is_merged = True
         dest_card.save()
         dragged_card.delete()
         return JsonResponse({'new_body': dest_card.body}, status=200)
+
+
+@login_required
+def unmerge(request, card_id):
+    card = get_object_or_404(Card, pk=card_id)
+    if is_card_merged(card):
+        parts = card.body.split("\r\n---\r\n")
+        card.body = parts[0]
+        card.is_merged = False
+        card.save()
+
+        for part in parts[1:]:
+            Card.objects.create(body=part, category=card.category, retro=card.retro, author=request.user)
+
+    return redirect('home', retro_id=card.retro.id)
 
 
 # helper functions
@@ -248,3 +269,9 @@ def get_num_of_authors(retro):
         if card.author not in authors:
             authors.append(card.author)
     return len(authors)
+
+
+def is_card_merged(card):
+    if "\r\n---\r\n" in card.body:
+        return True
+    return False

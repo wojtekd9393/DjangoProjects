@@ -118,18 +118,19 @@ $(document).ready(function () {
                         let category = response.card.category;
                         let id = response.card.id;
                         let body = response.card.body;
+                        let isMerged = response.card.is_merged;
 
                         switch (category) {
                             case 1:
-                                let greenCard = createCard(id, body, cardColor.green);
+                                let greenCard = createCard(id, body, cardColor.green, isMerged);
                                 $("#greenList").append(greenCard);
                                 break;
                             case 2:
-                                let redCard = createCard(id, body, cardColor.red);
+                                let redCard = createCard(id, body, cardColor.red, isMerged);
                                 $("#redList").append(redCard);
                                 break;
                             case 3:
-                                let blueCard = createCard(id, body, cardColor.blue);
+                                let blueCard = createCard(id, body, cardColor.blue, isMerged);
                                 $("#blueList").append(blueCard);
                                 break;
                             default:
@@ -140,6 +141,9 @@ $(document).ready(function () {
 
                         // add draggable listeners
                         addDraggableListeners(id);
+
+                        // add dropdown menu listeners
+                        addDropdownMenuListeners(id);
 
                         // remove temp card
                         $(tempCardDiv).remove();
@@ -161,8 +165,8 @@ $(document).ready(function () {
     })
 
     // building new card
-    function createCard(id, body, backgroundColor) {
-        let card = `
+    function createCard(id, body, backgroundColor, isMerged) {
+        let obj = `
             <div class="card text-white ${backgroundColor} mb-3" data-id=${id} data-dropped="false" draggable="true">
                 <div class="row m-0">
                     <div class="card-body col-card-content ps-3 pe-1">
@@ -170,8 +174,7 @@ $(document).ready(function () {
                     </div>
                     <div class="col-settings text-center p-1">
                         <i class="fas fa-ellipsis-v" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                        <ul class="dropdown-menu py-1">
-                            <li><a draggable="false" class="dropdown-item" href="#"><i class="far fa-object-ungroup"></i> Unmerge card</a></li>
+                        <ul class="dropdown-menu py-1" data-unmerge-url="{% url 'unmerge' card.id %}">
                             <li><a draggable="false" class="dropdown-item" href="#"><i class="far fa-file-alt"></i> Copy card text</a></li>
                         </ul>
                     </div>
@@ -184,6 +187,12 @@ $(document).ready(function () {
                 </div>
             </div>
         `;
+
+        let card = $(obj)[0];
+        if (isMerged) {
+            let menu = card.querySelector('ul.dropdown-menu');
+            menu.insertAdjacentHTML("afterbegin", '<li><a draggable="false" class="dropdown-item unmerge-item" href="/unmerge/'+ id +'"><i class="far fa-object-ungroup"></i> Unmerge card</a></li>');
+        }
 
         return card;
     }
@@ -239,9 +248,22 @@ $(document).ready(function () {
                         success: function (response) {
                             // update the card body (paragraph element)
                             cardDiv.children[0].children[0].children[0].innerHTML = response.card.body;
+
+                            // add or remove unmerge item from card settings dropdown menu
+                            let unmerge_item = cardDiv.querySelector('ul.dropdown-menu > li > a.unmerge-item');
+                            if (response.card.is_merged && unmerge_item == null) {
+                                let menu = cardDiv.querySelector('ul.dropdown-menu');
+                                menu.insertAdjacentHTML("afterbegin", '<li><a draggable="false" class="dropdown-item unmerge-item" href="/unmerge/'+ id +'"><i class="far fa-object-ungroup"></i> Unmerge card</a></li>');
+                            } else if (!response.card.is_merged && unmerge_item != null) {
+                                unmerge_item.remove();
+                            }
+
                             let editForm = editButton.parentElement.parentElement.parentElement;
                             // replace form with card containing edited content
                             $(editForm).replaceWith(cardDiv);
+
+                            // add dropdown menu listeners
+                            addDropdownMenuListeners(id);
                         }
                     })
                 })
@@ -302,7 +324,6 @@ $(document).ready(function () {
     function dragStart(e) {
         // if(e.target.classList.contains("dropdown-menu")) e.preventDefault();
         if(e.target.nodeName == "a") e.preventDefault();
-        console.log(e.target.nodeName);
         const id = e.target.getAttribute("data-id");
         dragItem = this;
         ghostElem = this;
@@ -372,8 +393,14 @@ $(document).ready(function () {
             },
             method: 'POST',
             success: function (response) {
-                let destCard = document.querySelector('div.card p.pre-line[data-id="' + destId + '"]');
-                destCard.innerHTML = response.new_body;
+                let destCard = document.querySelector('div.card[data-id="' + destId + '"]');
+                destCard.querySelector('p.pre-line[data-id="' + destId + '"]').innerHTML = response.new_body;
+
+                let unmerge_item = destCard.querySelector('ul.dropdown-menu > li > a.unmerge-item');
+                if (unmerge_item == null) {
+                    let menu = destCard.querySelector('ul.dropdown-menu');
+                    menu.insertAdjacentHTML("afterbegin", '<li><a draggable="false" class="dropdown-item unmerge-item" href="/unmerge/'+ destId +'"><i class="far fa-object-ungroup"></i> Unmerge card</a></li>');
+                }
 
                 const item = document.querySelector('div > div.card[data-id="' + draggedId + '"]');
                 cardsMergeModal.close();

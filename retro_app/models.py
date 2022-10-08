@@ -20,6 +20,7 @@ class Card(models.Model):
     retro = models.ForeignKey(Retro, on_delete=models.CASCADE, related_name='cards')
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     votes = models.ManyToManyField(get_user_model(), blank=True, related_name='card_votes')
+    is_merged = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['id']
