@@ -16,7 +16,7 @@
     <div class="actions text-end px-1 mt-1">
         {% if user.is_authenticated and card.author.id == user.id and not retro.voting and not retro.archived %}
             <i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i>
-            <i class="fas fa-trash-alt fa-white" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
+            <i class="fas fa-trash-alt fa-white show-delete-card-dialog" data-id="{{ card.id }}" data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
         {% endif %}
     </div>
     {% if retro.voting and user.is_authenticated %}

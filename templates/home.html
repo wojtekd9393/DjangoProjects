@@ -32,12 +32,12 @@
                 <input type="text" name="q" placeholder="Search...">
             </form>
         </div>
-        <div class="sort-by-dropdown">
-            <button class="dropbtn sort-cards-btn">Sort cards</button>
-            <div id="myDropdown" class="dropdown-content-sort">
-                <a href="{% url 'home' retro.id %}?order=votes">Sort by votes</a>
-                <a href="{% url 'home' retro.id %}?order=date">Sort by date</a>
-            </div>
+        <div class="btn-group sort-cards">
+            <button class="btn btn-secondary btn-sm dropdown-toggle shadow-none" data-bs-toggle="dropdown" aria-expanded="false">Sort cards</button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'home' retro.id %}?order=votes">Sort by votes</a></li>
+                <li><a class="dropdown-item" href="{% url 'home' retro.id %}?order=date"> Sort by date</a></li>
+            </ul>
         </div>
         <div class="btn-group add-timer-group">
             <button class="btn btn-primary btn-sm dropdown-toggle shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">Add</button>
@@ -107,6 +107,19 @@
               </div>
           </div>
     </div>
+
+<dialog id="modal-delete">
+    <div class="modal-delete-content">
+        <div class="modal-delete-icon">
+            <i class="fas fa-exclamation-circle"></i>
+        </div>
+        <h5 id="info">Are you sure you want to delete?</h5>
+        <div class="modal-buttons">
+            <button class="btn btn-primary" data-id="">Yes, delete it</button>
+            <button class="btn btn-secondary">No, keep it</button>
+        </div>
+    </div>
+</dialog>
 
 <dialog id="modal-merge">
     <div class="modal-delete-content">

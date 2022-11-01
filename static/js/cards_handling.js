@@ -14,14 +14,6 @@ $(document).ready(function () {
     const cardDeleteConfirmBtn = document.querySelector("#modal-delete button.btn-primary");
     const cardDeleteRejectBtn = document.querySelector("#modal-delete button.btn-secondary");
 
-    // cards delete buttons
-    let deleteBtns = document.querySelectorAll("i.fa-trash-alt");
-
-    deleteBtns.forEach(btn => {
-        let id = btn.getAttribute("data-id");
-        addModalDialogListeners(id);
-    });
-
     // cards merge modal dialog's handlers
     const cardsMergeModal = document.getElementById("modal-merge");
     const cardsMergeConfirmBtn = document.querySelector("#modal-merge button.btn-primary");
@@ -50,10 +42,6 @@ $(document).ready(function () {
         droppedArea.classList.remove('drag-over');
         droppedArea = null;
     });
-
-    // cards sorting - opening and closing the dropdown menu for Sort button
-    let sortBtn = document.getElementsByClassName('sort-cards-btn')[0];
-    sortBtn.addEventListener('click', toggleSortDropdownMenu);
 
     // counters
     var cardAddCounter = 0;
@@ -92,7 +80,7 @@ $(document).ready(function () {
                 $("#blueList").prepend(form);
                 break;
             default:
-                console.log("Wrong card category: " + category);
+                console.error("Wrong card category: " + category);
         }
 
         // focus on the textarea belonging to the lately added card
@@ -136,22 +124,17 @@ $(document).ready(function () {
                             default:
                                 console.log("Wrong card category: " + category);
                         }
-                        // add delete modal dialog events
-                        addModalDialogListeners(id);
 
                         // add draggable listeners
                         addDraggableListeners(id);
 
-                        // add dropdown menu listeners
-                        addDropdownMenuListeners(id);
-
                         // remove temp card
-                        $(tempCardDiv).remove();
+                        tempCardDiv.remove();
                     }
                 })
             } else {
                 // remove empty card
-                $(tempCardDiv).remove();
+                tempCardDiv.remove();
             }
         });
 
@@ -160,7 +143,7 @@ $(document).ready(function () {
         rejectButton.addEventListener("click", () => {
             let tempCardDiv = rejectButton.parentElement.parentElement.parentElement;
             // remove temp card
-            $(tempCardDiv).remove();
+            tempCardDiv.remove();
         });
     })
 
@@ -182,7 +165,7 @@ $(document).ready(function () {
                 <div class="row m-0 px-1 pb-2">
                     <div class="actions text-end px-1 mt-1">
                         <i class="fas fa-edit fa-white" data-toggle="tooltip" title="Edit card"></i>
-                        <i class="fas fa-trash-alt fa-white" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
+                        <i class="fas fa-trash-alt fa-white show-delete-card-dialog" data-id=${id} data-toggle="tooltip" data-placement="bottom" title="Delete card"></i>
                     </div>
                 </div>
             </div>
@@ -191,7 +174,7 @@ $(document).ready(function () {
         let card = $(obj)[0];
         if (isMerged) {
             let menu = card.querySelector('ul.dropdown-menu');
-            menu.insertAdjacentHTML("afterbegin", '<li><a draggable="false" class="dropdown-item unmerge-item" href="/unmerge/'+ id +'"><i class="far fa-object-ungroup"></i> Unmerge card</a></li>');
+            menu.insertAdjacentHTML("afterbegin", '<li><a draggable="false" class="dropdown-item unmerge-item" href="/unmerge/' + id + '"><i class="far fa-object-ungroup"></i> Unmerge card</a></li>');
         }
 
         return card;
@@ -253,7 +236,7 @@ $(document).ready(function () {
                             let unmerge_item = cardDiv.querySelector('ul.dropdown-menu > li > a.unmerge-item');
                             if (response.card.is_merged && unmerge_item == null) {
                                 let menu = cardDiv.querySelector('ul.dropdown-menu');
-                                menu.insertAdjacentHTML("afterbegin", '<li><a draggable="false" class="dropdown-item unmerge-item" href="/unmerge/'+ id +'"><i class="far fa-object-ungroup"></i> Unmerge card</a></li>');
+                                menu.insertAdjacentHTML("afterbegin", '<li><a draggable="false" class="dropdown-item unmerge-item" href="/unmerge/' + id + '"><i class="far fa-object-ungroup"></i> Unmerge card</a></li>');
                             } else if (!response.card.is_merged && unmerge_item != null) {
                                 unmerge_item.remove();
                             }
@@ -261,9 +244,6 @@ $(document).ready(function () {
                             let editForm = editButton.parentElement.parentElement.parentElement;
                             // replace form with card containing edited content
                             $(editForm).replaceWith(cardDiv);
-
-                            // add dropdown menu listeners
-                            addDropdownMenuListeners(id);
                         }
                     })
                 })
@@ -279,35 +259,34 @@ $(document).ready(function () {
         })
     });
 
-    // deleting card
-    $("#modal-delete button.btn-primary").on('click', function (event) {
-        event.stopPropagation();
-        let dataId = $(this).attr('data-id');
+    // delete the card
+    document.addEventListener('click', (e) => {
+        if (e.target.matches('i.show-delete-card-dialog')) {
+            let id = e.target.getAttribute("data-id");
+            cardDeleteConfirmBtn.setAttribute("data-id", id); // TODO: maybe set this attribute to dialog?
+            cardDeleteModal.showModal();
+        }
+    });
+
+    cardDeleteRejectBtn.addEventListener("click", () => {
+        cardDeleteModal.close();
+    });
+
+    cardDeleteConfirmBtn.addEventListener('click', (e) => {
+        let cardId = e.currentTarget.getAttribute("data-id");
 
         $.ajax({
-            url: '/delete/card/' + dataId,
+            url: '/delete/card/' + cardId,
             data: {
                 csrfmiddlewaretoken: csrfToken
             },
             method: 'POST',
             success: function () {
                 cardDeleteModal.close();
-                $('div.card[data-id="' + dataId + '"]').remove();
+                $('div.card[data-id="' + cardId + '"]').remove();
             }
         });
     });
-
-    function addModalDialogListeners(id) {
-        let btn = $("i.fa-trash-alt[data-id=" + id + "]")[0];
-        btn.addEventListener("click", () => {
-            cardDeleteConfirmBtn.setAttribute("data-id", id);
-            cardDeleteModal.showModal();
-        });
-
-        cardDeleteRejectBtn.addEventListener("click", () => {
-            cardDeleteModal.close();
-        });
-    }
 
     function addDraggableListeners(id) {
         const item = document.querySelector('div.card[data-id="' + id + '"]');
@@ -323,7 +302,7 @@ $(document).ready(function () {
     // drag & drop functions
     function dragStart(e) {
         // if(e.target.classList.contains("dropdown-menu")) e.preventDefault();
-        if(e.target.nodeName == "a") e.preventDefault();
+        if (e.target.nodeName == "a") e.preventDefault();
         const id = e.target.getAttribute("data-id");
         dragItem = this;
         ghostElem = this;
@@ -399,7 +378,7 @@ $(document).ready(function () {
                 let unmerge_item = destCard.querySelector('ul.dropdown-menu > li > a.unmerge-item');
                 if (unmerge_item == null) {
                     let menu = destCard.querySelector('ul.dropdown-menu');
-                    menu.insertAdjacentHTML("afterbegin", '<li><a draggable="false" class="dropdown-item unmerge-item" href="/unmerge/'+ destId +'"><i class="far fa-object-ungroup"></i> Unmerge card</a></li>');
+                    menu.insertAdjacentHTML("afterbegin", '<li><a draggable="false" class="dropdown-item unmerge-item" href="/unmerge/' + destId + '"><i class="far fa-object-ungroup"></i> Unmerge card</a></li>');
                 }
 
                 const item = document.querySelector('div > div.card[data-id="' + draggedId + '"]');
@@ -410,22 +389,4 @@ $(document).ready(function () {
             }
         });
     });
-
-    // cards sorting
-    function toggleSortDropdownMenu() {
-        document.getElementById("myDropdown").classList.toggle("show");
-    }
-
-    window.onclick = function (event) {
-        if (!event.target.matches('.dropbtn')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content-sort");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
-                }
-            }
-        }
-    }
 });
